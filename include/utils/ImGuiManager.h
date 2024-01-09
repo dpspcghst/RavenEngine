@@ -1,20 +1,14 @@
-#ifndef IMGUI_SETUP_H
-#define IMGUI_SETUP_H
+#ifndef IMGImGuiManager_SETUP_H
+#define IMGImGuiManager_SETUP_H
+
+#define IMGUI_ENABLE_DOCKING
 #include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl3.h"
 #include <GLFW/glfw3.h>
 
-class ImGuiSetup {
+class ImGuiManager {
 public:
-    // Declare the static color variables
-    static ImVec4 ravenPurpleA;
-    static ImVec4 ravenPurpleB;
-    static ImVec4 ravenPurpleC;
-    static ImVec4 ravenBlack;
-    static ImVec4 ravenWhite;
-    static ImVec4 ravenRed;
-
-
-    // ####################################
     /**
      * @brief Initializes the ImGui context.
      * 
@@ -38,4 +32,4 @@ public:
     static void Shutdown();
 };
 
-#endif // IMGUI_SETUP_H
+#endif // IMGImGuiManager_SETUP_H
