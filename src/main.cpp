@@ -4,11 +4,9 @@
 #include "GLFWWindowWrapper.h"
 #include "GLFWContextManager.h"
 #include "GLFWEventPoller.h"
-#include "GLFWCallbacks.h"
-#include "MenuSystem.h"
-#include "Workspace.h"
 #include "ImGuiManager.h"
 #include "ResourceManager.h"
+#include "../include/core/Workspace.h" // Make sure the path is correct
 
 int main() { 
     try {
@@ -22,14 +20,12 @@ int main() {
         ResourceManager::SetWindowIcons(mainWindow);
 
         ImGuiManager::Init(mainWindow);
-        Workspace workspace(mainWindow);
-        MenuSystem menuSystem(workspace, mainWindow);
+        RavenEngine::Workspace workspace(mainWindow); // Assuming Workspace is in the RavenEngine namespace
 
         while (!windowWrapper.shouldClose()) {
             GLFWEventPoller::pollEvents(); 
             ImGuiManager::NewFrame(); 
             ImGui::DockSpaceOverViewport(ImGui::GetMainViewport()); 
-            menuSystem.createMainMenu();
             workspace.Render(); 
             ImGuiManager::Render();
             windowWrapper.swapBuffers();

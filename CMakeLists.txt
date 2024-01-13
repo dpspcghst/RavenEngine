@@ -36,6 +36,8 @@ set(PROJECT_SOURCES
     src/Utils/MenuSystem.cpp
     src/Utils/ResourceManager.cpp
     src/Utils/Inspector.cpp
+    src/Utils/Doodle/Doodle.cpp
+    src/Utils/Doodle/DoodleManager.cpp
 )
 
 # Add resources file for Windows

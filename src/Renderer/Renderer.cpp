@@ -68,7 +68,7 @@ void Renderer::EndScene() {
 }
 
 void Renderer::Clear() {
-    std::cout << "Clearing screen" << std::endl;
+    // std::cout << "Clearing screen" << std::endl;
     glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -79,7 +79,7 @@ void Renderer::SetViewport(int x, int y, int width, int height) {
 }
 
 void Renderer::OnWindowResize(int newWidth, int newHeight) {
-    std::cout << "Resizing window to: " << newWidth << "x" << newHeight << std::endl;
+    // std::cout << "Resizing window to: " << newWidth << "x" << newHeight << std::endl;
     screenWidth = newWidth;
     screenHeight = newHeight;
     SetViewport(0, 0, newWidth, newHeight);

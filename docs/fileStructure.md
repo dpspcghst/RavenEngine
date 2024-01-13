@@ -21,7 +21,6 @@ RavenEngine
 │   │   ├── Component.h
 │   │   ├── ComponentCreator.h
 │   │   ├── ComponentManager.h
-│   │   ├── SceneNode.h
 │   │   └── TransformComponent.h
 │   ├── Core
 │   │   ├── GLFWManagement
@@ -29,28 +28,33 @@ RavenEngine
 │   │   │   ├── GLFWContextManager.h
 │   │   │   ├── GLFWEventPoller.h
 │   │   │   └── GLFWCWindowWrapper.h
-│   │   ├── SceneManager.h
 │   │   ├── UIManager.h
 │   │   ├── Viewport.h
 │   │   └── Workspace.h
+│   ├── glad
+│   │   └── glad.h
+│   ├── KHR
+│   │   └── lhrplatform.h
 │   ├── Maths
 │   │   └── Vector3.h
-│   ├── Utils
-│   │   ├── Console.h
-│   │   ├── FileDialog.h
-│   │   ├── ImGuiManager.h
-│   │   ├── Inspector.h
-│   │   ├── MenuSystem.h
-│   │   ├── ResourceManager.h
-│   │   └── SceneHierarchyPanel.h
 │   ├── Renderer
 │   │   ├── Primitives
 │   │   |   └── Point.h
 │   │   └──  Renderer.h
-│   └── Scene
-│       ├── SceneHierarchyPanel.h
-│       ├── SceneManager.h
-│       └── SceneNode.h
+│   ├── Scene
+│   │   ├── SceneHierarchyPanel.h
+│   │   ├── SceneManager.h
+│   │   └── SceneNode.h
+│   └── Utils
+│       ├── Doodle
+│       │   ├── Doodle.h
+│       │   └── DoodleManager.h
+│       ├── Console.h
+│       ├── FileDialog.h
+│       ├── ImGuiManager.h
+│       ├── Inspector.h
+│       ├── MenuSystem.h
+│       └── ResourceManager.h
 ├── Libs
 │   ├── glm
 │   ├── ImGui
@@ -62,7 +66,6 @@ RavenEngine
 │   │   ├── Component.cpp
 │   │   ├── ComponentCreator.cpp
 │   │   ├── ComponentManager.cpp
-│   │   ├── SceneNode.cpp
 │   │   └── TransformComponent.cpp
 │   ├── Core
 │   │   ├── GLFWManagement
@@ -70,26 +73,27 @@ RavenEngine
 │   │   │   ├── GLFWContextManager.cpp
 │   │   │   ├── GLFWEventPoller.cpp
 │   │   │   └── GLFWCWindowWrapper.cpp
-│   │   ├── SceneManager.cpp
 │   │   ├── UIManager.cpp
 │   │   └── Workspace.cpp
-│   ├── Utils
-│   │   ├── Console.cpp
-│   │   ├── FileDialog.cpp
-│   │   ├── ImGuiManager.cpp
-│   │   ├── Inspector.cpp
-│   │   ├── MenuSystem.cpp
-│   │   ├── ResourceManager.cpp
-│   │   └── SceneHierarchyPanel.cpp
 │   ├── Renderer
 │   │   ├── Primitives
 │   │   |   └── Point.cpp
 │   │   ├── Renderer.cpp
 │   │   └── Viewport.cpp
-│   └── Scene
-│       ├── SceneHierarchyPanel.cpp
-│       ├── SceneManager.cpp
-│       └── SceneNode.cpp
+│   ├── Scene
+│   │   ├── SceneHierarchyPanel.cpp
+│   │   ├── SceneManager.cpp
+│   │   └── SceneNode.cpp
+│   └── Utils
+│       ├── Doodle
+│       │   ├── Doodle.cpp
+│       │   └── DoodleManager.cpp
+│       ├── Console.cpp
+│       ├── FileDialog.cpp
+│       ├── ImGuiManager.cpp
+│       ├── Inspector.cpp
+│       ├── MenuSystem.cpp
+│       └── ResourceManager.cpp
 ├── CMakeLists.txt
 ├── RavenEngineProjectDoc
 ├── README.md

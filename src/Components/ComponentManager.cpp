@@ -1,6 +1,8 @@
 // ComponentManager.cpp
 #include "ComponentManager.h"
 
+namespace RavenEngine {
+
 ComponentManager::ComponentManager() {
     // Initialize your ComponentManager object here if needed
 }
@@ -24,3 +26,5 @@ void ComponentManager::RenderImGuiComponents() {
         }
     }
 }
+
+} // namespace RavenEngine

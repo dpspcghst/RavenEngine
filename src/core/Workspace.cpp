@@ -1,17 +1,20 @@
 #include <glad/glad.h>
 #include "Workspace.h"
-#include "UIManager.h"
-#include "Viewport.h"
 #include <iostream>
 #include "ComponentCreator.h"
+#include "MenuSystem.h"
+
+namespace RavenEngine {
 
 Workspace::Workspace(GLFWwindow* mainWin)
-    : window(mainWin), viewport(mainWin), uiManager(viewport), sceneManager(), componentManager() {
+    : window(mainWin), viewport(mainWin), doodleManager(), 
+      uiManager(viewport, doodleManager), sceneManager(), 
+      componentManager(), menuSystem(*this, mainWin, doodleManager, uiManager) {
     std::cout << "Initializing Workspace..." << std::endl;
     
-    // Set ImGui ini filename to nullptr to disable .ini file saving/loading
+    // Disable .ini file handling for ImGui
     ImGuiIO& io = ImGui::GetIO();
-    io.IniFilename = nullptr; // Add this line to disable .ini file handling
+    io.IniFilename = nullptr;
 
     // Set the context for the UIManager
     uiManager.SetSceneManagerContext(&sceneManager);
@@ -26,6 +29,7 @@ void Workspace::Render() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     componentManager.RenderImGuiComponents();
+    menuSystem.createMainMenu(); // Render the menu using MenuSystem
     uiManager.Render();
 
     glDisable(GL_BLEND);
@@ -44,5 +48,7 @@ void Workspace::AddComponent(const std::string& componentName) {
 
 void Workspace::Update() {
     componentManager.UpdateComponents();
-    // Update other components as needed
+    // Additional update logic can be placed here if needed
 }
+
+} // namespace RavenEngine

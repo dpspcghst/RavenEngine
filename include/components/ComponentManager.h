@@ -5,6 +5,8 @@
 #include <vector>
 #include "Component.h"
 
+namespace RavenEngine {
+
 class ComponentManager {
 private:
     std::vector<std::unique_ptr<Component>> components;
@@ -16,5 +18,7 @@ public:
     void UpdateComponents(); // Calls Update on all components
     void RenderImGuiComponents(); // Calls RenderImGui on all components
 };
+
+} // namespace RavenEngine
 
 #endif // COMPONENT_MANAGER_H
