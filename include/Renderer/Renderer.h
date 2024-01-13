@@ -2,6 +2,8 @@
 #define RAVENENGINE_RENDERER_H
 
 #include <glad/glad.h>
+#include <array>
+#include <glm/glm.hpp> // Include GLM for using glm::vec3
 
 namespace RavenEngine {
 
@@ -16,19 +18,17 @@ public:
     void BeginScene();
     void EndScene();
 
-    void Clear(const float* clearColor);
+    void Clear();
     void SetViewport(int x, int y, int width, int height);
     void OnWindowResize(int newWidth, int newHeight);
 
-    GLuint GetRenderedTexture() const;
+    GLuint GetTexture(); // Method to get the texture ID
 
 private:
     int screenWidth, screenHeight;
-    GLuint fbo; // Framebuffer object for rendering
-    GLuint textureColorbuffer; // Texture to render to
-
-    void createFramebuffer();
-    void deleteFramebuffer();
+    std::array<float, 4> clearColor;
+    GLuint framebuffer; // Framebuffer object
+    GLuint texture; // Texture object
 };
 
 } // namespace RavenEngine

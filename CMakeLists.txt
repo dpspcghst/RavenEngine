@@ -12,25 +12,29 @@ find_package(OpenGL REQUIRED)
 
 # Define source files
 set(PROJECT_SOURCES
-    src/main.cpp
-    src/Core/AppWindow.cpp
-    src/Core/Workspace.cpp
-    src/Core/Scene.cpp
+    Assets/Shaders/ShaderManager.cpp
     src/Components/Component.cpp
     src/Components/ComponentCreator.cpp
     src/Components/ComponentManager.cpp
     src/Components/TransformComponent.cpp
-    src/Components/SceneNode.cpp
-    src/Renderer/Renderer.cpp
-    src/Renderer/Viewport.cpp
-    src/Renderer/Primitives/Primitive.cpp
+    src/Core/GLFWManagement/GLFWCallbacks.cpp
+    src/Core/GLFWManagement/GLFWContextManager.cpp
+    src/Core/GLFWManagement/GLFWEventPoller.cpp
+    src/Core/GLFWManagement/GLFWWindowWrapper.cpp
+    src/Core/UIManager.cpp
+    src/Core/Viewport.cpp
+    src/Core/Workspace.cpp
+    src/main.cpp
     src/Renderer/Primitives/Point.cpp
+    src/Renderer/Renderer.cpp
+    src/Scene/SceneManager.cpp
+    src/Scene/SceneHierarchyPanel.cpp
+    src/Scene/SceneNode.cpp
+    src/Utils/Console.cpp
     src/Utils/FileDialog.cpp
     src/Utils/ImGuiManager.cpp
     src/Utils/MenuSystem.cpp
     src/Utils/ResourceManager.cpp
-    src/Utils/SceneHierarchyPanel.cpp
-    src/Utils/Console.cpp
     src/Utils/Inspector.cpp
 )
 
@@ -56,10 +60,11 @@ add_executable(RavenEngine ${PROJECT_SOURCES} ${IMGUI_SOURCES} ${GLAD_SOURCE})
 target_include_directories(RavenEngine PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Core"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/Core/GLFWManagement"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Components"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/Scene"  # Added include directory for scene
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/SceneManager" 
     "${CMAKE_CURRENT_SOURCE_DIR}/include/glad"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/KHR"
     "${CMAKE_CURRENT_SOURCE_DIR}/libs/imgui"

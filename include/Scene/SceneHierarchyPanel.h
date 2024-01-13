@@ -1,5 +1,5 @@
 #pragma once
-#include "scene.h"
+#include "SceneManager.h"
 #include <vector>
 
 namespace RavenEngine {
@@ -7,7 +7,7 @@ namespace RavenEngine {
 class SceneHierarchyPanel {
 public:
     SceneHierarchyPanel();
-    void SetContext(Scene* context);
+    void SetContext(SceneManager* context);
     void OnImGuiRender();
     void DrawNodeTree(SceneNode* node);
     void HandleNodeInteraction(SceneNode* node);
@@ -16,7 +16,7 @@ public:
     std::vector<SceneNode*> selectedNodes; // Corrected: only one declaration needed
 
 private:
-    Scene* context;
+    SceneManager* context;
     SceneNode* nodeToRename; // Member variable for node to rename
     bool renameRequested; // Flag to indicate renaming is requested
 };

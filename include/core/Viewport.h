@@ -6,6 +6,8 @@
 #include "imgui.h"
 #include "Renderer/Renderer.h"
 
+namespace RavenEngine {
+
 class Viewport {
 public:
     Viewport(GLFWwindow* window);
@@ -16,10 +18,9 @@ public:
 private:
     GLFWwindow* window;
     ImVec2 size; // Size of the viewport
-    GLuint fbo; // Framebuffer object for rendering
-    GLuint textureColorbuffer; // Texture to render to
-    GLuint checkerTexture; // Checker texture
-    RavenEngine::Renderer renderer;
+    Renderer renderer;
 };
+
+} // namespace RavenEngine
 
 #endif // RAVENENGINE_VIEWPORT_H

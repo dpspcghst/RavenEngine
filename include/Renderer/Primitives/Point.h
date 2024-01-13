@@ -1,22 +1,21 @@
 #pragma once
 
-#include <glad/glad.h> // Include OpenGL header
+#include <glad/glad.h>
+#include <glm/glm.hpp> // Include GLM (for vec3)
 
 namespace RavenEngine {
 
 class Point {
 public:
-    Point(float x, float y, float z);
+    explicit Point(const glm::vec3& position);
     ~Point();
 
     void Create(); // Set up the point data
     void Render(); // Render the point
 
 private:
-    float x, y, z; // Coordinates of the point
+    glm::vec3 position; // Coordinates of the point
     unsigned int VAO, VBO; // Vertex Array Object, Vertex Buffer Object
-
-    void setupPoint(); // Setup the VAO and VBO
 };
 
 } // namespace RavenEngine

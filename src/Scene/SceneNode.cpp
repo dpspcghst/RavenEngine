@@ -1,4 +1,4 @@
-#include "SceneNode.h"
+#include "../Scene/SceneNode.h"
 #include <iostream>
 
 namespace RavenEngine {

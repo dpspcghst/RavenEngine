@@ -1,30 +1,39 @@
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "Workspace.h"
+#include "UIManager.h"
+#include "Viewport.h"
 #include <iostream>
 #include "ComponentCreator.h"
-#include "imgui_internal.h"
 
 Workspace::Workspace(GLFWwindow* mainWin)
-    : window(mainWin), componentManager(), viewport(window), sceneHierarchyPanel(), currentScene() {
+    : window(mainWin), viewport(mainWin), uiManager(viewport), sceneManager(), componentManager() {
     std::cout << "Initializing Workspace..." << std::endl;
+    
+    // Set ImGui ini filename to nullptr to disable .ini file saving/loading
     ImGuiIO& io = ImGui::GetIO();
-    io.IniFilename = nullptr; // Disable .ini file saving/loading
+    io.IniFilename = nullptr; // Add this line to disable .ini file handling
 
-    console.AddLog("Workspace initialized successfully.");
+    // Set the context for the UIManager
+    uiManager.SetSceneManagerContext(&sceneManager);
+    uiManager.AddLogToConsole("Workspace initialized successfully.");
+}
 
-    sceneHierarchyPanel.SetContext(&currentScene); // Set the current scene in the panel
+void Workspace::Render() {
+    glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    componentManager.RenderImGuiComponents();
+    uiManager.Render();
+
+    glDisable(GL_BLEND);
 }
 
 void Workspace::AddComponent(const std::string& componentName) {
     std::cout << "Adding component: " << componentName << std::endl;
-    float initialComponentWidth = 100.0f;
-    float initialComponentHeight = 100.0f;
-
-    auto newComponent = ComponentCreator::CreateComponent(
-        componentName, 0.0f, 0.0f, initialComponentWidth, initialComponentHeight
-    );
-
+    auto newComponent = ComponentCreator::CreateComponent(componentName, 0.0f, 0.0f, 100.0f, 100.0f);
     if (newComponent) {
         componentManager.AddComponent(std::move(newComponent));
         std::cout << "Component added successfully." << std::endl;
@@ -35,31 +44,5 @@ void Workspace::AddComponent(const std::string& componentName) {
 
 void Workspace::Update() {
     componentManager.UpdateComponents();
-    // Update other components as needed, such as the current scene
-}
-
-void Workspace::Render() {
-    glClearColor(0.094f, 0.094f, 0.094f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    componentManager.RenderImGuiComponents();
-
-    viewport.Render();
-
-    sceneHierarchyPanel.OnImGuiRender(); // Render the scene hierarchy panel
-
-    bool consoleWindowOpen = true; // Or manage this state as needed
-    console.Draw("Console", &consoleWindowOpen); // Add this line
-
-    glDisable(GL_BLEND);
-}
-
-bool Workspace::isInside(float x, float y) const {
-    std::cout << "Checking if point (" << x << ", " << y << ") is inside the workspace..." << std::endl;
-    // Implement the logic to check if the point (x, y) is inside the workspace
-    // For now, returning true as placeholder
-    return true;
+    // Update other components as needed
 }

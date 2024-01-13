@@ -1,4 +1,4 @@
-#include "SceneHierarchyPanel.h"
+#include "../Scene/SceneHierarchyPanel.h"
 #include <imgui.h>
 #include <iostream>
 
@@ -7,7 +7,7 @@ namespace RavenEngine {
 SceneHierarchyPanel::SceneHierarchyPanel()
     : context(nullptr), nodeToRename(nullptr), renameRequested(false) {}
 
-void SceneHierarchyPanel::SetContext(Scene* newContext) {
+void SceneHierarchyPanel::SetContext(SceneManager* newContext) {
     context = newContext;
     selectedNodes.clear(); // Clear the selection
     nodeToRename = nullptr;
@@ -16,7 +16,7 @@ void SceneHierarchyPanel::SetContext(Scene* newContext) {
 
 void SceneHierarchyPanel::OnImGuiRender() {
     ImGui::SetNextWindowSize(ImVec2(300, 600), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Scene Hierarchy");
+    ImGui::Begin("SceneManager Hierarchy");
 
     // Handle deletion of multiple selected nodes
     if (!selectedNodes.empty() && ImGui::IsKeyPressed(ImGuiKey_Delete)) {

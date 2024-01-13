@@ -155,8 +155,6 @@ Primary Language: C++
 
 ## Logo
 
-The RavenEngine logo, featuring a stylized raven, is a key visual element of the engine's branding. The logo is not subject to change and is an integral part of the engine's identity.
-
 ![RavenEngine Logo](Assets/RavenLogoImgs/ravenPFP.png)
 
 ## Development Roadmap
@@ -168,84 +166,9 @@ The RavenEngine logo, featuring a stylized raven, is a key visual element of the
 5. Implement the Documentation Builder and Utility Tools to enhance developer productivity.
 6. Finalize the UI/UX of the engine, ensuring a seamless user experience.
 
-## Current Directory Structure
+# Project Directory Structure
 
-RavenEngine
-├── .vscode
-├── Assets
-│   └── Images
-│   │   ├── Cursors
-│   │   ├── Icons
-│   │   └── LogoStuff
-│   ├── Models
-│   ├── Sounds
-│   └── Textures
-├── Build
-├── Docs
-├── Include
-│   ├── KHR
-│   ├── Glad
-│   ├── Components
-│   │   ├── Component.h
-│   │   ├── ComponentCreator.h
-│   │   ├── ComponentManager.h
-│   │   ├── SceneNode.h
-│   │   └── TransformComponent.h
-│   ├── Core
-│   │   ├── AppWindow.h
-│   │   ├── Scene.h
-│   │   └── Workspace.h
-│   ├── Utils
-│   │   ├── Console.h
-│   │   ├── FileDialog.h
-│   │   ├── ImGuiManager.h
-│   │   ├── Inspector.h
-│   │   ├── MenuSystem.h
-│   │   ├── ResourceManager.h
-│   │   └── SceneHierarchyPanel.h
-│   └── Renderer
-│       └── Primitives
-│       │   ├── Primitives.h
-│       |   └── Point.h
-│       ├── Renderer.h
-│       ├── Viewport.h
-│       └── ... // other rendering related headers
-├── Libs
-│   ├── ImGui
-│   └── Stb
-├── Src
-│   ├── Glad.c
-│   ├── Main.cpp
-│   ├── Components
-│   │   ├── Component.cpp
-│   │   ├── ComponentCreator.cpp
-│   │   ├── ComponentManager.cpp
-│   │   ├── SceneNode.cpp
-│   │   └── TransformComponent.cpp
-│   ├── Core
-│   │   ├── AppWindow.cpp
-│   │   ├── Scene.cpp
-│   │   └── Workspace.cpp
-│   ├── Utils
-│   │   ├── Console.cpp
-│   │   ├── FileDialog.cpp
-│   │   ├── ImGuiManager.cpp
-│   │   ├── Inspector.cpp
-│   │   ├── MenuSystem.cpp
-│   │   ├── ResourceManager.cpp
-│   │   └── SceneHierarchyPanel.cpp
-│   └── Renderer
-│       └── Primitives
-│       │   ├── Primitives.cpp
-│       |   └── Point.cpp
-│       ├── Renderer.cpp
-│       ├── Viewport.cpp
-│       └── ... // other rendering related source files
-├── CMakeLists.txt
-├── RavenEngineProjectDoc
-├── README.md
-└── Resources.rc
-
+For the current directory structure of the project, please refer to the [fileStructure.md](docs/fileStructure.md) document.
 
 ## Contribution Guidelines
 

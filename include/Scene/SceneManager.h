@@ -7,10 +7,10 @@
 
 namespace RavenEngine {
 
-class Scene {
+class SceneManager {
 public:
-    Scene();
-    ~Scene();
+    SceneManager();
+    ~SceneManager();
 
     void AddNode(std::unique_ptr<SceneNode> node); // Change this to take a std::unique_ptr<SceneNode>
     void RemoveNode(SceneNode* node);

@@ -9,7 +9,6 @@ void Console::AddLog(const std::string& message) {
 
 void Console::Draw(const char* title, bool* p_open) {
     ImGui::SetNextWindowSize(ImVec2(600, 200)); // Set the window size to 600x200
-    ImGui::SetNextWindowPos(ImVec2(400, 800)); // Set the window position to 400x800
 
     if (!ImGui::Begin(title, p_open)) {
         ImGui::End();
