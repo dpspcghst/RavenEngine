@@ -84,7 +84,10 @@ void Doodle::DrawUI() {
 }
 
 void Doodle::HandleCanvasInteraction() {
-    // The original interaction code without cursor handling
+    if (!ImGui::IsWindowFocused()) {
+        return;
+    }
+
     ImVec2 mousePos = ImGui::GetMousePos();
     ImVec2 pointOnCanvas = ImVec2(mousePos.x - canvasPos.x, mousePos.y - canvasPos.y);
 
@@ -98,7 +101,6 @@ void Doodle::HandleCanvasInteraction() {
         isDrawing = false;
     }
 }
-
 
 void Doodle::EraseLines(const ImVec2& pointOnCanvas) {
     std::vector<std::pair<ImColor, std::vector<ImVec2>>> newStrokes;

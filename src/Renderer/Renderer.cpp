@@ -8,7 +8,6 @@ namespace RavenEngine {
 Renderer::Renderer() 
     : screenWidth(800), screenHeight(600), framebuffer(0), texture(0) {
     std::cout << "Renderer constructor called" << std::endl;
-    // Constructor logic
 }
 
 Renderer::~Renderer() {

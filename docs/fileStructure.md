@@ -39,7 +39,9 @@ RavenEngine
 │   │   └── Vector3.h
 │   ├── Renderer
 │   │   ├── Primitives
-│   │   |   └── Point.h
+│   │   |   ├── Line.h
+│   │   |   ├── Point.h
+│   │   |   └── Triangle.h
 │   │   └──  Renderer.h
 │   ├── Scene
 │   │   ├── SceneHierarchyPanel.h
@@ -77,7 +79,9 @@ RavenEngine
 │   │   └── Workspace.cpp
 │   ├── Renderer
 │   │   ├── Primitives
-│   │   |   └── Point.cpp
+│   │   |   ├── Line.cpp
+│   │   |   ├── Point.cpp
+│   │   |   └── Triangle.cpp
 │   │   ├── Renderer.cpp
 │   │   └── Viewport.cpp
 │   ├── Scene

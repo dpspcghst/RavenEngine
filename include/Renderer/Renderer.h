@@ -3,7 +3,7 @@
 
 #include <glad/glad.h>
 #include <array>
-#include <glm/glm.hpp> // Include GLM for using glm::vec3
+#include <glm/glm.hpp>
 
 namespace RavenEngine {
 
