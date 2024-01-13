@@ -26,6 +26,7 @@ set(PROJECT_SOURCES
     src/Core/Workspace.cpp
     src/main.cpp
     src/Renderer/Primitives/Point.cpp
+    src/Renderer/Primitives/Line.cpp
     src/Renderer/Renderer.cpp
     src/Scene/SceneManager.cpp
     src/Scene/SceneHierarchyPanel.cpp
