@@ -14,6 +14,7 @@ public:
 
     bool LoadShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath);
     GLuint GetShader(const std::string& name);
+    void SetUniformMat4(const std::string& name, const std::string& uniformName, const glm::mat4& matrix);
 
 private:
     std::unordered_map<std::string, GLuint> shaders;

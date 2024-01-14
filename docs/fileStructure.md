@@ -41,7 +41,8 @@ RavenEngine
 │   │   ├── Primitives
 │   │   |   ├── Line.h
 │   │   |   ├── Point.h
-│   │   |   └── Triangle.h
+│   │   |   ├── Triangle.h
+│   │   |   └── Quad.h
 │   │   └──  Renderer.h
 │   ├── Scene
 │   │   ├── SceneHierarchyPanel.h
@@ -81,7 +82,8 @@ RavenEngine
 │   │   ├── Primitives
 │   │   |   ├── Line.cpp
 │   │   |   ├── Point.cpp
-│   │   |   └── Triangle.cpp
+│   │   |   ├── Triangle.cpp
+│   │   |   └── Quad.cpp
 │   │   ├── Renderer.cpp
 │   │   └── Viewport.cpp
 │   ├── Scene

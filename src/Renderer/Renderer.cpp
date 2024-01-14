@@ -73,7 +73,7 @@ void Renderer::Clear() {
 }
 
 void Renderer::SetViewport(int x, int y, int width, int height) {
-    std::cout << "Setting viewport to: " << x << "," << y << " - " << width << "x" << height << std::endl;
+    //std::cout << "Setting viewport to: " << x << "," << y << " - " << width << "x" << height << std::endl;
     glViewport(x, y, width, height);
 }
 

@@ -28,6 +28,8 @@ set(PROJECT_SOURCES
     src/Renderer/Primitives/Point.cpp
     src/Renderer/Primitives/Line.cpp
     src/Renderer/Primitives/Triangle.cpp
+    src/Renderer/Primitives/TriQuad.cpp
+    src/Renderer/Primitives/Plane.cpp
     src/Renderer/Renderer.cpp
     src/Scene/SceneManager.cpp
     src/Scene/SceneHierarchyPanel.cpp
