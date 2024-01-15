@@ -1,5 +1,3 @@
-// includ glm for matrix
-#include <glm/gtc/matrix_transform.hpp>
 #include "ShaderManager.h"
 #include <fstream>
 #include <sstream>
@@ -68,18 +66,4 @@ std::string ShaderManager::ReadShaderFile(const std::string& filePath) {
     shaderFile.close();
 
     return shaderStream.str();
-}
-
-void ShaderManager::SetUniformMat4(const std::string& name, const std::string& uniformName, const glm::mat4& matrix) {
-    GLuint shaderProgram = GetShader(name);
-    if (shaderProgram) {
-        glUseProgram(shaderProgram);
-        GLint uniformLocation = glGetUniformLocation(shaderProgram, uniformName.c_str());
-        if (uniformLocation != -1) {
-            glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, &matrix[0][0]);
-        } else {
-            std::cerr << "Uniform " << uniformName << " not found in shader " << name << std::endl;
-        }
-        glUseProgram(0);
-    }
 }

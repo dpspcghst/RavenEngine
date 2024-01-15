@@ -15,7 +15,6 @@ public:
     void Render();
     void SetSize(float width, float height); // Declare the SetSize method
     void SetPosition(float x, float y); // Declare the SetPosition method
-    glm::vec2 GetSize() const { return size; } // Add this line
 
 private:
     GLuint VAO, VBO;

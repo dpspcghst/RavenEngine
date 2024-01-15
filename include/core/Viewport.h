@@ -11,9 +11,8 @@ namespace RavenEngine {
 class Viewport {
 public:
     Viewport(GLFWwindow* window);
-    ~Viewport(); // Declare the destructor
+    ~Viewport();
     void Render();
-    void Resize(int width, int height);
 
 private:
     GLFWwindow* window;

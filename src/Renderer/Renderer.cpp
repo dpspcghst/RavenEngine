@@ -1,46 +1,61 @@
 #include "Renderer.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "glm/gtc/matrix_transform.hpp"
 #include "../../Assets/Shaders/ShaderManager.h"
 
 namespace RavenEngine {
 
-Renderer::Renderer() 
-    : screenWidth(800), screenHeight(600), framebuffer(0), texture(0) {
-    std::cout << "Renderer constructor called" << std::endl;
+Renderer::Renderer(int gameWidth, int gameHeight)
+    : gameWidth(gameWidth), gameHeight(gameHeight), framebufferObject(0), currentTexture(0), testPlane() {
+    screenClearColor = {0.149f, 0.137f, 0.788f, 1.0f}; // Set your favorite blue color
+    UpdateProjectionMatrix(); // Correctly setup the projection matrix
+    std::cout << "Renderer created with size: " << gameWidth << "x" << gameHeight << std::endl;
+}
+
+void Renderer::UpdateProjectionMatrix() {
+    // Calculate the aspect ratio of the game's render target.
+    float aspectRatio = static_cast<float>(gameWidth) / static_cast<float>(gameHeight);
+    
+    // Define the orthographic projection dimensions.
+    // The larger dimension (width or height) will range from -1 to 1 in NDC space,
+    // and the other dimension will be scaled according to the aspect ratio.
+    float orthoWidth, orthoHeight;
+    if (aspectRatio >= 1.0f) { // Wide aspect
+        orthoWidth = aspectRatio;
+        orthoHeight = 1.0f;
+    } else { // Tall aspect
+        orthoWidth = 1.0f;
+        orthoHeight = 1.0f / aspectRatio;
+    }
+    // Use the calculated dimensions to set up an orthographic projection.
+    projectionMatrix = glm::ortho(-orthoWidth, orthoWidth, -orthoHeight, orthoHeight, -1.0f, 1.0f);
 }
 
 Renderer::~Renderer() {
     std::cout << "Renderer destructor called" << std::endl;
-    Shutdown(); // Ensure resources are cleaned up
+    ShutdownRenderer();
 }
 
-bool Renderer::Initialize(int screenWidth, int screenHeight) {
-    this->screenWidth = screenWidth;
-    this->screenHeight = screenHeight;
-
+bool Renderer::InitializeRenderer() {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         return false;
     }
 
-    SetViewport(0, 0, screenWidth, screenHeight);
+    testPlane.Create();
 
-    // Set the default clear color
-    clearColor = {0.149f, 0.137f, 0.788f, 1.0f};
+    SetGLViewport(0, 0, gameWidth, gameHeight);
+    //SetProjectionMatrix(glm::mat4(1.0f));
 
-    // Create a framebuffer object
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glGenFramebuffers(1, &framebufferObject);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebufferObject);
 
-    // Create a texture object
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glGenTextures(1, &currentTexture);
+    glBindTexture(GL_TEXTURE_2D, currentTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, gameWidth, gameHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // Attach the texture to the framebuffer
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, currentTexture, 0);
 
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         return false;
@@ -51,40 +66,34 @@ bool Renderer::Initialize(int screenWidth, int screenHeight) {
     return true;
 }
 
-void Renderer::Shutdown() {
+void Renderer::ShutdownRenderer() {
     std::cout << "Shutting down Renderer" << std::endl;
-    glDeleteFramebuffers(1, &framebuffer);
-    glDeleteTextures(1, &texture);
+    glDeleteFramebuffers(1, &framebufferObject);
+    glDeleteTextures(1, &currentTexture);
 }
 
-void Renderer::BeginScene() {
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+void Renderer::StartFrame() {
+    glBindFramebuffer(GL_FRAMEBUFFER, framebufferObject);
+    glClearColor(screenClearColor[0], screenClearColor[1], screenClearColor[2], screenClearColor[3]);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glm::mat4 viewMatrix = glm::mat4(1.0f); // Create a default view matrix if you don't have one
+    testPlane.Render();
 }
 
-void Renderer::EndScene() {
+void Renderer::FinishFrame() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::Clear() {
-    glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void Renderer::SetViewport(int x, int y, int width, int height) {
-    //std::cout << "Setting viewport to: " << x << "," << y << " - " << width << "x" << height << std::endl;
+void Renderer::SetGLViewport(int x, int y, int width, int height) {
     glViewport(x, y, width, height);
+    gameWidth = width;
+    gameHeight = height;
+    UpdateProjectionMatrix(); // Update the projection matrix on viewport size change
 }
 
-void Renderer::OnWindowResize(int newWidth, int newHeight) {
-    screenWidth = newWidth;
-    screenHeight = newHeight;
-    SetViewport(0, 0, newWidth, newHeight);
-}
-
-GLuint Renderer::GetTexture() {
-    return texture;
+GLuint Renderer::GetCurrentTexture() {
+    return currentTexture;
 }
 
 } // namespace RavenEngine

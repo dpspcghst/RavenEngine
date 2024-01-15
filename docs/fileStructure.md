@@ -40,9 +40,10 @@ RavenEngine
 │   ├── Renderer
 │   │   ├── Primitives
 │   │   |   ├── Line.h
+│   │   |   ├── Plane.h
 │   │   |   ├── Point.h
 │   │   |   ├── Triangle.h
-│   │   |   └── Quad.h
+│   │   |   └── TriQuad.h
 │   │   └──  Renderer.h
 │   ├── Scene
 │   │   ├── SceneHierarchyPanel.h
@@ -81,9 +82,10 @@ RavenEngine
 │   ├── Renderer
 │   │   ├── Primitives
 │   │   |   ├── Line.cpp
+│   │   |   ├── Plane.cpp
 │   │   |   ├── Point.cpp
 │   │   |   ├── Triangle.cpp
-│   │   |   └── Quad.cpp
+│   │   |   └── TriQuad.cpp
 │   │   ├── Renderer.cpp
 │   │   └── Viewport.cpp
 │   ├── Scene

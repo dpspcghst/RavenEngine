@@ -13,6 +13,7 @@ UIManager::UIManager(Viewport& viewport, DoodleManager& doodleManager)
 }
 
 void UIManager::Render() {
+
     // Render the UI components
 
     // SceneHierarchyPanel window (top-left)
@@ -25,7 +26,8 @@ void UIManager::Render() {
     console.Draw("Console", &consoleWindowOpen);
 
     // Viewport window (center-right-top)
-    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2, 0), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver); // Set the window size to 800x600 only on the first use
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2 - 400, 100), ImGuiCond_FirstUseEver); // Set the window position to top-center and 100px down only on the first use
     viewport.Render();
 
     doodleManager.Update();
@@ -38,7 +40,5 @@ void UIManager::SetSceneManagerContext(SceneManager* sceneManager) {
 void UIManager::AddLogToConsole(const std::string& message) {
     console.AddLog(message);
 }
-
-// Additional methods for UIManager can be implemented as needed
 
 } // namespace RavenEngine
