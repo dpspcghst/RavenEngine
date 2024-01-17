@@ -6,19 +6,24 @@
 
 namespace RavenEngine {
 
-Workspace::Workspace(GLFWwindow* mainWin)
-    : window(mainWin), viewport(mainWin), doodleManager(), 
-      uiManager(viewport, doodleManager), sceneManager(), 
-      componentManager(), menuSystem(*this, mainWin, doodleManager, uiManager) {
-    std::cout << "Initializing Workspace..." << std::endl;
-    
-    // Disable .ini file handling for ImGui
-    ImGuiIO& io = ImGui::GetIO();
-    io.IniFilename = nullptr;
+Workspace::Workspace(GLFWwindow* mainWin, SettingsManager& settingsManager)
+        : window(mainWin), 
+            settingsManager(settingsManager), 
+            viewport(mainWin, settingsManager), 
+            doodleManager(), 
+            uiManager(viewport, doodleManager), 
+            sceneManager(), 
+            componentManager(), 
+            menuSystem(*this, mainWin, doodleManager, uiManager) {
+        std::cout << "Initializing Workspace..." << std::endl;
+        
+        // Disable .ini file handling for ImGui
+        ImGuiIO& io = ImGui::GetIO();
+        io.IniFilename = nullptr;
 
-    // Set the context for the UIManager
-    uiManager.SetSceneManagerContext(&sceneManager);
-    uiManager.AddLogToConsole("Workspace initialized successfully.");
+        // Set the context for the UIManager
+        uiManager.SetSceneManagerContext(&sceneManager);
+        uiManager.AddLogToConsole("Workspace initialized successfully.");
 }
 
 void Workspace::Render() {

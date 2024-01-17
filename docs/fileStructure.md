@@ -1,22 +1,20 @@
 RavenEngine
 ├── .vscode
 ├── Assets
-│   └── Images
+│   ├── Images
 │   │   ├── Cursors
 │   │   ├── Icons
 │   │   └── LogoStuff
 │   ├── Models
 │   ├── Shaders
 │   │   ├── PointFragmentShader.glsl
-│   │   └── PointVertexShader.glsl
+│   │   ├── PointVertexShader.glsl
+│   │   ├── ShaderManager.cpp
+│   │   └── ShaderManager.h
 │   └── Textures
-│       ├── WhiteNoiseTexture.cpp
-│       └── WhiteNoiseTexture.h
 ├── Build
 ├── Docs
 ├── Include
-│   ├── KHR
-│   ├── Glad
 │   ├── Components
 │   │   ├── Component.h
 │   │   ├── ComponentCreator.h
@@ -38,10 +36,12 @@ RavenEngine
 │   ├── Maths
 │   │   └── Vector3.h
 │   ├── Renderer
-│   │   ├── Primitives
+│   │   ├── BaseShapes
 │   │   |   ├── Line.h
 │   │   |   ├── Plane.h
 │   │   |   ├── Point.h
+│   │   |   ├── Shape.h
+│   │   |   ├── ShapeManager.h
 │   │   |   ├── Triangle.h
 │   │   |   └── TriQuad.h
 │   │   └──  Renderer.h
@@ -78,20 +78,28 @@ RavenEngine
 │   │   │   ├── GLFWEventPoller.cpp
 │   │   │   └── GLFWCWindowWrapper.cpp
 │   │   ├── UIManager.cpp
+│   │   ├── Viewport.cpp
 │   │   └── Workspace.cpp
 │   ├── Renderer
-│   │   ├── Primitives
+│   │   ├── BaseShapes
 │   │   |   ├── Line.cpp
 │   │   |   ├── Plane.cpp
 │   │   |   ├── Point.cpp
+│   │   |   ├── Shape.cpp
+│   │   |   ├── ShapeManager.cpp
 │   │   |   ├── Triangle.cpp
 │   │   |   └── TriQuad.cpp
-│   │   ├── Renderer.cpp
-│   │   └── Viewport.cpp
+│   │   └── Renderer.cpp
 │   ├── Scene
 │   │   ├── SceneHierarchyPanel.cpp
 │   │   ├── SceneManager.cpp
 │   │   └── SceneNode.cpp
+│   ├── Settings
+│   │   ├── ProjectSettings.json
+│   │   ├── ProjectWizard.cpp
+│   │   ├── ProjectWizard.h
+│   │   ├── SettingsManager.cpp
+│   │   └── SettingsManager.h
 │   └── Utils
 │       ├── Doodle
 │       │   ├── Doodle.cpp

@@ -1,4 +1,4 @@
-#include "../../include/Renderer/Primitives/TriQuad.h"
+#include "../../include/Renderer/BaseShapes/TriQuad.h"
 
 namespace RavenEngine {
 

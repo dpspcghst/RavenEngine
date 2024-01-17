@@ -1,0 +1,9 @@
+{
+    "gameTitle": "My Game",
+    "resolution": {
+        "width": 1920,
+        "height": 1080
+    },
+    "renderStyle": "2D",
+    "creatorName": "John Doe"
+}

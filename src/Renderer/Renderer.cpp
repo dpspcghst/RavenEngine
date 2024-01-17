@@ -1,35 +1,17 @@
 #include "Renderer.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "glm/gtc/matrix_transform.hpp"
 #include "../../Assets/Shaders/ShaderManager.h"
+#include "../../include/Scene/SceneManager.h"
 
 namespace RavenEngine {
 
-Renderer::Renderer(int gameWidth, int gameHeight)
-    : gameWidth(gameWidth), gameHeight(gameHeight), framebufferObject(0), currentTexture(0), testPlane() {
-    screenClearColor = {0.149f, 0.137f, 0.788f, 1.0f}; // Set your favorite blue color
-    UpdateProjectionMatrix(); // Correctly setup the projection matrix
+Renderer::Renderer(SettingsManager& settingsManager)
+    : gameWidth(settingsManager.GetResolutionWidth()), 
+      gameHeight(settingsManager.GetResolutionHeight()), 
+      framebufferObject(0), 
+      currentTexture(0) {
     std::cout << "Renderer created with size: " << gameWidth << "x" << gameHeight << std::endl;
-}
-
-void Renderer::UpdateProjectionMatrix() {
-    // Calculate the aspect ratio of the game's render target.
-    float aspectRatio = static_cast<float>(gameWidth) / static_cast<float>(gameHeight);
-    
-    // Define the orthographic projection dimensions.
-    // The larger dimension (width or height) will range from -1 to 1 in NDC space,
-    // and the other dimension will be scaled according to the aspect ratio.
-    float orthoWidth, orthoHeight;
-    if (aspectRatio >= 1.0f) { // Wide aspect
-        orthoWidth = aspectRatio;
-        orthoHeight = 1.0f;
-    } else { // Tall aspect
-        orthoWidth = 1.0f;
-        orthoHeight = 1.0f / aspectRatio;
-    }
-    // Use the calculated dimensions to set up an orthographic projection.
-    projectionMatrix = glm::ortho(-orthoWidth, orthoWidth, -orthoHeight, orthoHeight, -1.0f, 1.0f);
 }
 
 Renderer::~Renderer() {
@@ -42,10 +24,10 @@ bool Renderer::InitializeRenderer() {
         return false;
     }
 
-    testPlane.Create();
+    // Initialize the ShaderManager and load your shaders
+    shaderManager.LoadShader("default", "../../Assets/Shaders/PointVertexShader.glsl", "../../Assets/Shaders/PointFragmentShader.glsl");
 
     SetGLViewport(0, 0, gameWidth, gameHeight);
-    //SetProjectionMatrix(glm::mat4(1.0f));
 
     glGenFramebuffers(1, &framebufferObject);
     glBindFramebuffer(GL_FRAMEBUFFER, framebufferObject);
@@ -60,7 +42,6 @@ bool Renderer::InitializeRenderer() {
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         return false;
     }
-
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     return true;
@@ -72,13 +53,11 @@ void Renderer::ShutdownRenderer() {
     glDeleteTextures(1, &currentTexture);
 }
 
+// Updated StartFrame method without SceneManager parameter
 void Renderer::StartFrame() {
     glBindFramebuffer(GL_FRAMEBUFFER, framebufferObject);
-    glClearColor(screenClearColor[0], screenClearColor[1], screenClearColor[2], screenClearColor[3]);
+    glClearColor(SCREEN_CLEAR_COLOR[0], SCREEN_CLEAR_COLOR[1], SCREEN_CLEAR_COLOR[2], SCREEN_CLEAR_COLOR[3]);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glm::mat4 viewMatrix = glm::mat4(1.0f); // Create a default view matrix if you don't have one
-    testPlane.Render();
 }
 
 void Renderer::FinishFrame() {
@@ -89,11 +68,22 @@ void Renderer::SetGLViewport(int x, int y, int width, int height) {
     glViewport(x, y, width, height);
     gameWidth = width;
     gameHeight = height;
-    UpdateProjectionMatrix(); // Update the projection matrix on viewport size change
 }
 
 GLuint Renderer::GetCurrentTexture() {
     return currentTexture;
 }
+
+void Renderer::RenderNode(const SceneNode& node) {
+    shaderManager.UseShader(node.GetName());
+    // Set uniforms, bind VAO, etc.
+    // Draw call (glDrawArrays or glDrawElements)
+}
+
+// void Renderer::RenderScene(const SceneManager& sceneManager) {
+//     for (const auto& node : sceneManager.GetNodes()) {
+//     RenderNode(*node);
+//     }
+// }
 
 } // namespace RavenEngine

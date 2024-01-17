@@ -16,7 +16,7 @@ private:
     GLFWwindow* mainWindow;
     bool fileDialogOpen = false; // State variable to track file dialog status
     DoodleManager& doodleManager;
-    UIManager& uiManager; // Add this line
+    UIManager& uiManager; 
 
 public:
     MenuSystem(Workspace& workspace, GLFWwindow* window, DoodleManager& doodleManager, UIManager& uiManager); // Update this line

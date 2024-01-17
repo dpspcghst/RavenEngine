@@ -9,9 +9,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Find packages
 find_package(glfw3 CONFIG REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
 
 # Define source files
 set(PROJECT_SOURCES
+    Settings/SettingsManager.cpp
     Assets/Shaders/ShaderManager.cpp
     src/Components/Component.cpp
     src/Components/ComponentCreator.cpp
@@ -25,11 +27,13 @@ set(PROJECT_SOURCES
     src/Core/Viewport.cpp
     src/Core/Workspace.cpp
     src/main.cpp
-    src/Renderer/Primitives/Point.cpp
-    src/Renderer/Primitives/Line.cpp
-    src/Renderer/Primitives/Triangle.cpp
-    src/Renderer/Primitives/TriQuad.cpp
-    src/Renderer/Primitives/Plane.cpp
+    src/Renderer/BaseShapes/Point.cpp
+    src/Renderer/BaseShapes/Line.cpp
+    src/Renderer/BaseShapes/Triangle.cpp
+    src/Renderer/BaseShapes/TriQuad.cpp
+    src/Renderer/BaseShapes/Plane.cpp
+    src/Renderer/BaseShapes/Shape.cpp
+    src/Renderer/BaseShapes/ShapeManager.cpp
     src/Renderer/Renderer.cpp
     src/Scene/SceneManager.cpp
     src/Scene/SceneHierarchyPanel.cpp
@@ -75,7 +79,8 @@ target_include_directories(RavenEngine PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include/KHR"
     "${CMAKE_CURRENT_SOURCE_DIR}/libs/imgui"
     "${CMAKE_CURRENT_SOURCE_DIR}/libs/glm"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Settings"
 )
 
 # Link libraries
-target_link_libraries(RavenEngine PRIVATE glfw OpenGL::GL)
+target_link_libraries(RavenEngine PRIVATE glfw OpenGL::GL nlohmann_json::nlohmann_json) 

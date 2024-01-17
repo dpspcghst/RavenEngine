@@ -5,10 +5,10 @@
 
 namespace RavenEngine {
 
-Viewport::Viewport(GLFWwindow* win) 
+Viewport::Viewport(GLFWwindow* win, SettingsManager& settingsManager) 
         : window(win), 
-            size(ImVec2(Renderer::RENDERER_WIDTH, Renderer::RENDERER_HEIGHT)), 
-            renderer(Renderer::RENDERER_WIDTH, Renderer::RENDERER_HEIGHT) { 
+            renderer(settingsManager), 
+            size(ImVec2(renderer.GetWidth(), renderer.GetHeight())) { 
         std::cout << "Initializing Viewport..." << std::endl;
         renderer.InitializeRenderer();
         std::cout << "Viewport initialized successfully." << std::endl;

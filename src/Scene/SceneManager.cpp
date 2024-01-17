@@ -14,12 +14,12 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::AddNode(std::unique_ptr<SceneNode> node) {
-    entityIDs.insert(node->GetID()); // Add this line
+    entityIDs.insert(node->GetID());
     nodes.push_back(std::move(node));
 }
 
 void SceneManager::RemoveNode(SceneNode* node) {
-    entityIDs.erase(node->GetID()); // Add this line
+    entityIDs.erase(node->GetID());
     nodes.erase(std::remove_if(nodes.begin(), nodes.end(),
         [node](const std::unique_ptr<SceneNode>& unique_ptr) {
             return unique_ptr.get() == node;
@@ -61,6 +61,11 @@ void SceneManager::SetParent(SceneNode* child, SceneNode* parent) {
         // Implement parent-child relationship
         // Update transforms, etc.
     }
+}
+
+int SceneManager::GetNextEntityID() {
+    int newID = entityIDs.empty() ? 1 : *entityIDs.rbegin() + 1;
+    return newID;
 }
 
 } // namespace RavenEngine

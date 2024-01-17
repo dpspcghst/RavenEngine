@@ -3,8 +3,16 @@
 #include <vector>
 #include <memory>
 #include "../Maths/Vector3.h" // Make sure to include the header file for Vector3
+#include "Renderer.h" // Include the header file for Renderer
 
 namespace RavenEngine {
+
+enum class ShapeType {
+    Point,
+    Line,
+    Plane,
+    // Add other shape types here
+};
 
 class SceneNode {
 public:
@@ -31,6 +39,11 @@ public:
 
     int GetID() const;
 
+    void AttachShape(ShapeType shapeType); // Attach a shape of a specific type to the node
+
+    void SetRenderData(ShapeType type, const std::string& shaderName); // Set the render data
+    void Render(Renderer& renderer); // Render the node
+
 private:
     std::string name;
     std::vector<std::unique_ptr<SceneNode>> children;
@@ -38,6 +51,10 @@ private:
     Vector3 rotation;
     Vector3 scale;
     int id; // Unique identifier for each node
+
+    ShapeType shapeType; // The type of shape attached to the node
+    std::string shaderName; // The name of the shader used to render the node
+    // Other renderable data like VAO, VBO
 };
 
 } // namespace RavenEngine

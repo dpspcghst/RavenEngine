@@ -9,8 +9,9 @@ GLFWContextManager::GLFWContextManager(GLFWwindow* window) {
 
 void GLFWContextManager::makeContextCurrent(GLFWwindow* window) {
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);  // Add this line to set the swap interval
+    glfwSwapInterval(1); // Set the swap interval
 }
+
 
 void GLFWContextManager::loadGLAD() {
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {

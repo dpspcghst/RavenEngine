@@ -8,13 +8,14 @@
 #include "../Components/ComponentManager.h"
 #include "../utils/Doodle/DoodleManager.h"
 #include "../utils/MenuSystem.h"
+#include "SettingsManager.h" // Include the SettingsManager header
 
 namespace RavenEngine {
     class SceneManager;
 
     class Workspace {
     public:
-        Workspace(GLFWwindow* mainWin);
+        Workspace(GLFWwindow* mainWin, SettingsManager& settingsManager); // Add SettingsManager to the constructor
         void Render();
         void AddComponent(const std::string& componentName);
         void Update();
@@ -22,11 +23,12 @@ namespace RavenEngine {
     private:
         GLFWwindow* window;
         UIManager uiManager;
-        Viewport viewport;
+        Viewport viewport; // Viewport now requires a SettingsManager object
         SceneManager sceneManager;
         ComponentManager componentManager;
         DoodleManager doodleManager;
         MenuSystem menuSystem;  // Add MenuSystem as a member variable
+        SettingsManager& settingsManager; // Add SettingsManager as a member variable
     };
 }
 

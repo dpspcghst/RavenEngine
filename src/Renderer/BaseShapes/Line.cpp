@@ -1,9 +1,11 @@
-#include "Renderer/Primitives/Line.h"
+// Line.cpp
+#include <glm/glm.hpp> // Include the glm header
+#include "../../include/Renderer/BaseShapes/Line.h"
 
 namespace RavenEngine {
 
 Line::Line(const glm::vec3& startPoint, const glm::vec3& endPoint)
-    : start(startPoint), end(endPoint), VAO(0), VBO(0) {}
+    : Shape(), start(startPoint), end(endPoint) {} // Call the Shape constructor
 
 Line::~Line() {
     glDeleteVertexArrays(1, &VAO);
@@ -29,7 +31,10 @@ void Line::Create() {
     glBindVertexArray(0);
 }
 
-void Line::Render() {
+void Line::Render(ShaderManager& shaderManager, const std::string& shaderName) {
+    shaderManager.UseShader(shaderName);
+    shaderManager.SetUniform(shaderName, transformMatrix);
+
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 2);
     glBindVertexArray(0);

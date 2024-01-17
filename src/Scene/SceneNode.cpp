@@ -73,6 +73,15 @@ int SceneNode::GetID() const {
     return id;
 }
 
+void SceneNode::AttachShape(ShapeType shapeType) {
+    switch (shapeType) {
+        case ShapeType::Point:
+            // Logic to attach a Point shape
+            break;
+        // Handle other shape types similarly
+    }
+}
+
 // Implement additional methods for components and transformations here.
 
 } // namespace RavenEngine

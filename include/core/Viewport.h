@@ -5,19 +5,20 @@
 #include <glad/glad.h>
 #include "imgui.h"
 #include "Renderer/Renderer.h"
+#include "SettingsManager.h"
 
 namespace RavenEngine {
 
 class Viewport {
 public:
-    Viewport(GLFWwindow* window);
+    Viewport(GLFWwindow* window, SettingsManager& settingsManager); // Add SettingsManager to the constructor
     ~Viewport();
     void Render();
 
 private:
     GLFWwindow* window;
-    ImVec2 size; // Size of the viewport
     Renderer renderer;
+    ImVec2 size; // Size of the viewport
 };
 
 } // namespace RavenEngine

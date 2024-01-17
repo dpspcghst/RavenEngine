@@ -1,9 +1,9 @@
-#ifndef SHADER_MANAGER_H
-#define SHADER_MANAGER_H
+#ifndef RAVENENGINE_SHADERMANAGER_H
+#define RAVENENGINE_SHADERMANAGER_H
 
 #include <string>
-#include <unordered_map>
-#include <glad/glad.h>
+#include <map>
+#include <glad/glad.h> // Use GLAD for OpenGL functions
 #include <glm/glm.hpp>
 
 namespace RavenEngine {
@@ -14,18 +14,18 @@ public:
     ~ShaderManager();
 
     bool LoadShader(const std::string& name, const std::string& vertexPath, const std::string& fragmentPath);
+    GLuint GetShader(const std::string& name);
+    std::string GetShaderName(GLuint shaderID);
     void UseShader(const std::string& name);
     void SetUniform(const std::string& name, const glm::mat4& value);
 
-    GLuint GetShader(const std::string& name);
-
 private:
-    std::unordered_map<std::string, GLuint> shaders;
+    std::map<std::string, GLuint> shaders;
 
     GLuint CreateShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource);
     std::string ReadShaderFile(const std::string& filePath);
 };
 
-} // namespace RavenEngine
+} // End of RavenEngine namespace
 
-#endif // SHADER_MANAGER_H
+#endif // RAVENENGINE_SHADERMANAGER_H

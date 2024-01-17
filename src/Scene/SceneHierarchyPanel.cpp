@@ -27,11 +27,24 @@ void SceneHierarchyPanel::OnImGuiRender() {
     }
 
     if (ImGui::Button("Create Entity")) {
-        int newID = context->entityIDs.empty() ? 1 : *context->entityIDs.rbegin() + 1; // Check if entityIDs is empty
+        int newID = context->GetNextEntityID(); // Use the public method to get the next entity ID
         std::string entityName = "New Entity" + std::to_string(newID);
         auto newNode = std::make_unique<SceneNode>(entityName, newID);
         context->AddNode(std::move(newNode));
         std::cout << "Created new entity: " << entityName << std::endl;
+    }
+
+    if (ImGui::Button("Create Shape")) {
+        ImGui::OpenPopup("CreateShapePopup");
+    }
+
+    if (ImGui::BeginPopup("CreateShapePopup")) {
+        if (ImGui::MenuItem("Point")) {
+            CreateShape<ShapeType::Point>();
+        }
+        // Add similar menu items for Line, Plane, etc.
+
+        ImGui::EndPopup();
     }
 
     if (context) {
@@ -91,7 +104,6 @@ void SceneHierarchyPanel::DrawNodeTree(SceneNode* node) {
     }
     ImGui::PopID();
 }
-
 
 void SceneHierarchyPanel::HandleNodeInteraction(SceneNode* node) {
     bool ctrlPressed = ImGui::GetIO().KeyCtrl;
@@ -177,6 +189,24 @@ void SceneHierarchyPanel::HandleNodeInteraction(SceneNode* node) {
         ImGui::EndPopup();
     }
 }
+
+template<ShapeType shapeType>
+void SceneHierarchyPanel::CreateShape() {
+    if (context) {
+        int newID = context->GetNextEntityID();
+        std::string entityName = "New Shape " + std::to_string(newID);
+        auto newNode = std::make_unique<SceneNode>(entityName, newID);
+        
+        // Attach the specific shape to the node
+        newNode->AttachShape(shapeType);
+
+        context->AddNode(std::move(newNode));
+        std::cout << "Created new shape: " << entityName << std::endl;
+    }
+}
+
+template void SceneHierarchyPanel::CreateShape<ShapeType::Point>();
+
 
 } // namespace RavenEngine
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneManager.h"
+#include "SceneNode.h" // Include this to get the ShapeType enum
 #include <vector>
 
 namespace RavenEngine {
@@ -7,13 +8,16 @@ namespace RavenEngine {
 class SceneHierarchyPanel {
 public:
     SceneHierarchyPanel();
-    void SetContext(SceneManager* context);
+    void SetContext(SceneManager* newContext);
     void OnImGuiRender();
     void DrawNodeTree(SceneNode* node);
     void HandleNodeInteraction(SceneNode* node);
     void RemoveNode(SceneNode* node);
 
-    std::vector<SceneNode*> selectedNodes; // Corrected: only one declaration needed
+    template<ShapeType shapeType>
+    void CreateShape();
+
+    std::vector<SceneNode*> selectedNodes;
 
 private:
     SceneManager* context;

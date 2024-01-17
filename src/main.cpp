@@ -6,10 +6,12 @@
 #include "GLFWEventPoller.h"
 #include "ImGuiManager.h"
 #include "ResourceManager.h"
-#include "../include/core/Workspace.h" // Make sure the path is correct
+#include "../include/core/Workspace.h"
+#include "../Settings/SettingsManager.h"
 
 int main() { 
     try {
+        RavenEngine::SettingsManager settingsManager("../Settings/ProjectSettings.json");
         GLFWWindowWrapper windowWrapper(800, 600, "Raven Engine");
         GLFWwindow* mainWindow = windowWrapper.getMainWindow();
         glfwMaximizeWindow(mainWindow);
@@ -20,7 +22,7 @@ int main() {
         ResourceManager::SetWindowIcons(mainWindow);
 
         ImGuiManager::Init(mainWindow);
-        RavenEngine::Workspace workspace(mainWindow); // Assuming Workspace is in the RavenEngine namespace
+        RavenEngine::Workspace workspace(mainWindow, settingsManager); // Pass settingsManager to Workspace constructor
 
         while (!windowWrapper.shouldClose()) {
             GLFWEventPoller::pollEvents(); 
