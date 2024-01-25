@@ -1,38 +1,40 @@
-#include "../include/Renderer/Renderer.h"
+#include "../Renderer/Renderer.h"
 #include "Viewport.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 
 namespace RavenEngine {
 
-Viewport::Viewport(GLFWwindow* win, SettingsManager& settingsManager) 
-        : window(win), 
-            renderer(settingsManager), 
-            size(ImVec2(renderer.GetWidth(), renderer.GetHeight())) { 
-        std::cout << "Initializing Viewport..." << std::endl;
+Viewport::Viewport(GLFWwindow* win) 
+        : window(win),
+            renderer(SettingsManager::GetInstance()),
+            size(ImVec2(static_cast<float>(renderer.GetSize().first), static_cast<float>(renderer.GetSize().second))),
+            offset(0, 0) { 
+        // std::cout << "Initializing Viewport..." << std::endl;
         renderer.InitializeRenderer();
-        std::cout << "Viewport initialized successfully." << std::endl;
 }
 
 Viewport::~Viewport() {
     renderer.ShutdownRenderer();
-    std::cout << "Viewport resources cleaned up successfully." << std::endl;
+    //std::cout << "Viewport resources cleaned up successfully." << std::endl;
 }
 
-void Viewport::Render() {
+void Viewport::Render(SceneNode& rootNode) {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
     
     // Set the window background color
     ImGuiStyle& style = ImGui::GetStyle();
     ImVec4 oldColor = style.Colors[ImGuiCol_WindowBg]; // Save the old color
-    style.Colors[ImGuiCol_WindowBg] = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Set the background color to red
-
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.0094f, 0.0094f, 0.0094f, 1.0f);
     ImGui::Begin("Viewport", nullptr, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-
+    ImGuiIO& io = ImGui::GetIO();
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    renderer.StartFrame();  // Start the renderer's frame
-    // ... Renderer render code ...
-    renderer.FinishFrame(); // Finish the renderer's frame
+
+
+    renderer.StartFrame();
+    renderer.RenderScene(rootNode);
+    
+    renderer.FinishFrame();
 
     GLuint textureId = renderer.GetCurrentTexture(); // Get the renderer's output texture ID
 
@@ -42,7 +44,7 @@ void Viewport::Render() {
 
     // Get the scroll wheel delta and adjust the zoom factor
     static float zoom = 1.0f;
-    float targetZoom = zoom + ImGui::GetIO().MouseWheel * 0.1f;
+    float targetZoom = zoom + io.MouseWheel * 0.1f;
     targetZoom = std::max(targetZoom, 0.1f); // Clamp the target zoom
     zoom = zoom + (targetZoom - zoom) * 0.1f; // Adjust the zoom smoothly
 
@@ -53,7 +55,29 @@ void Viewport::Render() {
     paddingY = paddingY > 0 ? paddingY : 0;
 
     // Set cursor position to apply padding
-    ImGui::SetCursorPos(ImVec2(paddingX, paddingY));
+    ImGui::SetCursorPos(ImVec2(paddingX + offset.x, paddingY + offset.y));
+
+    // Panning
+    if (ImGui::IsWindowFocused()) {
+        bool isPanning = io.MouseDown[ImGuiMouseButton_Middle];
+        static ImVec2 initialMousePos;
+        static ImVec2 initialOffset;
+
+        if (isPanning) {
+            if (!io.MouseDown[ImGuiMouseButton_Middle]) {
+                // If the mouse button was just released, stop panning
+                isPanning = false;
+            } else if (!io.MouseDownDuration[ImGuiMouseButton_Middle]) {
+                // If the mouse button was just pressed, start panning
+                initialMousePos = io.MousePos;
+                initialOffset = offset;
+            } else {
+                // If the mouse button is being held down, update the offset based on the mouse movement
+                offset.x = initialOffset.x + (io.MousePos.x - initialMousePos.x) / zoom;
+                offset.y = initialOffset.y + (io.MousePos.y - initialMousePos.y) / zoom;
+            }
+        }
+    }
 
     // Render the texture to the viewport with zoom
     ImGui::Image(

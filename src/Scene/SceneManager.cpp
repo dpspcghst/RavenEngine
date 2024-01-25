@@ -1,40 +1,96 @@
-#include "../Scene/SceneManager.h"
+// scenemanager.cpp
+
+// #include section
+// #####################
+// Standard library includes
+#include <stack>
+#include <iostream>
+
+// Third party includes
+
+// Raven includes
+#include "SceneManager.h"
+#include "../Renderer/Shapes/Shape.h"
+#include "../Renderer/Shapes/Shape2D/Shape2D.h"
 
 namespace RavenEngine {
 
 SceneManager::SceneManager() {
-    // Example of adding a node with a unique ID
-    static int nextNodeId = 1;
-    AddNode(std::make_unique<SceneNode>("InitialNode", nextNodeId++));
+    rootNode = std::make_unique<SceneNode>();
+    rootNode->SetName("rootNode");
 }
 
-SceneManager::~SceneManager() {
-    // Destructor logic
-    // No need to manually delete nodes or clear the vector, unique_ptr will handle it
+SceneManager::~SceneManager() {                                                           // Destructor
+    // no need to delete rootNode, as it is a unique_ptr
+}
+ 
+int SceneManager::GetNextEntityID() {                                                     // Get the next entity ID
+    int newID = entityIDs.empty() ? 1 : *entityIDs.rbegin() + 1;
+    return newID;
 }
 
 void SceneManager::AddNode(std::unique_ptr<SceneNode> node) {
-    entityIDs.insert(node->GetID());
-    nodes.push_back(std::move(node));
-}
+        int newID;
+        if (!deletedNodeIDs.empty()) {
+            newID = deletedNodeIDs.top();
+            deletedNodeIDs.pop();
+        } else {
+            newID = GetNextEntityID();
+        }
+        node->SetID(newID);
+        entityIDs.insert(newID); // Add the entity ID to the set
+
+        // Get the raw pointer from the shared_ptr and cast it to Shape2D*
+        auto shapePtr = node->GetShape();
+        if (shapePtr) {
+            Shape2D* shape2D = dynamic_cast<Shape2D*>(shapePtr.get());
+            if (shape2D) {
+                // Use the Shape2D class instead of the Shape class
+                Shape2D::Type shapeType = shape2D->GetType();
+                std::string shapeTypeName = Shape2D::GetTypeName(shapeType);
+                std::string entityName = shapeTypeName + " " + std::to_string(newID);
+                node->SetName(entityName);
+            }
+        }
+
+        rootNode->AddChild(std::move(node)); // Add the node to the root node
+    }
 
 void SceneManager::RemoveNode(SceneNode* node) {
+    std::cout << "Removing node: " << node->GetName() << std::endl;
+    deletedNodeIDs.push(node->GetID());
     entityIDs.erase(node->GetID());
+    rootNode->RemoveChild(node);
+
+
+    // Remove the node from the nodes vector
     nodes.erase(std::remove_if(nodes.begin(), nodes.end(),
-        [node](const std::unique_ptr<SceneNode>& unique_ptr) {
-            return unique_ptr.get() == node;
-        }), nodes.end());
+                               [node](const std::unique_ptr<SceneNode>& n) { return n.get() == node; }),
+                nodes.end());
+
+    // Debug print statements
+    std::cout << "deletedNodeIDs size: " << deletedNodeIDs.size() << std::endl;
+    std::cout << "nodes size: " << nodes.size() << std::endl;
 }
 
-void SceneManager::Update(float deltaTime) {
-    for (auto& node : nodes) { // Use reference to avoid copying unique_ptr
-        if (node) {
-            node->Update(deltaTime);
-        }
+std::vector<SceneNode*> SceneManager::GetAllNodes() const {                               
+    std::vector<SceneNode*> allNodes;
+    const auto& children = rootNode->GetChildren();  // Get the children of the rootNode
+    for (const auto& child : children) {
+        allNodes.push_back(child.get());
     }
+    return allNodes;
 }
 
-SceneNode* SceneManager::FindNode(const std::string& name) const {
+const std::vector<std::unique_ptr<SceneNode>>& SceneManager::GetNodes() const {           // Get a reference to the vector of unique pointers to the nodes
+    return nodes;
+}
+
+SceneNode& SceneManager::GetRootNode() const {                                            // Get the root node
+    return *rootNode; // Dereference the unique_ptr
+}
+
+SceneNode* SceneManager::FindNode(const std::string& name) const {                        // Find a node by name
     for (const auto& node : nodes) { // Use const reference to avoid copying unique_ptr
         if (node && node->GetName() == name) {
             return node.get();
@@ -43,19 +99,7 @@ SceneNode* SceneManager::FindNode(const std::string& name) const {
     return nullptr;
 }
 
-const std::vector<std::unique_ptr<SceneNode>>& SceneManager::GetNodes() const {
-    return nodes;
-}
-
-std::vector<SceneNode*> SceneManager::GetAllNodes() const {
-    std::vector<SceneNode*> allNodes;
-    for (const auto& node : nodes) {
-        allNodes.push_back(node.get());
-    }
-    return allNodes;
-}
-
-void SceneManager::SetParent(SceneNode* child, SceneNode* parent) {
+void SceneManager::SetParent(SceneNode* child, SceneNode* parent) {                       // Set the parent of a node
     // Ensure both child and parent are valid
     if (child && parent) {
         // Implement parent-child relationship
@@ -63,9 +107,12 @@ void SceneManager::SetParent(SceneNode* child, SceneNode* parent) {
     }
 }
 
-int SceneManager::GetNextEntityID() {
-    int newID = entityIDs.empty() ? 1 : *entityIDs.rbegin() + 1;
-    return newID;
+void SceneManager::Update(float deltaTime) {                                              // Update the scene
+    for (auto& node : nodes) { // Use reference to avoid copying unique_ptr
+        if (node) { // Check if node is valid
+            node->Update(deltaTime); // Update the node
+        }
+    }
 }
 
 } // namespace RavenEngine

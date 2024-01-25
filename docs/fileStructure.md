@@ -7,8 +7,8 @@ RavenEngine
 │   │   └── LogoStuff
 │   ├── Models
 │   ├── Shaders
-│   │   ├── PointFragmentShader.glsl
-│   │   ├── PointVertexShader.glsl
+│   │   ├── FragmentShader.glsl
+│   │   ├── VertexShader.glsl
 │   │   ├── ShaderManager.cpp
 │   │   └── ShaderManager.h
 │   └── Textures
@@ -36,7 +36,7 @@ RavenEngine
 │   ├── Maths
 │   │   └── Vector3.h
 │   ├── Renderer
-│   │   ├── BaseShapes
+│   │   ├── Shapes
 │   │   |   ├── Line.h
 │   │   |   ├── Plane.h
 │   │   |   ├── Point.h
@@ -46,7 +46,7 @@ RavenEngine
 │   │   |   └── TriQuad.h
 │   │   └──  Renderer.h
 │   ├── Scene
-│   │   ├── SceneHierarchyPanel.h
+│   │   ├── ScenePanel.h
 │   │   ├── SceneManager.h
 │   │   └── SceneNode.h
 │   └── Utils
@@ -81,7 +81,7 @@ RavenEngine
 │   │   ├── Viewport.cpp
 │   │   └── Workspace.cpp
 │   ├── Renderer
-│   │   ├── BaseShapes
+│   │   ├── Shapes
 │   │   |   ├── Line.cpp
 │   │   |   ├── Plane.cpp
 │   │   |   ├── Point.cpp
@@ -91,7 +91,7 @@ RavenEngine
 │   │   |   └── TriQuad.cpp
 │   │   └── Renderer.cpp
 │   ├── Scene
-│   │   ├── SceneHierarchyPanel.cpp
+│   │   ├── ScenePanel.cpp
 │   │   ├── SceneManager.cpp
 │   │   └── SceneNode.cpp
 │   ├── Settings

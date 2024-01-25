@@ -4,21 +4,23 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 #include "imgui.h"
-#include "Renderer/Renderer.h"
+#include "../../src/Renderer/Renderer.h"
+#include "../../src/Scene/SceneNode.h"  // Include the SceneNode header
 #include "SettingsManager.h"
 
 namespace RavenEngine {
 
 class Viewport {
 public:
-    Viewport(GLFWwindow* window, SettingsManager& settingsManager); // Add SettingsManager to the constructor
+    explicit Viewport(GLFWwindow* window);
     ~Viewport();
-    void Render();
+    void Render(SceneNode& rootNode);
 
 private:
     GLFWwindow* window;
     Renderer renderer;
-    ImVec2 size; // Size of the viewport
+    ImVec2 size;
+    ImVec2 offset;
 };
 
 } // namespace RavenEngine

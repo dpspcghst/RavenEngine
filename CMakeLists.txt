@@ -15,10 +15,6 @@ find_package(nlohmann_json CONFIG REQUIRED)
 set(PROJECT_SOURCES
     Settings/SettingsManager.cpp
     Assets/Shaders/ShaderManager.cpp
-    src/Components/Component.cpp
-    src/Components/ComponentCreator.cpp
-    src/Components/ComponentManager.cpp
-    src/Components/TransformComponent.cpp
     src/Core/GLFWManagement/GLFWCallbacks.cpp
     src/Core/GLFWManagement/GLFWContextManager.cpp
     src/Core/GLFWManagement/GLFWEventPoller.cpp
@@ -27,16 +23,21 @@ set(PROJECT_SOURCES
     src/Core/Viewport.cpp
     src/Core/Workspace.cpp
     src/main.cpp
-    src/Renderer/BaseShapes/Point.cpp
-    src/Renderer/BaseShapes/Line.cpp
-    src/Renderer/BaseShapes/Triangle.cpp
-    src/Renderer/BaseShapes/TriQuad.cpp
-    src/Renderer/BaseShapes/Plane.cpp
-    src/Renderer/BaseShapes/Shape.cpp
-    src/Renderer/BaseShapes/ShapeManager.cpp
+    src/Renderer/Shapes/Shape2D/Point.cpp
+    src/Renderer/Shapes/Shape2D/Line.cpp
+    src/Renderer/Shapes/Shape2D/Triangle.cpp
+    src/Renderer/Shapes/Shape2D/TriQuad.cpp
+    src/Renderer/Shapes/Shape2D/Plane.cpp
+    src/Renderer/Shapes/Shape2D/Shape2d.cpp
+    src/Renderer/Shapes/Shape.cpp
+    src/Renderer/Shapes/ShapeManager.cpp
+    src/Renderer/Shapes/ShapeCreate.cpp
+    src/Renderer/Shapes/Mesh.cpp
+    src/Renderer/Camera.cpp
     src/Renderer/Renderer.cpp
+    src/Renderer/FBO/FBManager.cpp
     src/Scene/SceneManager.cpp
-    src/Scene/SceneHierarchyPanel.cpp
+    src/Scene/ScenePanel.cpp
     src/Scene/SceneNode.cpp
     src/Utils/Console.cpp
     src/Utils/FileDialog.cpp
@@ -71,7 +72,6 @@ target_include_directories(RavenEngine PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Core"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Core/GLFWManagement"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/Components"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Utils"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/SceneManager" 

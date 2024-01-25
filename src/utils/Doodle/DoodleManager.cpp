@@ -1,8 +1,21 @@
+// DoodleManager.cpp
+
+// #include section
+// #####################
+// Standard library includes
+#include <iostream>
+
+// Third-party library includes
+
+// Raven includes
 #include "../../include/utils/Doodle/DoodleManager.h"
 
 namespace RavenEngine {
 
-DoodleManager::DoodleManager() : nextWindowPos(100.0f, 100.0f) {}
+DoodleManager::DoodleManager() : nextWindowPos(100.0f, 100.0f) {
+    // Initialization code for DoodleManager
+    //std::cout << "Initializing DoodleManager..." << std::endl;
+}
 
 DoodleManager::~DoodleManager() = default;
 

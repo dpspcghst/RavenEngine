@@ -11,6 +11,7 @@ using namespace RavenEngine;
 
 MenuSystem::MenuSystem(Workspace& workspace, GLFWwindow* window, DoodleManager& doodleManager, UIManager& uiManager) // Update this line
     : workspace(workspace), mainWindow(window), doodleManager(doodleManager), uiManager(uiManager) { // Update this line
+    //std::cout << "Initializing MenuSystem..." << std::endl;
 }
 
 void MenuSystem::createMainMenu() {
@@ -20,6 +21,9 @@ void MenuSystem::createMainMenu() {
         ImGui::EndMainMenuBar();
     }
     handleFileDialog(); // Call this after the main menu bar
+
+    // output "Rendering MenuSystem..."
+    //std::cout << "Rendering MenuSystem..." << std::endl;
 }
 
 void MenuSystem::createFileMenu() {
