@@ -10,7 +10,6 @@
 
 // Local project includes
 #include "SceneManager.h"
-#include "../../src/Renderer/Shapes/Shape.h"
 #include "SceneNode.h"
 #include "../../Assets/Shaders/ShaderManager.h" // Include ShaderManager.h if not already included
 #include "../../src/Renderer/Shapes/ShapeManager.h" // Include ShapeManager.h if not already included

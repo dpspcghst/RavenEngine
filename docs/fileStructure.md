@@ -14,12 +14,8 @@ RavenEngine
 │   └── Textures
 ├── Build
 ├── Docs
+│   └── fileStructure.md
 ├── Include
-│   ├── Components
-│   │   ├── Component.h
-│   │   ├── ComponentCreator.h
-│   │   ├── ComponentManager.h
-│   │   └── TransformComponent.h
 │   ├── Core
 │   │   ├── GLFWManagement
 │   │   │   ├── GLFWCallbacks.h
@@ -35,20 +31,6 @@ RavenEngine
 │   │   └── lhrplatform.h
 │   ├── Maths
 │   │   └── Vector3.h
-│   ├── Renderer
-│   │   ├── Shapes
-│   │   |   ├── Line.h
-│   │   |   ├── Plane.h
-│   │   |   ├── Point.h
-│   │   |   ├── Shape.h
-│   │   |   ├── ShapeManager.h
-│   │   |   ├── Triangle.h
-│   │   |   └── TriQuad.h
-│   │   └──  Renderer.h
-│   ├── Scene
-│   │   ├── ScenePanel.h
-│   │   ├── SceneManager.h
-│   │   └── SceneNode.h
 │   └── Utils
 │       ├── Doodle
 │       │   ├── Doodle.h
@@ -63,14 +45,15 @@ RavenEngine
 │   ├── glm
 │   ├── ImGui
 │   └── Stb
+├── Settings
+│   ├── ProjectSettings.json
+│   ├── ProjectWizard.cpp
+│   ├── ProjectWizard.h
+│   ├── SettingsManager.cpp
+│   └── SettingsManager.h
 ├── Src
 │   ├── Glad.c
 │   ├── Main.cpp
-│   ├── Components
-│   │   ├── Component.cpp
-│   │   ├── ComponentCreator.cpp
-│   │   ├── ComponentManager.cpp
-│   │   └── TransformComponent.cpp
 │   ├── Core
 │   │   ├── GLFWManagement
 │   │   │   ├── GLFWCallbacks.cpp
@@ -81,25 +64,36 @@ RavenEngine
 │   │   ├── Viewport.cpp
 │   │   └── Workspace.cpp
 │   ├── Renderer
+│   │   ├── FBO
+│   │   │   ├── FBManager.h 
+│   │   |   └── FBManager.cpp
 │   │   ├── Shapes
-│   │   |   ├── Line.cpp
-│   │   |   ├── Plane.cpp
-│   │   |   ├── Point.cpp
-│   │   |   ├── Shape.cpp
+│   │   |   ├── Shapes2D
+│   │   │   │   ├── Line.h 
+│   │   |   |   ├── Line.cpp
+│   │   │   |   ├── Plane.cpp
+│   │   │   │   ├── Plane.h
+│   │   │   │   ├── Point.h
+│   │   │   │   ├── Shape2D.h
+│   │   │   │   ├── Shape2D.cpp
+│   │   │   │   ├── Triangle.h
+│   │   │   │   ├── TriQuad.h
+│   │   │   │   ├── Point.cpp
+│   │   │   |   ├── Triangle.cpp
+│   │   │   |   └── TriQuad.cpp
 │   │   |   ├── ShapeManager.cpp
-│   │   |   ├── Triangle.cpp
-│   │   |   └── TriQuad.cpp
+│   │   │   ├── ShapeManager.h
+│   │   │   ├── ShapeCreate.cpp
+│   │   │   └── ShapeCreate.h
+│   │   ├── Renderer.h
 │   │   └── Renderer.cpp
 │   ├── Scene
+│   │   ├── ScenePanel.h
+│   │   ├── SceneManager.h
+│   │   ├── SceneNode.h
 │   │   ├── ScenePanel.cpp
 │   │   ├── SceneManager.cpp
 │   │   └── SceneNode.cpp
-│   ├── Settings
-│   │   ├── ProjectSettings.json
-│   │   ├── ProjectWizard.cpp
-│   │   ├── ProjectWizard.h
-│   │   ├── SettingsManager.cpp
-│   │   └── SettingsManager.h
 │   └── Utils
 │       ├── Doodle
 │       │   ├── Doodle.cpp

@@ -19,7 +19,11 @@ public:
     std::string GetShaderName(GLuint shaderID);
     void UseShader(const std::string& name);
     void SetMatrix4(const std::string& shaderName, const std::string& name, const glm::mat4& value);
-    
+
+    bool IsShaderLoaded(const std::string& name) {
+        return shaders.count(name) > 0;
+    }
+
     void PrintAllShaderInfo();
 
 private:

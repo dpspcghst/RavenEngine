@@ -14,6 +14,10 @@ Shape2D::Shape2D(const glm::vec3& pos, Type type) : VAO(0), VBO(0), size(1.0f, 1
     UpdateTransformMatrix();
 }
 
+Shape2D::Shape2D(const std::string& shaderName) : VAO(0), VBO(0), size(1.0f, 1.0f, 0.0f), position(0.0f, 0.0f, 0.0f), rotation(0.0f), transformMatrix(1.0f), shaderName(shaderName) {
+    UpdateTransformMatrix();
+}
+
 Shape2D::~Shape2D() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
@@ -71,6 +75,14 @@ void Shape2D::UpdateTransformMatrix() {
     transformMatrix = glm::rotate(transformMatrix, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
     transformMatrix = glm::rotate(transformMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
     transformMatrix = glm::scale(transformMatrix, size);
+}
+
+void Shape2D::SetShaderName(const std::string& shaderName) {
+    this->shaderName = shaderName;
+}
+
+const std::string& Shape2D::GetShaderName() const {
+    return shaderName;
 }
 
 } // namespace RavenEngine

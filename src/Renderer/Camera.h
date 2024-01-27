@@ -7,7 +7,7 @@ namespace RavenEngine {
 
 class Camera {
 public:
-    Camera(float fov, float aspectRatio, float nearPlane, float farPlane);
+    Camera(float left, float rightBound, float bottom, float top, float nearPlane, float farPlane);
 
     // Getters
     const glm::mat4& GetViewMatrix() const;
@@ -15,39 +15,39 @@ public:
 
     // Camera transformations
     void Move(const glm::vec3& offset);
-    void Rotate(float yaw, float pitch); // yaw = rotation around y-axis, pitch = rotation around x-axis
+    void Rotate(float yaw, float pitch);
 
-    // Update the camera (call this every frame)
+    // Update the camera
     void Update();
 
+    // Set projection
+    void setProjection(float left, float right, float bottom, float top, float nearPlane, float farPlane);
+
 private:
-    // Camera properties
     glm::vec3 position;
     glm::vec3 front;
     glm::vec3 up;
-    glm::vec3 right;
+    glm::vec3 rightVector; // Renamed to avoid conflict
     glm::vec3 worldUp;
 
-    // Eular Angles
     float yaw;
     float pitch;
 
-    // Camera options
     float movementSpeed;
     float mouseSensitivity;
     float zoom;
 
     // Projection properties
-    float fov; // field of view
-    float aspectRatio;
+    float left;
+    float rightBound; // Renamed to avoid conflict
+    float bottom;
+    float top;
     float nearPlane;
     float farPlane;
 
-    // Matrices
     glm::mat4 viewMatrix;
     glm::mat4 projectionMatrix;
 
-    // Private methods
     void updateCameraVectors();
     void updateViewMatrix();
     void updateProjectionMatrix();

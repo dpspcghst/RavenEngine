@@ -29,7 +29,6 @@ set(PROJECT_SOURCES
     src/Renderer/Shapes/Shape2D/TriQuad.cpp
     src/Renderer/Shapes/Shape2D/Plane.cpp
     src/Renderer/Shapes/Shape2D/Shape2d.cpp
-    src/Renderer/Shapes/Shape.cpp
     src/Renderer/Shapes/ShapeManager.cpp
     src/Renderer/Shapes/ShapeCreate.cpp
     src/Renderer/Shapes/Mesh.cpp

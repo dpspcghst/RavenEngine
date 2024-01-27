@@ -31,9 +31,14 @@ void Viewport::Render(SceneNode& rootNode) {
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 
 
+    // Check the state of the rootNode and its children
+    //std::cout << "rootNode has " << rootNode.GetChildren().size() << " children" << std::endl;
+
+    // Debugging information
+    //std::cout << "Address of rootNode in Viewport: " << &rootNode << std::endl;
+
     renderer.StartFrame();
     renderer.RenderScene(rootNode);
-    
     renderer.FinishFrame();
 
     GLuint textureId = renderer.GetCurrentTexture(); // Get the renderer's output texture ID
@@ -96,5 +101,3 @@ void Viewport::Render(SceneNode& rootNode) {
 }
 
 } // namespace RavenEngine
-
-

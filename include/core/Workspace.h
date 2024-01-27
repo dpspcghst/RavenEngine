@@ -12,7 +12,7 @@
 #include "SettingsManager.h"
 #include "UIManager.h"
 #include "Viewport.h"
-#include "../Scene/SceneManager.h"
+#include "../../src/Scene/SceneManager.h"
 #include "../utils/Doodle/DoodleManager.h"
 #include "../utils/MenuSystem.h"
 #include "../Assets/Shaders/ShaderManager.h"

@@ -15,7 +15,7 @@ Workspace::Workspace(GLFWwindow* mainWindow)
             doodleManager(),
             sceneManager(),
             shaderManager(ShaderManager::GetInstance()),  // ShaderManager instance obtained
-            uiManager(doodleManager, viewport, shaderManager),  // Passing ShaderManager by reference
+            uiManager(doodleManager, viewport, shaderManager, sceneManager),  // Passing ShaderManager by reference
             menuSystem(*this, mainWindow, doodleManager, uiManager) {
         
         ImGuiIO& io = ImGui::GetIO();

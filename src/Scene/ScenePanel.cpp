@@ -12,7 +12,6 @@
 
 // Raven includes
 #include "ScenePanel.h"
-#include "../Renderer/Shapes/Shape.h"
 #include "../Renderer/Shapes/ShapeCreate.h"
 #include "../Renderer/Shapes/Shape2D//Point.h"
 #include "../Renderer/Shapes/Shape2D/Line.h"
@@ -232,11 +231,14 @@ void ScenePanel::Create2DShape(Shape2D::Type shapeType) {
     ShapeCreate shapeCreate;
 
     // Create a new shape
-    std::shared_ptr<Shape> newShape = shapeCreate.CreateShape(shapeType); // Pass shapeType directly
+    std::shared_ptr<Shape2D> newShape = shapeCreate.CreateShape(shapeType); // Pass shapeType directly
     if (newShape) { // if shape creation was successful
         
         auto newNode = std::make_unique<SceneNode>(); // Create a new scene node
-    
+
+        std::string shapeTypeName = Shape2D::GetTypeName(shapeType);
+        newNode->SetName(shapeTypeName);  // Set the name of the SceneNode
+
         newNode->AttachShape(newShape); // Pass shared_ptr directly
 
         // Add the node to the scene

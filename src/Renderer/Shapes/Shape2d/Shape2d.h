@@ -8,12 +8,9 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-// Local includes
-#include "../Shape.h"
-
 namespace RavenEngine {
 
-class Shape2D : public Shape {
+class Shape2D {
 public:
     enum class Type {
         Point,
@@ -25,6 +22,8 @@ public:
 
     Shape2D();
     Shape2D(const glm::vec3& position, Type type);
+    Shape2D(const std::string& shaderName);
+
     virtual ~Shape2D();
 
     virtual int GetVertexCount() const = 0;
@@ -32,21 +31,25 @@ public:
     virtual void Create() = 0;
     virtual void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const = 0;
 
-    void SetSize(const glm::vec3& size) override;
-    void SetPosition(const glm::vec3& position) override;
-    void SetRotation(const glm::vec3& rotation) override;
+    void SetSize(const glm::vec3& size);
+    void SetPosition(const glm::vec3& position);
+    void SetRotation(const glm::vec3& rotation);
 
-    glm::vec3 GetSize() const override;
-    glm::vec3 GetPosition() const override;
-    glm::vec3 GetRotation() const override;
+    glm::vec3 GetSize() const;
+    glm::vec3 GetPosition() const;
+    glm::vec3 GetRotation() const;
 
-    glm::mat4 GetTransformMatrix() const override {
-    return transformMatrix;
+    glm::mat4 GetTransformMatrix() const {
+        return transformMatrix;
     }
     
     Type GetType() const;
     static std::string GetTypeName(Type type);
     GLuint GetVAO() const;
+
+    // Declare methods to set and get the shader name
+    void SetShaderName(const std::string& shaderName);
+    const std::string& GetShaderName() const;
 
 protected:
     void UpdateTransformMatrix();
@@ -57,6 +60,8 @@ protected:
     glm::vec3 rotation;
     GLuint VAO, VBO;
     Type type;
+
+    std::string shaderName;
 };
 
 } // namespace RavenEngine

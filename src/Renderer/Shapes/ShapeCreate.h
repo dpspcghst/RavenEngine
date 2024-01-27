@@ -9,7 +9,6 @@
 // Third party includes
 
 // Raven includes
-#include "Shape.h" // Include the base Shape class
 #include "../../../Assets/Shaders/ShaderManager.h" // Include ShaderManager
 #include "../../Scene/SceneNode.h" // Include SceneNode
 

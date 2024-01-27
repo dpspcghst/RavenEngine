@@ -1,14 +1,22 @@
 #ifndef RAVENENGINE_RENDERER_H
 #define RAVENENGINE_RENDERER_H
 
-#include <glad/glad.h>
+// #include section
+// #####################
+// Standard library includes
 #include <array>
+
+// Third party includes
+#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
+// Raven includes
 #include "SettingsManager.h"
 #include "../../Assets/Shaders/ShaderManager.h"
 #include "Shapes/ShapeManager.h"
 #include "FBO/FBManager.h"
+#include "Camera.h"
 
 namespace RavenEngine {
 
@@ -34,23 +42,20 @@ public:
 
     static constexpr std::array<float, 4> SCREEN_CLEAR_COLOR = {0.149f, 0.137f, 0.788f, 1.0f};
 
-    void RenderNode(const SceneNode& node);
-    // void UpdateProjectionMatrix();
+    void RenderNode(const SceneNode& node, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix); // Updated signature
 
     std::pair<int, int> GetSize() const;
-
-    void SetCameraPosition(const glm::vec2& position);
 
 private:
     int gameWidth, gameHeight;
     std::array<float, 4> clearColor;
-    glm::mat4 projectionMatrix;
-
-    glm::vec2 cameraPosition;
-    glm::mat4 viewMatrix;
 
     ShapeManager shapeManager;
     FBManager* fbManager; // Add a pointer to the FBManager
+
+    Shape2D* testTriangle; // Add a pointer to a Shape2D
+
+    std::unique_ptr<Camera> camera; // Add a Camera member variable
 };
 
 } // namespace RavenEngine

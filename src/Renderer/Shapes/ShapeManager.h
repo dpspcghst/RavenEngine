@@ -10,7 +10,6 @@
 // Third party includes
 
 // Raven includes
-#include "Shape.h"
 #include "Shape2D/Shape2D.h"
 #include "SettingsManager.h"
 #include "../../../Assets/Shaders/ShaderManager.h"
@@ -24,12 +23,13 @@ public:
     ~ShapeManager();
 
     void AddShape(std::shared_ptr<Shape2D> shape);
+
     void ValidateShape(std::shared_ptr<Shape2D> shape);
     void RenderShapes();
-
+    void RemoveShape(std::shared_ptr<Shape2D> shape);
     void SetCamera(std::shared_ptr<Camera> camera) { this->camera = camera; }
 
-    Shape* GetShape(Shape2D::Type shapeType) const {
+    Shape2D* GetShape(Shape2D::Type shapeType) const {
         for (const auto& shape2D : shapes2D) {
             if (shape2D->GetType() == shapeType) {
                 return shape2D.get();

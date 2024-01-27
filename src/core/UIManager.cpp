@@ -17,9 +17,9 @@
 #include "Console.h"
 
 namespace RavenEngine {
-
-UIManager::UIManager(DoodleManager& doodleManager, Viewport& viewport, ShaderManager& shaderManagerInstance)
-    : viewport(viewport), doodleManager(doodleManager), scenePanel(shaderManagerInstance){
+    
+UIManager::UIManager(DoodleManager& doodleManager, Viewport& viewport, ShaderManager& shaderManagerInstance, SceneManager& sceneManager)
+    : viewport(viewport), doodleManager(doodleManager), scenePanel(shaderManagerInstance), sceneManager(sceneManager) {
     // initialize ui manager
     scenePanel.SetSize(200, 800);
     //std::cout << "Initializing UIManager..." << std::endl;
@@ -45,7 +45,7 @@ void UIManager::Render() {                                                      
     ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver);                                   // Set initial viewport window size
     ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2 - 400, 
                             ImGui::GetIO().DisplaySize.y - 960), ImGuiCond_FirstUseEver);                 // Set initial viewport window position
-    SceneNode rootNode;  // This should be the root node of your scene
+    SceneNode& rootNode = sceneManager.GetRootNode();
     viewport.Render(rootNode);  // Pass the root node to viewport.Render                                                                                   // Render the viewport
     // output "viewport complete"
     //std::cout << "viewport complete" << std::endl;

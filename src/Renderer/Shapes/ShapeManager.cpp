@@ -33,6 +33,10 @@ void ShapeManager::AddShape(std::shared_ptr<Shape2D> shape2D) {
     shapes2D.push_back(shape2D); // Add the shape to the vector of shapes
 }
 
+void ShapeManager::RemoveShape(std::shared_ptr<Shape2D> shape2D) {
+    shapes2D.erase(std::remove(shapes2D.begin(), shapes2D.end(), shape2D), shapes2D.end());
+}
+
 void ShapeManager::ValidateShape(std::shared_ptr<Shape2D> shape2D) {
     if (!shape2D) {
         std::cout << "Cannot add null shape" << std::endl;

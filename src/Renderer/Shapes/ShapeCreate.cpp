@@ -10,6 +10,7 @@
 // Third party includes
 
 // Local project includes
+#include "../../Assets/Shaders/ShaderManager.h"
 #include "ShapeCreate.h"
 #include "Shape2D/Point.h"
 #include "Shape2D/Line.h"
@@ -47,7 +48,21 @@ std::shared_ptr<Shape2D> ShapeCreate::CreateShape(Shape2D::Type shapeType) {
             throw std::invalid_argument("Invalid shape type");
     }
 
-    std::cout << "Created new shape of type: " << shapeTypeName << std::endl;
+    // Initialize (Create) the shape
+    shape->Create(); // Assuming all Shape2D derived classes have a Create method
+
+    // Load default shader (temporarily here, consider moving this later)
+    ShaderManager& shaderManager = ShaderManager::GetInstance();
+    if (!shaderManager.IsShaderLoaded("defaultShader")) { // Check if the shader is already loaded
+        if (!shaderManager.LoadShader("defaultShader", "D:/RavenEngineProject/RavenEngine/Assets/Shaders/VertexShader.glsl", "D:/RavenEngineProject/RavenEngine/Assets/Shaders/FragmentShader.glsl")) {
+            throw std::runtime_error("ShapeCreate::CreateShape FAILED to load default shader");
+        }
+    }
+    shape->SetShaderName("defaultShader");
+
+    
+
+    std::cout << "ShapeCreate::CreateShape created: " << shapeTypeName << std::endl;
     return shape;
 }
 

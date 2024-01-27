@@ -20,14 +20,17 @@
 
 namespace RavenEngine {
 
-Renderer::Renderer(SettingsManager& settingsManager)                                 // Constructor
+Renderer::Renderer(SettingsManager& settingsManager)
         : gameWidth(settingsManager.GetResolutionWidth()),
             gameHeight(settingsManager.GetResolutionHeight()),
             fbManager(new FBManager(gameWidth, gameHeight)),
-            shapeManager(){
+            shapeManager(), testTriangle() {
 
-        std::cout << "Renderer Constructor Ping" << std::endl;      
-        std::cout << "Renderer created with size: " << gameWidth << "x" << gameHeight << std::endl; // Output 
+        // Initialize camera for 2D orthographic projection
+        float left = 0.0f, right = static_cast<float>(gameWidth); // Stretch the right boundary
+        float bottom = 0.0f, top = static_cast<float>(gameHeight); // Stretch the top boundary
+        float nearPlane = -1.0f, farPlane = 1.0f;
+        camera = std::make_unique<Camera>(left, right, bottom, top, nearPlane, farPlane);
 }
 
 Renderer::~Renderer() {                                                               // Destructor
@@ -36,9 +39,11 @@ Renderer::~Renderer() {                                                         
 }
 
 // Initialize Renderer
-bool Renderer::InitializeRenderer() {                                                 
+bool Renderer::InitializeRenderer() {
+
 
     clearColor = {0.149f, 0.137f, 0.788f, 1.0f}; // Set the default clear color
+    SetGLViewport(0, 0, gameWidth, gameHeight); // Set the viewport to the game width and height
 
     if (!fbManager->Initialize()) { // If the framebuffer fails to initialize
         std::cout << "Failed to initialize framebuffer" << std::endl; // Output
@@ -49,12 +54,9 @@ bool Renderer::InitializeRenderer() {
         std::cout << "Failed to initialize GLAD" << std::endl; // output
         return false; // return false
     }
-
-    SetGLViewport(0, 0, gameWidth, gameHeight); // Set the viewport to the game width and height
-    // UpdateProjectionMatrix();                   // Update the projection matrix
-
+    
     return true; // Return true if the renderer was initialized successfully
-    //std::cout << "Renderer initialized successfully" << std::endl;
+    std::cout << "Renderer initialized successfully" << std::endl;
 }
 
 void Renderer::ShutdownRenderer() {
@@ -66,7 +68,6 @@ void Renderer::SetGLViewport(int x, int y, int width, int height) {             
     glViewport(x, y, width, height);
     gameWidth = width;
     gameHeight = height;
-    //UpdateProjectionMatrix();
 }
 
 GLuint Renderer::GetCurrentTexture() {                                                // Get current texture
@@ -78,12 +79,23 @@ void Renderer::StartFrame() {
     glBindFramebuffer(GL_FRAMEBUFFER, fbManager->GetCurrentTexture());
     glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
 }
 
 void Renderer::RenderScene(const SceneNode& rootNode) {
-    // Traverse the scene graph and render each node
-    for (const auto& child : rootNode.GetChildren()) {
-        RenderNode(*child);
+
+    auto viewMatrix = camera->GetViewMatrix();
+    auto projectionMatrix = camera->GetProjectionMatrix();
+
+    // cout view/projection matrices
+    std::cout << "viewMatrix: " << glm::to_string(viewMatrix) << std::endl;
+    std::cout << "projectionMatrix: " << glm::to_string(projectionMatrix) << std::endl;
+
+    // Render each node with updated matrices
+    if (!rootNode.GetChildren().empty()) {
+        for (const auto& child : rootNode.GetChildren()) {
+            RenderNode(*child, viewMatrix, projectionMatrix);
+        }
     }
 }
 
@@ -91,31 +103,27 @@ void Renderer::FinishFrame() {                                                  
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::RenderNode(const RavenEngine::SceneNode& node) {
-    // Get the shape associated with the node
+void Renderer::RenderNode(const SceneNode& node, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+
     auto shape = node.GetShape();
+    std::cout << "shape: " << shape << std::endl;
 
     if (shape) {
-        // Get the name of the shader associated with the shape
         std::string shaderName = shape->GetShaderName();
-
-        // Use the shader by name
-        RavenEngine::ShaderManager::GetInstance().UseShader(shaderName);
-
-        // Set the transformation matrix uniform in the shader
-        glm::mat4 transformMatrix = shape->GetTransformMatrix();
-        RavenEngine::ShaderManager::GetInstance().SetMatrix4(shaderName, "transformMatrix", transformMatrix);
-
-        // Render the shape
-        shape->Render();
+        if (!shaderName.empty()) {
+            ShaderManager::GetInstance().UseShader(shaderName);
+            ShaderManager::GetInstance().SetMatrix4(shaderName, "model", shape->GetTransformMatrix());
+            ShaderManager::GetInstance().SetMatrix4(shaderName, "view", viewMatrix);
+            ShaderManager::GetInstance().SetMatrix4(shaderName, "projection", projectionMatrix);
+            shape->Render(viewMatrix, projectionMatrix);
+        }
     }
 
-    // Traverse the scene graph and render each child node
+    // Render children
     for (const auto& child : node.GetChildren()) {
-        RenderNode(*child);
+        RenderNode(*child, viewMatrix, projectionMatrix);
     }
 }
-
 
 std::pair<int, int> Renderer::GetSize() const {                                       // Get size
     return std::make_pair(gameWidth, gameHeight);

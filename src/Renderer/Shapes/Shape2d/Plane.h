@@ -14,8 +14,6 @@ public:
     void Create() override;
     void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
 
-    void Render() const override {}
-
     // Added getter method
     int GetVertexCount() const override { return 4; } // A plane has 4 vertices
 

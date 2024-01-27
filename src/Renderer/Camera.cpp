@@ -4,15 +4,15 @@
 
 namespace RavenEngine {
 
-Camera::Camera(float fov, float aspectRatio, float nearPlane, float farPlane)
-    : position(glm::vec3(0.0f, 0.0f, 0.0f)),
-      worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
-      yaw(-90.0f), pitch(0.0f),
-      movementSpeed(2.5f), mouseSensitivity(0.1f), zoom(45.0f),
-      fov(fov), aspectRatio(aspectRatio), nearPlane(nearPlane), farPlane(farPlane) {
-    updateCameraVectors();
-    updateViewMatrix();
-    updateProjectionMatrix();
+Camera::Camera(float left, float right, float bottom, float top, float nearPlane, float farPlane)
+        : position(glm::vec3(0.0f, 0.0f, 0.0f)),
+            worldUp(glm::vec3(0.0f, 1.0f, 0.0f)),
+            yaw(-90.0f), pitch(0.0f),
+            movementSpeed(2.5f), mouseSensitivity(0.1f), zoom(45.0f),
+            left(left), rightBound(right), bottom(bottom), top(top), nearPlane(nearPlane), farPlane(farPlane) {
+        updateCameraVectors();
+        updateViewMatrix();
+        updateProjectionMatrix();
 }
 
 const glm::mat4& Camera::GetViewMatrix() const {
@@ -53,8 +53,8 @@ void Camera::updateCameraVectors() {
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     this->front = glm::normalize(front);
     // Also re-calculate the Right and Up vector
-    right = glm::normalize(glm::cross(front, worldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-    up    = glm::normalize(glm::cross(right, front));
+    rightVector = glm::normalize(glm::cross(front, worldUp));
+    up = glm::normalize(glm::cross(rightVector, front));
 }
 
 void Camera::updateViewMatrix() {
@@ -62,7 +62,17 @@ void Camera::updateViewMatrix() {
 }
 
 void Camera::updateProjectionMatrix() {
-    projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
+    projectionMatrix = glm::ortho(left, rightBound, bottom, top, nearPlane, farPlane);
+}
+
+void Camera::setProjection(float left, float right, float bottom, float top, float nearPlane, float farPlane) {
+    this->left = left;
+    this->rightBound = right;
+    this->bottom = bottom;
+    this->top = top;
+    this->nearPlane = nearPlane;
+    this->farPlane = farPlane;
+    updateProjectionMatrix();
 }
 
 } // namespace RavenEngine

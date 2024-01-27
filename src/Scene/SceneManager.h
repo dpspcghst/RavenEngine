@@ -31,7 +31,9 @@ public:
     SceneNode& GetRootNode() const; // Returns a reference to the root node
     SceneNode* FindNode(const std::string& name) const; // Finds a node by name
     void SetParent(SceneNode* child, SceneNode* parent); // Sets the parent of a node
-
+    SceneNode* GetRootNodePtr() const {
+    return rootNode.get();
+    }
     void Update(float deltaTime); // Updates the scene
 
 private:

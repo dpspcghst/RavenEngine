@@ -1,8 +1,6 @@
 // Triangle.h
 #pragma once
 
-// #include section
-// #####################
 // Standard library includes
 
 // Third party includes
@@ -22,15 +20,11 @@ public:
     void Create() override;
     void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
 
-    // Implement the Render method from Shape (if needed)
-    void Render() const override {
-        // Provide an implementation here, or leave empty if not applicable
-    }
-
     // Added getter method
     int GetVertexCount() const override { return 3; } // A triangle has 3 vertices
 
 private:
+    GLuint shaderProgram;
     glm::vec3 vertices[3];
 };
 

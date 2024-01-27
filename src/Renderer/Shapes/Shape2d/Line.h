@@ -15,10 +15,6 @@ public:
     void Create() override;
     void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override; // From Shape2D
 
-    void Render() const override {
-        // Provide an implementation here, or leave empty if not applicable
-    }
-
     int GetVertexCount() const override { return 2; }
 
 private:

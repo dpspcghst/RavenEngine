@@ -16,10 +16,6 @@ public:
     void Create() override; 
     void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
 
-    void Render() const override {
-        // Provide an implementation here, or leave empty if not applicable
-    }
-    
     // Added getter method
     int GetVertexCount() const override { return 6; } // A TriQuad has 6 vertices
 
