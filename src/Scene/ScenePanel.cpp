@@ -113,6 +113,10 @@ void ScenePanel::DrawNodeTree(SceneNode* node) {                                
     ImGui::PopID();
 }
 
+const std::vector<SceneNode*>& ScenePanel::GetSelectedNodes() const {
+    return selectedNodes;
+}
+
 void ScenePanel::HandleNodeDeletion() {                                         
     //std::cout << "Number of selected nodes: " << selectedNodes.size() << std::endl;  // Add this line
     //std::cout << "Delete key pressed: " << ImGui::IsKeyPressed(ImGuiKey_Delete) << std::endl;  // Add this line
@@ -216,6 +220,10 @@ void ScenePanel::HandleNodeCreation() {                                         
             if (ImGui::MenuItem("TriQuad")) {                                   // Shape::Type::TriQuad
                 std::cout << "Creating 2D TriQuad" << std::endl;
                 Create2DShape(Shape2D::Type::TriQuad);                                  
+            }
+            if (ImGui::MenuItem("Circle")) {                                    // Shape::Type::Circle
+                std::cout << "Creating 2D Circle" << std::endl;
+                Create2DShape(Shape2D::Type::Circle);                                  
             }
             ImGui::EndMenu();
         }

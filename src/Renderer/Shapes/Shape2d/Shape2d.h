@@ -17,7 +17,8 @@ public:
         Line,
         Triangle,
         Plane,
-        TriQuad
+        TriQuad,
+        Circle,
     };
 
     Shape2D();

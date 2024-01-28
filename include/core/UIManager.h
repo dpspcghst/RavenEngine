@@ -15,24 +15,35 @@
 #include "../../src/Scene/SceneManager.h"
 #include "Viewport.h"
 #include "../utils/Doodle/DoodleManager.h"
+#include "../utils/Palette/PaletteManager.h"
+#include "../utils/Calc/CalculatorManager.h" 
+#include "../utils/Inspector.h" 
+
 
 namespace RavenEngine {
     // Forward declarations
     class ScenePanel;
     class SceneManager;
     class DoodleManager;
+    class CalculatorManager;
+    class PaletteManager;
+    class Inspector;
+    
 
     class UIManager {
     public:
-        UIManager(DoodleManager& doodleManager, Viewport& viewport, ShaderManager& shaderManagerInstance, SceneManager& sceneManager); // Constructor
-        void SetSceneManagerContext(SceneManager* sceneManager); // Set the SceneManager context for the UIManager (i dont really know what this does)
+        UIManager(DoodleManager& doodleManager, PaletteManager& paletteManager, CalculatorManager& calculatorManager, Viewport& viewport, ShaderManager& shaderManagerInstance, SceneManager& sceneManager); // Constructor
+        void SetSceneManagerContext(SceneManager* sceneManager); // Set the SceneManager context for the UIManager
         void Render(); // Render the UIManager
 
     private:
         ScenePanel scenePanel; // Scene Panel
         Viewport& viewport; // Viewport
         DoodleManager& doodleManager; // Doodle Util
+        PaletteManager& paletteManager;
         SceneManager& sceneManager; // SceneManager
+        Inspector inspector; // Inspector
+        CalculatorManager& calculatorManager;
     };
 }
 

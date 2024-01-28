@@ -34,6 +34,7 @@ std::string Shape2D::GetTypeName(Type type) {
         case Type::Triangle: return "Triangle";
         case Type::Plane: return "Plane";
         case Type::TriQuad: return "TriQuad";
+        case Type::Circle: return "Circle";
         default: return "Unknown";
     }
 }

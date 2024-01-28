@@ -29,6 +29,7 @@ set(PROJECT_SOURCES
     src/Renderer/Shapes/Shape2D/TriQuad.cpp
     src/Renderer/Shapes/Shape2D/Plane.cpp
     src/Renderer/Shapes/Shape2D/Shape2d.cpp
+    src/Renderer/Shapes/Shape2D/Circle.cpp
     src/Renderer/Shapes/ShapeManager.cpp
     src/Renderer/Shapes/ShapeCreate.cpp
     src/Renderer/Shapes/Mesh.cpp
@@ -46,6 +47,10 @@ set(PROJECT_SOURCES
     src/Utils/Inspector.cpp
     src/Utils/Doodle/Doodle.cpp
     src/Utils/Doodle/DoodleManager.cpp
+    src/Utils/Palette/Palette.cpp
+    src/Utils/Palette/PaletteManager.cpp
+    src/Utils/Calc/Calculator.cpp
+    src/Utils/Calc/CalculatorManager.cpp
 )
 
 # Add resources file for Windows

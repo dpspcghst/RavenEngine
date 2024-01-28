@@ -17,6 +17,7 @@
 #include "Shape2D/Plane.h"
 #include "Shape2D/Triangle.h"
 #include "Shape2D/TriQuad.h"
+#include "Shape2D/Circle.h"
 
 namespace RavenEngine {
 
@@ -44,6 +45,9 @@ std::shared_ptr<Shape2D> ShapeCreate::CreateShape(Shape2D::Type shapeType) {
         case Shape2D::Type::TriQuad:
             shape = std::make_shared<TriQuad>();
             break;
+        case Shape2D::Type::Circle:
+            shape = std::make_shared<Circle>();
+            break;
         default:
             throw std::invalid_argument("Invalid shape type");
     }
@@ -54,7 +58,7 @@ std::shared_ptr<Shape2D> ShapeCreate::CreateShape(Shape2D::Type shapeType) {
     // Load default shader (temporarily here, consider moving this later)
     ShaderManager& shaderManager = ShaderManager::GetInstance();
     if (!shaderManager.IsShaderLoaded("defaultShader")) { // Check if the shader is already loaded
-        if (!shaderManager.LoadShader("defaultShader", "D:/RavenEngineProject/RavenEngine/Assets/Shaders/VertexShader.glsl", "D:/RavenEngineProject/RavenEngine/Assets/Shaders/FragmentShader.glsl")) {
+        if (!shaderManager.LoadShader("defaultShader", "../Assets/Shaders/VertexShader.glsl", "../Assets/Shaders/FragmentShader.glsl")) {
             throw std::runtime_error("ShapeCreate::CreateShape FAILED to load default shader");
         }
     }

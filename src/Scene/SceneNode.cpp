@@ -16,6 +16,7 @@
 #include "../Renderer/Shapes/Shape2D/Plane.h"
 #include "../Renderer/Shapes/Shape2D/Triangle.h"
 #include "../Renderer/Shapes/Shape2D/TriQuad.h"
+#include "../Renderer/Shapes/Shape2D/Circle.h"
 #include "../../Assets/Shaders/ShaderManager.h"
 
 namespace RavenEngine {
@@ -42,8 +43,8 @@ void SceneNode::AddChild(SceneNode* child) {
     children.push_back(std::unique_ptr<SceneNode>(child));
     
     // Debugging information
-    std::cout << "Address of this SceneNode: " << this << std::endl;
-    std::cout << "Added child to node. Total children: " << children.size() << std::endl;
+    //std::cout << "Address of this SceneNode: " << this << std::endl;
+    //std::cout << "Added child to node. Total children: " << children.size() << std::endl;
 }
 
 const std::vector<std::unique_ptr<SceneNode>>& SceneNode::GetChildren() const {                                  // Get children method
@@ -51,12 +52,12 @@ const std::vector<std::unique_ptr<SceneNode>>& SceneNode::GetChildren() const { 
 }
 
 void SceneNode::RemoveChild(const SceneNode* child) {
-    std::cout << "Removing child: " << child->GetName() << " from node: " << GetName() << std::endl;
+    //std::cout << "Removing child: " << child->GetName() << " from node: " << GetName() << std::endl;
     children.erase(std::remove_if(children.begin(), children.end(),
                                   [child](const std::unique_ptr<SceneNode>& c) { return c.get() == child; }),
                    children.end());
 
-    std::cout << "Total children: " << children.size() << std::endl;
+    //std::cout << "Total children: " << children.size() << std::endl;
 }
 
 const std::string& SceneNode::GetName() const {                                                                  // Get node name method
@@ -69,19 +70,19 @@ void SceneNode::SetName(const std::string& newName) {                           
 
 void SceneNode::AttachShape(std::shared_ptr<Shape2D> newShape) {
     if (!newShape) {
-        std::cout << "Error: Attempted to attach a null shape to node: " << GetName() << std::endl;
+        //std::cout << "Error: Attempted to attach a null shape to node: " << GetName() << std::endl;
         return;
     }
 
-    std::cout << "Attaching shape to node: " << GetName() << std::endl;
+    //std::cout << "Attaching shape to node: " << GetName() << std::endl;
     shape = std::move(newShape);
 }
 
 std::shared_ptr<Shape2D> SceneNode::GetShape() const {
     if (shape) {
-        std::cout << "Retrieving shape from node: " << GetName() << std::endl;
+        //std::cout << "Retrieving shape from node: " << GetName() << std::endl;
     } else {
-        std::cout << "No shape attached to node: " << GetName() << std::endl;
+        //std::cout << "No shape attached to node: " << GetName() << std::endl;
     }
     return shape;
 }

@@ -6,12 +6,14 @@
 #include "FileDialog.h"
 #include <iostream>
 #include "../../../include/utils/Doodle/DoodleManager.h"
+#include "../../../include/utils/Palette/Palette.h"
+#include "../../../include/utils/Calc/CalculatorManager.h"
 
 using namespace RavenEngine;
 
-MenuSystem::MenuSystem(Workspace& workspace, GLFWwindow* window, DoodleManager& doodleManager, UIManager& uiManager) // Update this line
-    : workspace(workspace), mainWindow(window), doodleManager(doodleManager), uiManager(uiManager) { // Update this line
-    //std::cout << "Initializing MenuSystem..." << std::endl;
+MenuSystem::MenuSystem(Workspace& workspace, GLFWwindow* window, DoodleManager& doodleManager, PaletteManager& paletteManager, CalculatorManager& calculatorManager, UIManager& uiManager)
+    : workspace(workspace), mainWindow(window), doodleManager(doodleManager), paletteManager(paletteManager), calculatorManager(calculatorManager), uiManager(uiManager) {
+    // constructor body
 }
 
 void MenuSystem::createMainMenu() {
@@ -86,9 +88,14 @@ void MenuSystem::handleToolsMenuItems() {
         doodleManager.CreateNewDoodle(); // Create a new Doodle window directly
     }
 
-    if (ImGui::MenuItem("Palette Helper")) {
-        std::cout << "Palette Helper Selected.\n";
-        // Coloors rip off logic here
+    if (ImGui::MenuItem("Palette")) {
+        std::cout << "Palette Selected.\n";
+        paletteManager.CreateNewPalette(); // Create a new Palette window directly
+    }
+
+    if (ImGui::MenuItem("Calculator")) {
+        std::cout << "Calculator Selected.\n";
+        calculatorManager.ToggleCalculatorVisibility(); // Toggle the visibility of the calculator when the "Calculator" menu item is selected
     }
 
     if (ImGui::MenuItem("Debug (coming soon)")) {

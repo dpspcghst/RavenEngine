@@ -23,7 +23,6 @@ public:
     void OnImGuiRender();
 
     void SetSize(int width, int height);
-
     void DrawNodeTree(SceneNode* node);
     
     void HandleNodeInteraction(SceneNode* node);
@@ -31,7 +30,7 @@ public:
     
     void Create2DShape(Shape2D::Type shapeType);
 
-
+    const std::vector<SceneNode*>& GetSelectedNodes() const;
     std::vector<SceneNode*> selectedNodes;
 
 private:
@@ -42,7 +41,6 @@ private:
 
     SceneManager* sceneManager;
     std::shared_ptr<ShapeManager> shapeManager; // Declare shapeManager
-
 
     void HandleNodeCreation(); // Node Creation Menu
     void HandleNodeDeletion(); // Node Removal

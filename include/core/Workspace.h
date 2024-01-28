@@ -14,6 +14,8 @@
 #include "Viewport.h"
 #include "../../src/Scene/SceneManager.h"
 #include "../utils/Doodle/DoodleManager.h"
+#include "../utils/Palette/PaletteManager.h"
+#include "../utils/Calc/Calculator.h"
 #include "../utils/MenuSystem.h"
 #include "../Assets/Shaders/ShaderManager.h"
 
@@ -32,6 +34,8 @@ namespace RavenEngine {
         Viewport viewport;
         SceneManager sceneManager;
         DoodleManager doodleManager;
+        PaletteManager paletteManager;
+        CalculatorManager calculatorManager;
         MenuSystem menuSystem;
         SettingsManager& settingsManager;
         ShaderManager& shaderManager;

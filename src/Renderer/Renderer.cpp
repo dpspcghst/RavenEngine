@@ -88,8 +88,8 @@ void Renderer::RenderScene(const SceneNode& rootNode) {
     auto projectionMatrix = camera->GetProjectionMatrix();
 
     // cout view/projection matrices
-    std::cout << "viewMatrix: " << glm::to_string(viewMatrix) << std::endl;
-    std::cout << "projectionMatrix: " << glm::to_string(projectionMatrix) << std::endl;
+    //std::cout << "viewMatrix: " << glm::to_string(viewMatrix) << std::endl;
+    //std::cout << "projectionMatrix: " << glm::to_string(projectionMatrix) << std::endl;
 
     // Render each node with updated matrices
     if (!rootNode.GetChildren().empty()) {
@@ -106,7 +106,7 @@ void Renderer::FinishFrame() {                                                  
 void Renderer::RenderNode(const SceneNode& node, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
 
     auto shape = node.GetShape();
-    std::cout << "shape: " << shape << std::endl;
+    //std::cout << "shape: " << shape << std::endl;
 
     if (shape) {
         std::string shaderName = shape->GetShaderName();

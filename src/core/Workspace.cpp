@@ -15,11 +15,13 @@ Workspace::Workspace(GLFWwindow* mainWindow)
             doodleManager(),
             sceneManager(),
             shaderManager(ShaderManager::GetInstance()),  // ShaderManager instance obtained
-            uiManager(doodleManager, viewport, shaderManager, sceneManager),  // Passing ShaderManager by reference
-            menuSystem(*this, mainWindow, doodleManager, uiManager) {
+            uiManager(doodleManager, paletteManager, calculatorManager, viewport, shaderManager, sceneManager),  // Passing ShaderManager by reference
+            menuSystem(*this, mainWindow, doodleManager, paletteManager, calculatorManager, uiManager) {
         
         ImGuiIO& io = ImGui::GetIO();
         io.IniFilename = nullptr;
+
+        console.AddLog("Welcome to RavenEngine!");
 
         uiManager.SetSceneManagerContext(&sceneManager);
 }

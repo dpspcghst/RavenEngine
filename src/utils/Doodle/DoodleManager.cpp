@@ -65,13 +65,6 @@ ImVec2 DoodleManager::CalculateNextWindowPosition() {
     const float offset = 20.0f; // Offset for cascading
     ImVec2 newPos = ImVec2(nextWindowPos.x + offset, nextWindowPos.y + offset);
 
-    // Optional: Limit the cascading to a certain area
-    // If newPos exceeds certain bounds, reset to initial position
-    // Example:
-    // if (newPos.x > someLimit || newPos.y > someLimit) {
-    //     newPos = ImVec2(100.0f, 100.0f);
-    // }
-
     return newPos;
 }
 

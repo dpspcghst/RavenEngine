@@ -15,11 +15,12 @@
 #include "Viewport.h"
 #include "../utils/Doodle/DoodleManager.h"
 #include "Console.h"
+#include "../utils/Inspector.h" // Include the Inspector header file
 
 namespace RavenEngine {
     
-UIManager::UIManager(DoodleManager& doodleManager, Viewport& viewport, ShaderManager& shaderManagerInstance, SceneManager& sceneManager)
-    : viewport(viewport), doodleManager(doodleManager), scenePanel(shaderManagerInstance), sceneManager(sceneManager) {
+UIManager::UIManager(DoodleManager& doodleManager, PaletteManager& paletteManager, CalculatorManager& calculatorManager, Viewport& viewport, ShaderManager& shaderManagerInstance, SceneManager& sceneManager)
+    : viewport(viewport), doodleManager(doodleManager), paletteManager(paletteManager), scenePanel(shaderManagerInstance), sceneManager(sceneManager), inspector(scenePanel), calculatorManager(calculatorManager){
     // initialize ui manager
     scenePanel.SetSize(200, 800);
     //std::cout << "Initializing UIManager..." << std::endl;
@@ -32,6 +33,12 @@ void UIManager::Render() {                                                      
     // Doodle window
     doodleManager.Update();
 
+    // Palette window
+    paletteManager.Update();
+
+    // Calculator window
+    calculatorManager.Update();
+
     // Console window
     ImGui::SetNextWindowSize(ImVec2(800, 300), ImGuiCond_FirstUseEver);                                   // Set initial console window size                                                                   
     ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2 - 400, 
@@ -39,7 +46,6 @@ void UIManager::Render() {                                                      
     console.Render();
     // output "console complete"
     //std::cout << "console complete" << std::endl;
-
 
     // Viewport window
     ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver);                                   // Set initial viewport window size
@@ -55,6 +61,9 @@ void UIManager::Render() {                                                      
     ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - ImGui::GetIO().DisplaySize.x, 
                             ImGui::GetIO().DisplaySize.y - 960), ImGuiCond_FirstUseEver);                 // Set initial scene panel window position
     scenePanel.OnImGuiRender();                                                                                  // Render the scene panel
+
+    // Inspector window
+    inspector.Render(); // Render the Inspector window
 }
 
 void UIManager::SetSceneManagerContext(SceneManager* sceneManager) {

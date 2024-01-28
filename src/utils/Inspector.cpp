@@ -1,25 +1,57 @@
-// #include "Inspector.h"
-// #include <imgui.h>
+// Inspector.cpp
+#include <imgui.h>
+#include "Inspector.h"
+#include "../Scene/SceneManager.h"
+#include "../Scene/ScenePanel.h"
+#include "../Scene/SceneNode.h"
+#include "../Renderer/Shapes/Shape2D/Shape2D.h"
 
-// namespace RavenEngine {
+namespace RavenEngine {
 
-// void Inspector::Draw(SceneNode* selectedNode) {
-//     if (!selectedNode) return;
+Inspector::Inspector(ScenePanel& scenePanel) // Change SceneManager to ScenePanel
+    : scenePanel(scenePanel) { // Change sceneManager to scenePanel
+}
 
-//     ImGui::Begin("Inspector");
+void Inspector::Render() {
+    std::vector<SceneNode*> selectedNodes = scenePanel.GetSelectedNodes();
+    bool isOpen = !selectedNodes.empty();
 
-//     if (auto* transform = selectedNode->GetComponent<TransformComponent>()) {
-//         DrawTransformComponent(transform);
-//     }
+    if (isOpen) {
+        SceneNode* selectedNode = selectedNodes[0];
+        auto shape2D = dynamic_cast<Shape2D*>(selectedNode->GetShape().get());
 
-//     // Draw other components or properties
+        if (ImGui::Begin("Inspector", &isOpen, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) {
+            if (shape2D != nullptr) {
+                // Name
+                char name[128];
+                strncpy_s(name, sizeof(name), selectedNode->GetName().c_str(), _TRUNCATE);
+                if (ImGui::InputText("Name", name, sizeof(name))) {
+                    selectedNode->SetName(name);
+                }
 
-//     ImGui::End();
-// }
+                glm::vec3 position = shape2D->GetPosition();
+                glm::vec3 rotation = shape2D->GetRotation();
+                glm::vec3 size = shape2D->GetSize();
 
-// void Inspector::DrawTransformComponent(TransformComponent* transform) {
-//     // Use ImGui to draw and manipulate transform properties
-//     // Example: ImGui::DragFloat3("Position", transform->GetPositionPtr());
-// }
+                // Position
+                if (ImGui::DragFloat3("Position", &position.x)) {
+                    shape2D->SetPosition(position);
+                }
 
-// } // namespace RavenEngine
+                // Rotation
+                if (ImGui::DragFloat3("Rotation", &rotation.x)) {
+                    shape2D->SetRotation(rotation);
+                }
+
+                // Size
+                if (ImGui::DragFloat3("Size", &size.x)) {
+                    shape2D->SetSize(size);
+                }
+            }
+
+            ImGui::End();
+        }
+    }
+}
+
+} // namespace RavenEngine
