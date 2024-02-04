@@ -15,7 +15,9 @@
 // Raven includes
 #include "Renderer.h"
 #include "FBO/FBManager.h"
-#include "../../Assets/Shaders/ShaderManager.h"
+#include "UBO/UniformBuffer.h"
+#include "Materials/MaterialProperties.h"
+#include "Shaders/ShaderManager.h"
 #include "../../src/Scene/SceneManager.h"
 
 namespace RavenEngine {
@@ -23,18 +25,24 @@ namespace RavenEngine {
 Renderer::Renderer(SettingsManager& settingsManager)
         : gameWidth(settingsManager.GetResolutionWidth()),
             gameHeight(settingsManager.GetResolutionHeight()),
-            fbManager(new FBManager(gameWidth, gameHeight)),
-            shapeManager(), testTriangle() {
+            fbManager(new FBManager(gameWidth, gameHeight))
+            {
 
         // Initialize camera for 2D orthographic projection
         float left = 0.0f, right = static_cast<float>(gameWidth); // Stretch the right boundary
         float bottom = 0.0f, top = static_cast<float>(gameHeight); // Stretch the top boundary
         float nearPlane = -1.0f, farPlane = 1.0f;
         camera = std::make_unique<Camera>(left, right, bottom, top, nearPlane, farPlane);
+
+        // Print the orthographic projection boundaries
+        // std::cout << "Orthographic projection boundaries:" << std::endl;
+        // std::cout << "Left: " << left << ", Right: " << right << std::endl;
+        // std::cout << "Bottom: " << bottom << ", Top: " << top << std::endl;
+        // std::cout << "Near: " << nearPlane << ", Far: " << farPlane << std::endl;
 }
 
 Renderer::~Renderer() {                                                               // Destructor
-    std::cout << "Renderer destructor called" << std::endl;
+    //std::cout << "Renderer destructor called" << std::endl;
     delete fbManager;
 }
 
@@ -46,12 +54,12 @@ bool Renderer::InitializeRenderer() {
     SetGLViewport(0, 0, gameWidth, gameHeight); // Set the viewport to the game width and height
 
     if (!fbManager->Initialize()) { // If the framebuffer fails to initialize
-        std::cout << "Failed to initialize framebuffer" << std::endl; // Output
+        //std::cout << "Failed to initialize framebuffer" << std::endl; // Output
         return false; // Return false
     }
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { // if glad fails to load
-        std::cout << "Failed to initialize GLAD" << std::endl; // output
+        //std::cout << "Failed to initialize GLAD" << std::endl; // output
         return false; // return false
     }
     
@@ -61,7 +69,7 @@ bool Renderer::InitializeRenderer() {
 
 void Renderer::ShutdownRenderer() {
         // Implement the shutdown logic here, e.g., releasing resources
-        std::cout << "Renderer shutdown" << std::endl;
+        //std::cout << "Renderer shutdown" << std::endl;
 }
 
 void Renderer::SetGLViewport(int x, int y, int width, int height) {                   // Set GL viewport
@@ -82,14 +90,20 @@ void Renderer::StartFrame() {
     glDisable(GL_DEPTH_TEST);
 }
 
-void Renderer::RenderScene(const SceneNode& rootNode) {
+void Renderer::UpdateColors() {
+    // Iterate over all Shape2D objects and update their color
+    for (auto& shape : shapes) {
+        std::string uboName = shape->GetMaterialUBOName();
+        MaterialProperties props;
+        props.color = shape->GetColor();
+        ShaderManager::GetInstance().UpdateUniformBuffer(uboName, &props, sizeof(props));
+    }
+}
 
+void Renderer::RenderScene(const SceneNode& rootNode) {
+    UpdateColors(); // Update the colors of all shapes
     auto viewMatrix = camera->GetViewMatrix();
     auto projectionMatrix = camera->GetProjectionMatrix();
-
-    // cout view/projection matrices
-    //std::cout << "viewMatrix: " << glm::to_string(viewMatrix) << std::endl;
-    //std::cout << "projectionMatrix: " << glm::to_string(projectionMatrix) << std::endl;
 
     // Render each node with updated matrices
     if (!rootNode.GetChildren().empty()) {
@@ -99,31 +113,79 @@ void Renderer::RenderScene(const SceneNode& rootNode) {
     }
 }
 
-void Renderer::FinishFrame() {                                                        // Finish frame
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+void Renderer::FinishFrame() {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Renderer::RenderNode(const SceneNode& node, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-
+    const GLuint FIXED_BINDING_POINT = 0;
     auto shape = node.GetShape();
-    //std::cout << "shape: " << shape << std::endl;
-
-    if (shape) {
-        std::string shaderName = shape->GetShaderName();
-        if (!shaderName.empty()) {
-            ShaderManager::GetInstance().UseShader(shaderName);
-            ShaderManager::GetInstance().SetMatrix4(shaderName, "model", shape->GetTransformMatrix());
-            ShaderManager::GetInstance().SetMatrix4(shaderName, "view", viewMatrix);
-            ShaderManager::GetInstance().SetMatrix4(shaderName, "projection", projectionMatrix);
-            shape->Render(viewMatrix, projectionMatrix);
-        }
+    if (!shape) {
+        std::cerr << "RENDERER::RENDERNODE Shape is NULL for the node: " << node.GetName() << std::endl;
+        return;
     }
 
-    // Render children
+    std::string shaderName = shape->GetShaderName();
+    ShaderManager& shaderManager = ShaderManager::GetInstance();
+
+    if (!shaderManager.IsShaderLoaded(shaderName)) {
+        std::cerr << "RENDERER::RENDERNODE Shader " << shaderName << " is not loaded.\n";
+        return;
+    }
+
+    GLuint shaderProgram = shaderManager.GetShader(shaderName);
+    if (shaderProgram == 0 || !glIsProgram(shaderProgram)) {
+        std::cerr << "RENDERER::RENDERNODE Invalid shader program ID for shader: " << shaderName << std::endl;
+        return;
+    }
+    glUseProgram(shaderProgram);
+    std::cout << "Shader " << shaderName << " with program ID " << shaderProgram << " is now bound." << std::endl;
+
+    // Set the transformation matrices
+    glm::mat4 modelMatrix = shape->GetTransformMatrix();
+    shaderManager.SetMatrix4(shaderName, "model", modelMatrix);
+    shaderManager.SetMatrix4(shaderName, "view", viewMatrix);
+    shaderManager.SetMatrix4(shaderName, "projection", projectionMatrix);
+
+    // Bind UBO for the current shape
+    std::string uboName = shape->GetMaterialUBOName();
+    UniformBufferProperties uboProps = shaderManager.GetUBOProperties(uboName);
+    if (uboProps.bufferID == 0) {
+        std::cerr << "RENDERER::RENDERNODE UBO " << uboName << " not found for shape: " << node.GetName() << std::endl;
+        return;
+    }
+
+    // Obtain the block index for the UBO in the shader
+    GLuint blockIndex = glGetUniformBlockIndex(shaderProgram, "MaterialProperties");
+    if (blockIndex == GL_INVALID_INDEX) {
+        std::cerr << "RENDERER::RENDERNODE Uniform block 'MaterialProperties' not found in shader program: " << shaderProgram << std::endl;
+        return;
+    }
+
+    // Bind the UBO to a fixed binding point
+    glUniformBlockBinding(shaderProgram, blockIndex, FIXED_BINDING_POINT);
+    glBindBufferBase(GL_UNIFORM_BUFFER, FIXED_BINDING_POINT, uboProps.bufferID);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        std::cerr << "OpenGL error after binding UBO: " << error << std::endl;
+    }
+
+    // Render the shape
+    shape->Render(viewMatrix, projectionMatrix);
+
+    error = glGetError();
+    if (error != GL_NO_ERROR) {
+        std::cerr << "OpenGL error after rendering shape: " << error << std::endl;
+    }
+
+    std::cout << "Shader " << shaderName << " with program ID " << shaderProgram << " is now unbound." << std::endl;
+    // Render children nodes recursively
     for (const auto& child : node.GetChildren()) {
         RenderNode(*child, viewMatrix, projectionMatrix);
     }
 }
+
 
 std::pair<int, int> Renderer::GetSize() const {                                       // Get size
     return std::make_pair(gameWidth, gameHeight);

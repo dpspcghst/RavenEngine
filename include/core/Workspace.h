@@ -13,11 +13,11 @@
 #include "UIManager.h"
 #include "Viewport.h"
 #include "../../src/Scene/SceneManager.h"
-#include "../utils/Doodle/DoodleManager.h"
-#include "../utils/Palette/PaletteManager.h"
-#include "../utils/Calc/Calculator.h"
+#include "../../Tools/Doodle/DoodleManager.h"
+#include "../../Tools/Palette/PaletteManager.h"
+#include "../../Tools/Calc/Calculator.h"
 #include "../utils/MenuSystem.h"
-#include "../Assets/Shaders/ShaderManager.h"
+#include "../src/Renderer/Shaders/ShaderManager.h"
 
 namespace RavenEngine {
     class SceneManager;

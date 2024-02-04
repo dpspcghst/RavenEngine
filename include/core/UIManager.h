@@ -1,8 +1,6 @@
 // uimanager.h
-
 #ifndef UI_MANAGER_H
 #define UI_MANAGER_H
-
 // #include section
 // #####################
 // Standard library includes
@@ -14,9 +12,9 @@
 #include "../../src/Scene/ScenePanel.h"
 #include "../../src/Scene/SceneManager.h"
 #include "Viewport.h"
-#include "../utils/Doodle/DoodleManager.h"
-#include "../utils/Palette/PaletteManager.h"
-#include "../utils/Calc/CalculatorManager.h" 
+#include "../../Tools/Doodle/DoodleManager.h"
+#include "../../Tools//Palette/PaletteManager.h"
+#include "../../Tools//Calc/CalculatorManager.h" 
 #include "../utils/Inspector.h" 
 
 

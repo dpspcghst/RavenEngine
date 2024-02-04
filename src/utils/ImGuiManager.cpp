@@ -99,6 +99,9 @@ void ImGuiManager::Init(GLFWwindow* window) {
     style.Colors[ImGuiCol_NavWindowingHighlight] = AccentColor; // Use Accent Color for windowing highlights
     style.Colors[ImGuiCol_NavWindowingDimBg] = PrimaryBackground;
 
+    // Docking
+    style.Colors[ImGuiCol_DockingPreview] = HoverColor; // Use Accent Color for docking previews
+
     // Modal Window Dim Background
     style.Colors[ImGuiCol_ModalWindowDimBg] = PrimaryBackground;
 

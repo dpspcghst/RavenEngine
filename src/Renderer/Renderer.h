@@ -13,10 +13,10 @@
 
 // Raven includes
 #include "SettingsManager.h"
-#include "../../Assets/Shaders/ShaderManager.h"
-#include "Shapes/ShapeManager.h"
+#include "Shaders/ShaderManager.h"
 #include "FBO/FBManager.h"
-#include "Camera.h"
+#include "Camera/Camera.h"
+#include "Shapes/Shape2D/Shape2D.h" // Include Shape2D.h
 
 namespace RavenEngine {
 
@@ -42,20 +42,21 @@ public:
 
     static constexpr std::array<float, 4> SCREEN_CLEAR_COLOR = {0.149f, 0.137f, 0.788f, 1.0f};
 
-    void RenderNode(const SceneNode& node, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix); // Updated signature
+    void RenderNode(const SceneNode& node, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
     std::pair<int, int> GetSize() const;
 
 private:
     int gameWidth, gameHeight;
     std::array<float, 4> clearColor;
-
-    ShapeManager shapeManager;
+    
     FBManager* fbManager; // Add a pointer to the FBManager
 
-    Shape2D* testTriangle; // Add a pointer to a Shape2D
-
     std::unique_ptr<Camera> camera; // Add a Camera member variable
+
+    std::vector<std::shared_ptr<Shape2D>> shapes; // Add a vector to hold all Shape2D objects
+
+    void UpdateColors(); // Declare the UpdateColors method
 };
 
 } // namespace RavenEngine

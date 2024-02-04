@@ -11,8 +11,7 @@
 // Local project includes
 #include "SceneManager.h"
 #include "SceneNode.h"
-#include "../../Assets/Shaders/ShaderManager.h" // Include ShaderManager.h if not already included
-#include "../../src/Renderer/Shapes/ShapeManager.h" // Include ShapeManager.h if not already included
+#include "../Renderer/Shaders/ShaderManager.h" // Include ShaderManager.h if not already included
 
 namespace RavenEngine {
 
@@ -40,7 +39,6 @@ private:
     int width, height;
 
     SceneManager* sceneManager;
-    std::shared_ptr<ShapeManager> shapeManager; // Declare shapeManager
 
     void HandleNodeCreation(); // Node Creation Menu
     void HandleNodeDeletion(); // Node Removal

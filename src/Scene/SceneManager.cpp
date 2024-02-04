@@ -56,11 +56,11 @@ void SceneManager::AddNode(std::unique_ptr<SceneNode> node) {
     rootNode->AddChild(nodes.back().get()); // Add the node to the root node
 
     // Debugging information
-    std::cout << "Address of rootNode: " << rootNode.get() << std::endl;
-    std::cout << "Child count of rootNode: " << rootNode->GetChildren().size() << std::endl;
+    //std::cout << "Address of rootNode: " << rootNode.get() << std::endl;
+    //std::cout << "Child count of rootNode: " << rootNode->GetChildren().size() << std::endl;
 
-    std::cout << "Added node to root node. Total children in root node: " << rootNode->GetChildren().size() << std::endl;
-    std::cout << "Total nodes: " << nodes.size() << std::endl;
+    //std::cout << "Added node to root node. Total children in root node: " << rootNode->GetChildren().size() << std::endl;
+    //std::cout << "Total nodes: " << nodes.size() << std::endl;
 }
 
 void SceneManager::RemoveNode(SceneNode* node) {

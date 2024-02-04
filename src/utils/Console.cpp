@@ -26,7 +26,7 @@ Console::~Console() {                                                   // Destr
 
 void Console::AddLog(const std::string& message) {
     log.push_back(message);
-    std::cout << "Added message: " << message << ", log size: " << log.size() << std::endl;
+    //std::cout << "Added message: " << message << ", log size: " << log.size() << std::endl;
 }
 
 void Console::Render(bool* p_open) {

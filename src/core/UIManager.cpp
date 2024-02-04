@@ -2,20 +2,19 @@
 
 // #include section
 // #####################
-
 // Standard library includes
 #include <iostream>
 
 // Third-party library includes
 #include "glad/glad.h"
+#include <imgui.h>
 
 // Local project includes
 #include "UIManager.h"
-#include <imgui.h>
-#include "Viewport.h"
-#include "../utils/Doodle/DoodleManager.h"
 #include "Console.h"
-#include "../utils/Inspector.h" // Include the Inspector header file
+#include "Viewport.h"
+#include "../../Tools/Doodle/DoodleManager.h"
+#include "../utils/Inspector.h"
 
 namespace RavenEngine {
     
@@ -27,7 +26,6 @@ UIManager::UIManager(DoodleManager& doodleManager, PaletteManager& paletteManage
 }
 
 void UIManager::Render() {                                                                                // Render the UIManager
-    // console out "Rendering UIManager..."
     //std::cout << "Rendering UIManager..." << std::endl;
 
     // Doodle window
@@ -44,8 +42,6 @@ void UIManager::Render() {                                                      
     ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x / 2 - 400, 
                             ImGui::GetIO().DisplaySize.y - 380), ImGuiCond_FirstUseEver);                 // Set initial console window position
     console.Render();
-    // output "console complete"
-    //std::cout << "console complete" << std::endl;
 
     // Viewport window
     ImGui::SetNextWindowSize(ImVec2(800, 600), ImGuiCond_FirstUseEver);                                   // Set initial viewport window size
@@ -53,8 +49,6 @@ void UIManager::Render() {                                                      
                             ImGui::GetIO().DisplaySize.y - 960), ImGuiCond_FirstUseEver);                 // Set initial viewport window position
     SceneNode& rootNode = sceneManager.GetRootNode();
     viewport.Render(rootNode);  // Pass the root node to viewport.Render                                                                                   // Render the viewport
-    // output "viewport complete"
-    //std::cout << "viewport complete" << std::endl;
 
     // Scene panel window
     ImGui::SetNextWindowSize(ImVec2(200, 800), ImGuiCond_FirstUseEver);                                  // Set initial scene panel window size
@@ -67,8 +61,6 @@ void UIManager::Render() {                                                      
 }
 
 void UIManager::SetSceneManagerContext(SceneManager* sceneManager) {
-    // output "Setting SceneManager context..."
-    //std::cout << "Setting SceneManager context..." << std::endl;
     scenePanel.SetSceneManager(sceneManager);
 }
 

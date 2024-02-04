@@ -5,9 +5,9 @@
 #include "Workspace.h"
 #include "FileDialog.h"
 #include <iostream>
-#include "../../../include/utils/Doodle/DoodleManager.h"
-#include "../../../include/utils/Palette/Palette.h"
-#include "../../../include/utils/Calc/CalculatorManager.h"
+#include "../../../Tools/Doodle/DoodleManager.h"
+#include "../../../Tools/Palette/Palette.h"
+#include "../../../Tools/Calc/CalculatorManager.h"
 
 using namespace RavenEngine;
 

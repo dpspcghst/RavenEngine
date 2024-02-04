@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include "Shape2d.h" // Include the Shape base class
-#include "../../../Assets/Shaders/ShaderManager.h" // Include the ShaderManager class
+#include "../../Shaders/ShaderManager.h" // Include the ShaderManager class
 
 namespace RavenEngine {
 

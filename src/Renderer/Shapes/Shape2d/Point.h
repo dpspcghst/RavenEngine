@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include "../../../Assets/Shaders/ShaderManager.h"
+#include "../../Shaders/ShaderManager.h"
 #include "Shape2D.h"
 
 namespace RavenEngine {

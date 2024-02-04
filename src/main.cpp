@@ -31,6 +31,14 @@ int main() {
                                               L"../Assets/Images/Icons/raven32x32.ico");    // Load the window icons
         ResourceManager::SetWindowIcons(mainWindow);                                        // Set the window icons
 
+        // Check the OpenGL version
+        const GLubyte* glVersion = glGetString(GL_VERSION);
+        if (glVersion != nullptr) {
+            std::cout << "OpenGL version: " << glVersion << std::endl;
+        } else {
+            std::cout << "Failed to get OpenGL version" << std::endl;
+        }
+
         ImGuiManager::Init(mainWindow);                                                     // Initialize the ImGuiManager
         RavenEngine::Workspace workspace(mainWindow);  // Initialize the Workspace                      // Initialize the Workspace
         //std::cout << "starting main loop" << std::endl;                                     // Output "starting main loop

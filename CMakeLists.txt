@@ -14,7 +14,7 @@ find_package(nlohmann_json CONFIG REQUIRED)
 # Define source files
 set(PROJECT_SOURCES
     Settings/SettingsManager.cpp
-    Assets/Shaders/ShaderManager.cpp
+    src/Renderer/Shaders/ShaderManager.cpp
     src/Core/GLFWManagement/GLFWCallbacks.cpp
     src/Core/GLFWManagement/GLFWContextManager.cpp
     src/Core/GLFWManagement/GLFWEventPoller.cpp
@@ -27,15 +27,16 @@ set(PROJECT_SOURCES
     src/Renderer/Shapes/Shape2D/Line.cpp
     src/Renderer/Shapes/Shape2D/Triangle.cpp
     src/Renderer/Shapes/Shape2D/TriQuad.cpp
-    src/Renderer/Shapes/Shape2D/Plane.cpp
+    src/Renderer/Shapes/Shape2D/Rect.cpp
     src/Renderer/Shapes/Shape2D/Shape2d.cpp
     src/Renderer/Shapes/Shape2D/Circle.cpp
-    src/Renderer/Shapes/ShapeManager.cpp
+    src/Renderer/Shapes/Shape3D/Mesh.cpp
     src/Renderer/Shapes/ShapeCreate.cpp
-    src/Renderer/Shapes/Mesh.cpp
-    src/Renderer/Camera.cpp
+    src/Renderer/Camera/Camera.cpp
     src/Renderer/Renderer.cpp
     src/Renderer/FBO/FBManager.cpp
+    src/Renderer/UBO/UniformBuffer.cpp
+    src/Renderer/Materials/MaterialManager.cpp
     src/Scene/SceneManager.cpp
     src/Scene/ScenePanel.cpp
     src/Scene/SceneNode.cpp
@@ -45,12 +46,12 @@ set(PROJECT_SOURCES
     src/Utils/MenuSystem.cpp
     src/Utils/ResourceManager.cpp
     src/Utils/Inspector.cpp
-    src/Utils/Doodle/Doodle.cpp
-    src/Utils/Doodle/DoodleManager.cpp
-    src/Utils/Palette/Palette.cpp
-    src/Utils/Palette/PaletteManager.cpp
-    src/Utils/Calc/Calculator.cpp
-    src/Utils/Calc/CalculatorManager.cpp
+    Tools/Doodle/Doodle.cpp
+    Tools/Doodle/DoodleManager.cpp
+    Tools/Palette/Palette.cpp
+    Tools/Palette/PaletteManager.cpp
+    Tools/Calc/Calculator.cpp
+    Tools/Calc/CalculatorManager.cpp
 )
 
 # Add resources file for Windows

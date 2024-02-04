@@ -3,9 +3,9 @@
 
 #include <GLFW/glfw3.h>
 #include <string>
-#include "Doodle/DoodleManager.h"
-#include "Palette/PaletteManager.h"
-#include "Calc/Calculator.h"
+#include "../../Tools/Doodle/DoodleManager.h"
+#include "../../Tools/Palette/PaletteManager.h"
+#include "../../Tools/Calc/Calculator.h"
 #include "UIManager.h" // Include UIManager
 
 namespace RavenEngine {

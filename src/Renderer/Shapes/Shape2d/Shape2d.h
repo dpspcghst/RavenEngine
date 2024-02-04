@@ -4,7 +4,7 @@
 // Standard library includes
 #include <string>
 
-// Third party includes
+// Raven includes
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -16,7 +16,7 @@ public:
         Point,
         Line,
         Triangle,
-        Plane,
+        Rect,
         TriQuad,
         Circle,
     };
@@ -43,14 +43,24 @@ public:
     glm::mat4 GetTransformMatrix() const {
         return transformMatrix;
     }
+
+    void SetColor(const glm::vec4& newColor);
+    glm::vec4 GetColor() const;
+
+    void SetMaterialUBOName(const std::string& name);
+    std::string GetMaterialUBOName() const;
     
     Type GetType() const;
     static std::string GetTypeName(Type type);
     GLuint GetVAO() const;
 
-    // Declare methods to set and get the shader name
     void SetShaderName(const std::string& shaderName);
     const std::string& GetShaderName() const;
+
+    void SetID(int newID); // Use int for ID
+    int GetID() const; // Use int for ID
+    GLuint GetBindingPoint() const;
+
 
 protected:
     void UpdateTransformMatrix();
@@ -61,8 +71,17 @@ protected:
     glm::vec3 rotation;
     GLuint VAO, VBO;
     Type type;
+    glm::vec4 color; // Color property for the shape
 
-    std::string shaderName;
+    std::string shaderName; // Name of the shader used for this shape
+    std::string materialUBOName;
+
+    GLuint shaderProgram; // ID of the shader program used for this shape
+    GLuint ubo;
+    int ID; // ID of the shape
+    static int nextID; // Static variable to keep track of the next ID to be assigned
+    GLuint bindingPoint; // UBO binding point for this shape
+
 };
 
 } // namespace RavenEngine

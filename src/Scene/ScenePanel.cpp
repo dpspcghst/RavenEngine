@@ -15,7 +15,7 @@
 #include "../Renderer/Shapes/ShapeCreate.h"
 #include "../Renderer/Shapes/Shape2D//Point.h"
 #include "../Renderer/Shapes/Shape2D/Line.h"
-#include "../Renderer/Shapes/Shape2D/Plane.h"
+#include "../Renderer/Shapes/Shape2D/Rect.h"
 #include "../Renderer/Shapes/Shape2D/Triangle.h"
 #include "../Renderer/Shapes/Shape2D/TriQuad.h"
 
@@ -49,6 +49,7 @@ void ScenePanel::OnImGuiRender() {                                              
     HandleNodeCreation();
     DrawSceneNodes();
 
+    
     ImGui::End();
 }
 
@@ -202,27 +203,21 @@ void ScenePanel::HandleNodeCreation() {                                         
     if (ImGui::BeginPopup("Create2DShapePopup")) {                                // shape selection list
         if (ImGui::BeginMenu("2D")) {
             if (ImGui::MenuItem("Point")) {                                     // Shape::Type::Point
-                std::cout << "Creating 2D Point" << std::endl;
                 Create2DShape(Shape2D::Type::Point);                                    
             }
             if (ImGui::MenuItem("Line")) {                                      // Shape::Type::Line
-                std::cout << "Creating 2D Line" << std::endl;
                 Create2DShape(Shape2D::Type::Line);                                     
             }
             if (ImGui::MenuItem("Triangle")) {                                  // Shape::Type::Triangle
-                std::cout << "Creating 2D Triangle" << std::endl;
                 Create2DShape(Shape2D::Type::Triangle);                                 
             }
-            if (ImGui::MenuItem("Plane")) {                                     // Shape::Type::Plane
-                std::cout << "Creating 2D Plane" << std::endl;
-                Create2DShape(Shape2D::Type::Plane);                                    
+            if (ImGui::MenuItem("Rect")) {                                     // Shape::Type::Rect
+                Create2DShape(Shape2D::Type::Rect);                                    
             }
             if (ImGui::MenuItem("TriQuad")) {                                   // Shape::Type::TriQuad
-                std::cout << "Creating 2D TriQuad" << std::endl;
                 Create2DShape(Shape2D::Type::TriQuad);                                  
             }
             if (ImGui::MenuItem("Circle")) {                                    // Shape::Type::Circle
-                std::cout << "Creating 2D Circle" << std::endl;
                 Create2DShape(Shape2D::Type::Circle);                                  
             }
             ImGui::EndMenu();
@@ -252,7 +247,7 @@ void ScenePanel::Create2DShape(Shape2D::Type shapeType) {
         // Add the node to the scene
         sceneManager->AddNode(std::move(newNode));
 
-        std::cout << "Shape created and added to the scene list." << std::endl;
+        std::cout << "SCENEPANEL::CREATE2DSHAPE Shape created and added to the scene list." << std::endl;
     } else {
         std::cout << "Failed to create shape." << std::endl;
     }

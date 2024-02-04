@@ -13,19 +13,19 @@
 #include "SceneNode.h"
 #include "../Renderer/Shapes/Shape2D/Point.h"
 #include "../Renderer/Shapes/Shape2D/Line.h"
-#include "../Renderer/Shapes/Shape2D/Plane.h"
+#include "../Renderer/Shapes/Shape2D/Rect.h"
 #include "../Renderer/Shapes/Shape2D/Triangle.h"
 #include "../Renderer/Shapes/Shape2D/TriQuad.h"
 #include "../Renderer/Shapes/Shape2D/Circle.h"
-#include "../../Assets/Shaders/ShaderManager.h"
+#include "../Renderer/Shaders/ShaderManager.h"
 
 namespace RavenEngine {
 
-SceneNode::SceneNode() : name("") {
+SceneNode::SceneNode() : name("") {                                                                             // Default constructor
     // Default constructor
 }
 
-SceneNode::SceneNode(const std::string& nodeName) : name(nodeName) {
+SceneNode::SceneNode(const std::string& nodeName) : name(nodeName) {                                            // Constructor
     name = nodeName;
 }
 
@@ -39,7 +39,7 @@ void SceneNode::Update(float deltaTime) {                                       
     }
 }
 
-void SceneNode::AddChild(SceneNode* child) {
+void SceneNode::AddChild(SceneNode* child) {                                                                     // Add child method
     children.push_back(std::unique_ptr<SceneNode>(child));
     
     // Debugging information
@@ -51,7 +51,7 @@ const std::vector<std::unique_ptr<SceneNode>>& SceneNode::GetChildren() const { 
     return children;
 }
 
-void SceneNode::RemoveChild(const SceneNode* child) {
+void SceneNode::RemoveChild(const SceneNode* child) {                                                            // Remove child method
     //std::cout << "Removing child: " << child->GetName() << " from node: " << GetName() << std::endl;
     children.erase(std::remove_if(children.begin(), children.end(),
                                   [child](const std::unique_ptr<SceneNode>& c) { return c.get() == child; }),
@@ -68,7 +68,7 @@ void SceneNode::SetName(const std::string& newName) {                           
     name = newName;
 }
 
-void SceneNode::AttachShape(std::shared_ptr<Shape2D> newShape) {
+void SceneNode::AttachShape(std::shared_ptr<Shape2D> newShape) {                                                 // Attach shape method
     if (!newShape) {
         //std::cout << "Error: Attempted to attach a null shape to node: " << GetName() << std::endl;
         return;
@@ -78,7 +78,7 @@ void SceneNode::AttachShape(std::shared_ptr<Shape2D> newShape) {
     shape = std::move(newShape);
 }
 
-std::shared_ptr<Shape2D> SceneNode::GetShape() const {
+std::shared_ptr<Shape2D> SceneNode::GetShape() const {                                                           // Get shape method
     if (shape) {
         //std::cout << "Retrieving shape from node: " << GetName() << std::endl;
     } else {
@@ -87,7 +87,7 @@ std::shared_ptr<Shape2D> SceneNode::GetShape() const {
     return shape;
 }
 
-void SceneNode::SetID(int newID) {
+void SceneNode::SetID(int newID) {                                                                               // Set ID method
     id = newID;
 }
 

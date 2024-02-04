@@ -6,8 +6,8 @@ namespace RavenEngine {
 
 FBManager::FBManager(int width, int height)
     : gameWidth(width), gameHeight(height), framebufferObject(0), currentTexture(0) {
-    std::cout << "FBManager Constructor Ping" << std::endl;
-    std::cout << "FBManager created with size: " << gameWidth << "x" << gameHeight << std::endl;
+    //std::cout << "FBManager Constructor Ping" << std::endl;
+    //std::cout << "FBManager created with size: " << gameWidth << "x" << gameHeight << std::endl;
 }
 
 FBManager::~FBManager() {
