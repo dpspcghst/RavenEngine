@@ -25,8 +25,11 @@ UIManager::UIManager(DoodleManager& doodleManager, PaletteManager& paletteManage
     //std::cout << "Initializing UIManager..." << std::endl;
 }
 
-void UIManager::Render() {                                                                                // Render the UIManager
-    //std::cout << "Rendering UIManager..." << std::endl;
+void UIManager::Render() { // Render the UIManager
+                                                                                   
+    // Dockspace
+    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), ImGuiDockNodeFlags_None);       // Create a dockspace over the main viewport
+
 
     // Doodle window
     doodleManager.Update();

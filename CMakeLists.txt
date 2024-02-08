@@ -15,6 +15,8 @@ find_package(nlohmann_json CONFIG REQUIRED)
 set(PROJECT_SOURCES
     Settings/SettingsManager.cpp
     src/Renderer/Shaders/ShaderManager.cpp
+    src/Renderer/Shaders/ShaderLoader.cpp
+    src/Renderer/Shaders/ShaderProgram.cpp
     src/Core/GLFWManagement/GLFWCallbacks.cpp
     src/Core/GLFWManagement/GLFWContextManager.cpp
     src/Core/GLFWManagement/GLFWEventPoller.cpp
@@ -30,12 +32,17 @@ set(PROJECT_SOURCES
     src/Renderer/Shapes/Shape2D/Rect.cpp
     src/Renderer/Shapes/Shape2D/Shape2d.cpp
     src/Renderer/Shapes/Shape2D/Circle.cpp
+    src/Renderer/Shapes/Shape2D/ShapeCreate2D.cpp
     src/Renderer/Shapes/Shape3D/Mesh.cpp
-    src/Renderer/Shapes/ShapeCreate.cpp
+    src/Renderer/Shapes/Shape3D/Shape3D.cpp
+    src/Renderer/Shapes/Shape3D/Cube.cpp
+    src/Renderer/Shapes/Shape3D/ShapeCreate3D.cpp
+    src/Renderer/Shapes/Shape.cpp
     src/Renderer/Camera/Camera.cpp
     src/Renderer/Renderer.cpp
     src/Renderer/FBO/FBManager.cpp
     src/Renderer/UBO/UniformBuffer.cpp
+    src/Renderer/UBO/UniformBufferManager.cpp
     src/Renderer/Materials/MaterialManager.cpp
     src/Scene/SceneManager.cpp
     src/Scene/ScenePanel.cpp

@@ -1,8 +1,15 @@
+// UniformBuffer.h
 #ifndef UNIFORM_BUFFER_H
 #define UNIFORM_BUFFER_H
 
+// #include section
+// #####################
+// standard library includes
 #include <string>
-#include <glm/glm.hpp>
+
+// third party includes
+#include <glad/glad.h>
+#include <glm/glm.hpp> 
 
 namespace RavenEngine {
 
@@ -14,31 +21,30 @@ struct UniformBufferProperties {
 
 class UniformBuffer {
 public:
-    // Constructor & Destructor
-    explicit UniformBuffer(size_t size, unsigned int bindingPoint);
-    ~UniformBuffer() = default;
+    UniformBuffer(size_t size, unsigned int bindingPoint);              // Initializes a new Uniform Buffer Object with the given size and binding point
+    ~UniformBuffer() = default;                                         // Default destructor
 
-    // Public Methods
-    void Bind() const;
-    void Unbind() const;
-    void Update(const void* data, size_t size, size_t offset = 0);
-    void GetData(void* data, size_t size, size_t offset = 0) const;
+    void Bind() const;                                                  // Binds the Uniform Buffer Object to the GL_UNIFORM_BUFFER target
+    void Unbind() const;                                                // Unbinds the current Uniform Buffer Object from the GL_UNIFORM_BUFFER target
+    void Update(const void* data, size_t size, size_t offset = 0);      // Updates the data in the Uniform Buffer Object
+    void GetData(void* data, size_t size, size_t offset = 0) const;     // Retrieves data from the Uniform Buffer Object
+
+    size_t GetSize() const;                                             // Returns the size of the Uniform Buffer Object
+
+    UniformBufferProperties GetProperties() const;                      // Returns the properties of the Uniform Buffer Object
+
+    unsigned int GetID() const;                                         // Returns the ID of the Uniform Buffer Object
+
+    // Declare the UpdateColor method
     void UpdateColor(const glm::vec4& color);
 
-    // Getters
-    size_t GetSize() const;
-    unsigned int GetID() const;
-    UniformBufferProperties GetProperties() const;
-
 private:
-    // Helper Methods
-    bool LogGLError(const std::string& functionName) const;
-    void CheckBufferBinding(GLuint expectedBindingPoint) const;
+    bool LogGLError(const std::string& functionName) const;             // Checks for OpenGL errors and logs them if any are found
+    void CheckBufferBinding(GLuint bindingPoint) const;                 // Checks if the Uniform Buffer Object is correctly bound to the expected binding point
 
-    // Member Variables
-    GLuint bufferID;
-    GLuint bindingPoint;
-    size_t bufferSize;
+    unsigned int bufferID;                                              // The ID of the Uniform Buffer Object
+    unsigned int bindingPoint;                                          // The binding point of the Uniform Buffer Object
+    size_t bufferSize;                                                  // The size of the Uniform Buffer Object
 };
 
 } // namespace RavenEngine

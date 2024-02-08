@@ -5,6 +5,8 @@
 // #####################
 // Standard library includes
 #include <array>
+#include <vector>
+#include <memory>
 
 // Third party includes
 #include <glad/glad.h>
@@ -16,7 +18,7 @@
 #include "Shaders/ShaderManager.h"
 #include "FBO/FBManager.h"
 #include "Camera/Camera.h"
-#include "Shapes/Shape2D/Shape2D.h" // Include Shape2D.h
+#include "Shapes/Shape.h" // Include the unified Shape.h
 
 namespace RavenEngine {
 
@@ -54,7 +56,7 @@ private:
 
     std::unique_ptr<Camera> camera; // Add a Camera member variable
 
-    std::vector<std::shared_ptr<Shape2D>> shapes; // Add a vector to hold all Shape2D objects
+    std::vector<std::shared_ptr<Shape>> shapes; // A unified vector to hold all Shape objects
 
     void UpdateColors(); // Declare the UpdateColors method
 };

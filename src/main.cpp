@@ -45,7 +45,6 @@ int main() {
         while (!windowWrapper.shouldClose()) {                                              // Main loop
             GLFWEventPoller::pollEvents();                                                  // Poll GLFW events
             ImGuiManager::NewFrame();                                                       // Start the Dear ImGui frame
-            ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());                         // Dock the ImGui window
             workspace.Render();                                                             // Render the Workspace
             ImGuiManager::Render();                                                         // Render the ImGui frame
             windowWrapper.swapBuffers();                                                    // Swap the window buffers

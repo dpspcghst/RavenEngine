@@ -12,12 +12,15 @@
 
 // Raven includes
 #include "ScenePanel.h"
-#include "../Renderer/Shapes/ShapeCreate.h"
+#include "../Renderer/Shapes/Shape2D/ShapeCreate2D.h"
 #include "../Renderer/Shapes/Shape2D//Point.h"
 #include "../Renderer/Shapes/Shape2D/Line.h"
 #include "../Renderer/Shapes/Shape2D/Rect.h"
 #include "../Renderer/Shapes/Shape2D/Triangle.h"
 #include "../Renderer/Shapes/Shape2D/TriQuad.h"
+
+#include "../Renderer/Shapes/Shape3D/ShapeCreate3D.h"
+#include "../Renderer/Shapes/Shape3D/Cube.h"
 
 namespace RavenEngine {
 
@@ -196,60 +199,62 @@ void ScenePanel::HandleNodeInteraction(SceneNode* node) {                       
     }
 }
 
-void ScenePanel::HandleNodeCreation() {                                         // Handle shape creation
+void ScenePanel::HandleNodeCreation() {                                     
     if (ImGui::Button("+Shape")) {
-        ImGui::OpenPopup("Create2DShapePopup");
+        ImGui::OpenPopup("CreateShapePopup");
     }
-    if (ImGui::BeginPopup("Create2DShapePopup")) {                                // shape selection list
-        if (ImGui::BeginMenu("2D")) {
-            if (ImGui::MenuItem("Point")) {                                     // Shape::Type::Point
-                Create2DShape(Shape2D::Type::Point);                                    
-            }
-            if (ImGui::MenuItem("Line")) {                                      // Shape::Type::Line
-                Create2DShape(Shape2D::Type::Line);                                     
-            }
-            if (ImGui::MenuItem("Triangle")) {                                  // Shape::Type::Triangle
-                Create2DShape(Shape2D::Type::Triangle);                                 
-            }
-            if (ImGui::MenuItem("Rect")) {                                     // Shape::Type::Rect
-                Create2DShape(Shape2D::Type::Rect);                                    
-            }
-            if (ImGui::MenuItem("TriQuad")) {                                   // Shape::Type::TriQuad
-                Create2DShape(Shape2D::Type::TriQuad);                                  
-            }
-            if (ImGui::MenuItem("Circle")) {                                    // Shape::Type::Circle
-                Create2DShape(Shape2D::Type::Circle);                                  
-            }
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("3D")) {
-            // 3D shape creation options go here...
-            ImGui::EndMenu();
-        }
+    if (ImGui::BeginPopup("CreateShapePopup")) { 
+        Handle2DShapeCreationMenu(); // handle 2D shape creation
+        Handle3DShapeCreationMenu(); // handle 3D shape creation
         ImGui::EndPopup(); // End the popup
     }
 }
 
-void ScenePanel::Create2DShape(Shape2D::Type shapeType) {
-    ShapeCreate shapeCreate;
+void ScenePanel::CreateShape(int shapeType, bool is3D) {
+    std::shared_ptr<Shape> newShape;
+    std::string shapeTypeName;
 
-    // Create a new shape
-    std::shared_ptr<Shape2D> newShape = shapeCreate.CreateShape(shapeType); // Pass shapeType directly
-    if (newShape) { // if shape creation was successful
-        
-        auto newNode = std::make_unique<SceneNode>(); // Create a new scene node
-
-        std::string shapeTypeName = Shape2D::GetTypeName(shapeType);
-        newNode->SetName(shapeTypeName);  // Set the name of the SceneNode
-
-        newNode->AttachShape(newShape); // Pass shared_ptr directly
-
-        // Add the node to the scene
-        sceneManager->AddNode(std::move(newNode));
-
-        std::cout << "SCENEPANEL::CREATE2DSHAPE Shape created and added to the scene list." << std::endl;
+    if (is3D) {
+        ShapeCreate3D shapeCreate3D;
+        // Use the existing CreateShape3D method from ShapeCreate3D
+        newShape = shapeCreate3D.CreateShape3D(static_cast<Shape3D::Type>(shapeType));
+        shapeTypeName = Shape3D::GetTypeName(static_cast<Shape3D::Type>(shapeType));
     } else {
-        std::cout << "Failed to create shape." << std::endl;
+        ShapeCreate2D shapeCreate2D;
+        newShape = shapeCreate2D.CreateShape2D(static_cast<Shape2D::Type>(shapeType));
+        shapeTypeName = Shape2D::GetTypeName(static_cast<Shape2D::Type>(shapeType));
+    }
+
+    if (newShape) {
+        auto newNode = std::make_unique<SceneNode>();
+        newNode->SetName(shapeTypeName);
+        newNode->AttachShape(newShape);
+        sceneManager->AddNode(std::move(newNode));
+    } else {
+        std::cerr << "Failed to create shape." << std::endl;
+    }
+}
+
+
+void ScenePanel::Handle2DShapeCreationMenu() {
+    if (ImGui::BeginMenu("2D")) {
+        for (auto type : Shape2D::AllTypes) { // Assume Shape2D::AllTypes is a collection of all 2D types
+            if (ImGui::MenuItem(Shape2D::GetTypeName(type).c_str())) {
+                CreateShape(static_cast<int>(type)); // Create 2D shape
+            }
+        }
+        ImGui::EndMenu();
+    }
+}
+
+void ScenePanel::Handle3DShapeCreationMenu() {
+    if (ImGui::BeginMenu("3D")) {
+        for (auto type : Shape3D::AllTypes) { // Assume Shape3D::AllTypes is a collection of all 3D types
+            if (ImGui::MenuItem(Shape3D::GetTypeName(type).c_str())) {
+                CreateShape(static_cast<int>(type), true); // Create 3D shape
+            }
+        }
+        ImGui::EndMenu();
     }
 }
 

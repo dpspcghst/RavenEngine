@@ -111,7 +111,7 @@ void Calculator::DrawResultDisplay() {
 void Calculator::DrawNumberButtons() {
     // Get the available width for the window and divide by the number of buttons per row
     float windowWidth = ImGui::GetContentRegionAvail().x;
-    float buttonWidth = windowWidth / 4 - ImGui::GetStyle().ItemSpacing.x; // Assuming 4 buttons per row
+    float buttonWidth = windowWidth / 4 - ImGui::GetStyle().ItemSpacing.x; 
     float buttonHeight = buttonWidth * 0.75f; // Maintain aspect ratio
 
     // Number buttons
@@ -138,7 +138,7 @@ void Calculator::DrawNumberButtons() {
 void Calculator::DrawOperationButtons() {
     // Get the available width for the window and divide by the number of buttons per row
     float windowWidth = ImGui::GetContentRegionAvail().x;
-    float buttonWidth = windowWidth / 6 - ImGui::GetStyle().ItemSpacing.x; // Assuming 6 buttons per row
+    float buttonWidth = windowWidth / 6 - ImGui::GetStyle().ItemSpacing.x;
     float buttonHeight = buttonWidth * 0.75f; // Maintain aspect ratio
 
     // Operation buttons
@@ -155,7 +155,7 @@ void Calculator::DrawOperationButtons() {
 void Calculator::DrawMemoryButtons() {
     // Get the available width for the window and divide by the number of buttons per row
     float windowWidth = ImGui::GetContentRegionAvail().x;
-    float buttonWidth = windowWidth / 5 - ImGui::GetStyle().ItemSpacing.x; // Assuming 5 buttons per row
+    float buttonWidth = windowWidth / 5 - ImGui::GetStyle().ItemSpacing.x;
     float buttonHeight = buttonWidth * 0.75f; // Maintain aspect ratio
 
     // Memory buttons
@@ -264,7 +264,6 @@ void Calculator::MemoryClear() {
 }
 
 void Calculator::MemoryRecall() {
-    // Assuming you want to recall the memory to the firstNumber or result
     if (operation == Operation::None) {
         firstNumber = memory;
         equalsPressed = false;

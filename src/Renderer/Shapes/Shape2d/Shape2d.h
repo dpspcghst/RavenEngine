@@ -1,16 +1,12 @@
-// Shape2D.h
 #pragma once
 
-// Standard library includes
 #include <string>
-
-// Raven includes
-#include <glad/glad.h>
-#include <glm/glm.hpp>
+#include <vector>
+#include "../Shape.h"
 
 namespace RavenEngine {
 
-class Shape2D {
+class Shape2D : public Shape {
 public:
     enum class Type {
         Point,
@@ -21,67 +17,43 @@ public:
         Circle,
     };
 
+    static const std::vector<Type> AllTypes;
+
     Shape2D();
-    Shape2D(const glm::vec3& position, Type type);
-    Shape2D(const std::string& shaderName);
+    explicit Shape2D(const glm::vec3& position, Type type);
+    explicit Shape2D(const std::string& shaderName);
 
-    virtual ~Shape2D();
+    ~Shape2D() override;
 
-    virtual int GetVertexCount() const = 0;
-
+    // Inherited pure virtual functions implemented in Shape2D.cpp
     virtual void Create() = 0;
-    virtual void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const = 0;
-
-    void SetSize(const glm::vec3& size);
-    void SetPosition(const glm::vec3& position);
-    void SetRotation(const glm::vec3& rotation);
-
-    glm::vec3 GetSize() const;
-    glm::vec3 GetPosition() const;
-    glm::vec3 GetRotation() const;
-
+    virtual void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override = 0;
     glm::mat4 GetTransformMatrix() const {
         return transformMatrix;
     }
 
-    void SetColor(const glm::vec4& newColor);
-    glm::vec4 GetColor() const;
+    void SetShaderName(const std::string& shaderName) override;
 
-    void SetMaterialUBOName(const std::string& name);
-    std::string GetMaterialUBOName() const;
-    
-    Type GetType() const;
+    // Shape-specific methods
+    virtual int GetVertexCount() const = 0;
+    Type GetSpecificType() const; // Rename from GetType to GetSpecificType
     static std::string GetTypeName(Type type);
     GLuint GetVAO() const;
+    
+    // Implement GetType from the base class to return ShapeType
+    Shape::ShapeType GetType() const override;
 
-    void SetShaderName(const std::string& shaderName);
-    const std::string& GetShaderName() const;
-
-    void SetID(int newID); // Use int for ID
-    int GetID() const; // Use int for ID
+    // Additional getters not present in the base class
     GLuint GetBindingPoint() const;
 
+    void SetMaterialUBOName(const std::string& name) override;
+    std::string GetMaterialUBOName() const override;
 
 protected:
     void UpdateTransformMatrix();
 
-    glm::mat4 transformMatrix;
-    glm::vec3 size;
-    glm::vec3 position;
-    glm::vec3 rotation;
-    GLuint VAO, VBO;
-    Type type;
-    glm::vec4 color; // Color property for the shape
-
-    std::string shaderName; // Name of the shader used for this shape
-    std::string materialUBOName;
-
-    GLuint shaderProgram; // ID of the shader program used for this shape
-    GLuint ubo;
-    int ID; // ID of the shape
-    static int nextID; // Static variable to keep track of the next ID to be assigned
-    GLuint bindingPoint; // UBO binding point for this shape
-
+    Type type;  // Specific to Shape2D
+    GLuint VAO;  // OpenGL Vertex Array Object, specific to Shape2D
 };
 
 } // namespace RavenEngine

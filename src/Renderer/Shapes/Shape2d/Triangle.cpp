@@ -43,19 +43,25 @@ void Triangle::Create() {
 
 void Triangle::Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const {
     ShaderManager& shaderManager = ShaderManager::GetInstance();
-    GLuint shaderProgram = shaderManager.GetShader(GetShaderName());
+    std::shared_ptr<RavenEngine::ShaderProgram> shaderProgramPtr = shaderManager.GetShader(GetShaderName());
 
-    glUseProgram(shaderProgram);
+    if (shaderProgramPtr) {
+        GLuint shaderProgramID = shaderProgramPtr->GetID();
+        glUseProgram(shaderProgramID);
 
-    // Set the shader uniforms
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(transformMatrix));
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+        // Set the shader uniforms
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "model"), 1, GL_FALSE, glm::value_ptr(transformMatrix));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, GetVertexCount());
-    glBindVertexArray(0);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, GetVertexCount());
+        glBindVertexArray(0);
+    } else {
+        std::cerr << "Triangle::Render: Failed to retrieve shader program for '" << GetShaderName() << "'." << std::endl;
+    }
 }
+
 
 int Triangle::GetVertexCount() const {
     return 3; // Number of vertices in a triangle

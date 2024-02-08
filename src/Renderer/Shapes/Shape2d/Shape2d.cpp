@@ -18,36 +18,26 @@
 
 namespace RavenEngine {
 
-int Shape2D::nextID = 0;
+const std::vector<Shape2D::Type> Shape2D::AllTypes = { Shape2D::Type::Point, Shape2D::Type::Line, Shape2D::Type::Triangle, Shape2D::Type::Rect, Shape2D::Type::TriQuad, Shape2D::Type::Circle };
 
 Shape2D::Shape2D() 
-    : VAO(0), VBO(0), ubo(0), // Initialize ubo here
-      size(1.0f, 1.0f, 0.0f), 
-      position(0.0f, 0.0f, 0.0f), rotation(0.0f), 
-      color(1.0f, 1.0f, 1.0f, 1.0f), 
-      transformMatrix(1.0f) {
+    : Shape() {
+    type = Type::Point; // Default type can be set here
     glGenBuffers(1, &ubo); // Generate UBO here
     ID = nextID++;
     UpdateTransformMatrix();
 }
 
 Shape2D::Shape2D(const glm::vec3& pos, Type type) 
-    : VAO(0), VBO(0), ubo(0), // Initialize ubo here
-      size(1.0f, 1.0f, 0.0f), 
-      position(pos), type(type), rotation(0.0f), 
-      color(1.0f, 1.0f, 1.0f, 1.0f), // Default color: white
-      transformMatrix(1.0f) {
+    : Shape() {
+    this->position = pos; // Position is now in the base class
+    this->type = type;
     glGenBuffers(1, &ubo); // Generate UBO here
     ID = nextID++;
     UpdateTransformMatrix();
 }
 
-Shape2D::Shape2D(const std::string& shaderName) 
-    : VAO(0), VBO(0), ubo(0), // Initialize ubo here
-      size(1.0f, 1.0f, 0.0f), 
-      position(0.0f, 0.0f, 0.0f), rotation(0.0f), 
-      color(1.0f, 1.0f, 1.0f, 1.0f), // Default color: white
-      transformMatrix(1.0f), shaderName(shaderName) {
+Shape2D::Shape2D(const std::string& shaderName) {
     glGenBuffers(1, &ubo); // Generate UBO here
     ID = nextID++;
     UpdateTransformMatrix();
@@ -59,8 +49,38 @@ Shape2D::~Shape2D() {
     glDeleteBuffers(1, &VBO);
 }
 
-Shape2D::Type Shape2D::GetType() const {
+void Shape2D::SetShaderName(const std::string& shaderName) {
+    Shape::SetShaderName(shaderName);  // Call the base class method
+
+    std::cout << "SHAPE2D::SETSHADERNAME Shader name set to: " << this->shaderName 
+              << ", Shader program ID set to: " << this->shaderProgram << std::endl;
+
+    if (glIsProgram(this->shaderProgram) == GL_FALSE) {
+        std::cerr << "SHAPE2D::SETSHADERNAME Invalid shader program ID: " << this->shaderProgram << std::endl;
+    } else {
+        std::cout << "SHAPE2D::SETSHADERNAME Valid shader program ID: " << this->shaderProgram << std::endl;
+    }
+}
+
+void Shape2D::SetMaterialUBOName(const std::string& name) {
+    Shape::SetMaterialUBOName(name);  // Call the base class method
+
+    std::cout << "SHAPE2D::SETMATERIALUBONAME Material UBO name set to: " << materialUBOName << std::endl;
+}
+
+std::string Shape2D::GetMaterialUBOName() const {
+    std::cout << "SHAPE2D::GETMATERIALUBONAME Retrieved material UBO name: " << materialUBOName << std::endl;
+
+    return Shape::GetMaterialUBOName();  // Call the base class method
+}
+
+Shape2D::Type Shape2D::GetSpecificType() const {
     return type;
+}
+
+// Implement GetType from the base class to return ShapeType
+Shape::ShapeType Shape2D::GetType() const {
+    return Shape::ShapeType::Shape2D;
 }
 
 std::string Shape2D::GetTypeName(Type type) {
@@ -75,34 +95,6 @@ std::string Shape2D::GetTypeName(Type type) {
     }
 }
 
-glm::vec3 Shape2D::GetSize() const {
-    return size;
-}
-
-void Shape2D::SetSize(const glm::vec3& newSize) {
-    size = newSize;
-    UpdateTransformMatrix();
-}
-
-glm::vec3 Shape2D::GetPosition() const {
-    return position;
-}
-
-void Shape2D::SetPosition(const glm::vec3& newPosition) {
-    position = newPosition;
-    UpdateTransformMatrix();
-    //std::cout << "SHAPE2D::SETPOSITION Position set to: " << position.x << ", " << position.y << ", " << position.z << std::endl;
-}
-
-glm::vec3 Shape2D::GetRotation() const {
-    return rotation;
-}
-
-void Shape2D::SetRotation(const glm::vec3& newRotation) {
-    rotation = newRotation;
-    UpdateTransformMatrix();
-}
-
 void Shape2D::UpdateTransformMatrix() {
     transformMatrix = glm::mat4(1.0f);
     transformMatrix = glm::translate(transformMatrix, position);
@@ -111,62 +103,8 @@ void Shape2D::UpdateTransformMatrix() {
     transformMatrix = glm::rotate(transformMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
     transformMatrix = glm::scale(transformMatrix, size);
     // debug
-    //std::cout << "SHAPE2D::UPDATETRANSFORMMATRIX Transform matrix: " << glm::to_string(transformMatrix) << std::endl;
-}
-
-void Shape2D::SetShaderName(const std::string& shaderName) {
-    this->shaderName = shaderName;
-    this->shaderProgram = ShaderManager::GetInstance().GetShader(shaderName);
-    std::cout << "SHAPE2D::SETSHADERNAME Shader name set to: " << this->shaderName 
-              << ", Shader program ID set to: " << this->shaderProgram << std::endl;
-
-    if (glIsProgram(this->shaderProgram) == GL_FALSE) {
-        std::cerr << "SHAPE2D::SETSHADERNAME Invalid shader program ID: " << this->shaderProgram << std::endl;
-    } else {
-        std::cout << "SHAPE2D::SETSHADERNAME Valid shader program ID: " << this->shaderProgram << std::endl;
-    }
-}
-
-const std::string& Shape2D::GetShaderName() const {
-    return shaderName;
-}
-
-void Shape2D::SetID(int id) {
-    ID = id;
-}
-
-int Shape2D::GetID() const {
-    return ID;
-}
-
-void Shape2D::SetMaterialUBOName(const std::string& name) {
-    materialUBOName = name;
-    std::cout << "SHAPE2D::SETMATERIALUBONAME Material UBO name set to: " << materialUBOName << std::endl;
-}
-
-std::string Shape2D::GetMaterialUBOName() const {
-    std::cout << "SHAPE2D::GETMATERIALUBONAME Retrieved material UBO name: " << materialUBOName << std::endl;
-    return materialUBOName;
-}
-
-void Shape2D::SetColor(const glm::vec4& newColor) {  
-    color = newColor;
-    ShaderManager& shaderManager = ShaderManager::GetInstance();
-    MaterialProperties props{color};
-
-    std::cout << "SHAPE2D::SETCOLOR Material UBO Name: " << materialUBOName 
-              << ", New Color: (" << newColor.r << ", " << newColor.g << ", " << newColor.b << ", " << newColor.a << ")\n";
-
-    shaderManager.UpdateUniformBuffer(materialUBOName, &props, sizeof(props));
-
-    MaterialProperties readBackProps;
-    shaderManager.GetUBOData(materialUBOName, &readBackProps, sizeof(readBackProps));
-    std::cout << "SHAPE2D::SETCOLOR Read back UBO data: Color: (" << readBackProps.color.r << ", " << readBackProps.color.g << ", " << readBackProps.color.b << ", " << readBackProps.color.a << ")\n";
-}
-
-
-glm::vec4 Shape2D::GetColor() const {
-    return color;
+    std::cout << "Shape2D size: " << glm::to_string(size) << std::endl;
+    std::cout << "SHAPE2D::UPDATETRANSFORMMATRIX Transform matrix: " << glm::to_string(transformMatrix) << std::endl;
 }
 
 } // namespace RavenEngine

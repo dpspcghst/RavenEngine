@@ -8,7 +8,7 @@
 // Third-party library includes
 #include <imgui.h>
 
-// Local project includes
+// Raven includes
 #include "Console.h"
 
 namespace RavenEngine {

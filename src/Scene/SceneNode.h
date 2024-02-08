@@ -1,5 +1,7 @@
 // scenenode.h
-#pragma once
+#ifndef RAVENENGINE_SCENENODE_H
+#define RAVENENGINE_SCENENODE_H
+
 // #include section
 // #####################
 // Standard library includes
@@ -10,14 +12,14 @@
 // Third party includes
 
 // Raven includes
-#include "../Renderer/Shapes/Shape2D/Shape2D.h"
+#include "../Renderer/Shapes/Shape.h"  // Include the unified Shape.h
 
 namespace RavenEngine {
 
 class SceneNode {
 public:
     SceneNode();  // Default constructor
-    SceneNode(const std::string& nodeName);  // Constructor that takes a name parameter
+    explicit SceneNode(const std::string& nodeName);  // Constructor that takes a name parameter
     ~SceneNode();
 
     void Update(float deltaTime);
@@ -31,16 +33,19 @@ public:
     void SetID(int newID);
     int GetID() const;
 
-    void AttachShape(std::shared_ptr<Shape2D> shape);
+    void AttachShape(std::shared_ptr<Shape> newShape);  // Unified method to attach a shape
 
-    std::shared_ptr<Shape2D> GetShape() const; // Changed return type to std::shared_ptr<Shape>
+    std::shared_ptr<Shape> GetShape() const;  // Unified method to get the attached shape
+
 private:
     std::string name;
     std::vector<std::unique_ptr<SceneNode>> children;
     int id;
 
-    std::shared_ptr<Shape2D> shape;
+    std::shared_ptr<Shape> shape;  // Unified shape member
 
 };
 
 } // namespace RavenEngine
+
+#endif // RAVENENGINE_SCENENODE_H

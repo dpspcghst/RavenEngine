@@ -16,7 +16,7 @@ namespace RavenEngine {
 UniformBuffer::UniformBuffer(size_t size, unsigned int bindingPoint)        // Initializes a new Uniform Buffer Object with the given size and binding point
     : bindingPoint(bindingPoint), bufferSize(size) {
     glGenBuffers(1, &bufferID);
-    std::cout << "UNIFORMBUFFER Generated buffer with ID: " << bufferID << std::endl;
+    //std::cout << "UNIFORMBUFFER Generated buffer with ID: " << bufferID << std::endl;
     LogGLError("glGenBuffers");
 
     glBindBuffer(GL_UNIFORM_BUFFER, bufferID);
@@ -31,9 +31,9 @@ UniformBuffer::UniformBuffer(size_t size, unsigned int bindingPoint)        // I
         CheckBufferBinding(bindingPoint);
     }
 
-    std::cout << "UNIFORMBUFFER:: UniformBuffer created with size: " << size 
-              << ", bindingPoint: " << bindingPoint 
-              << ", bufferID: " << bufferID << std::endl;
+    //std::cout << "UNIFORMBUFFER:: UniformBuffer created with size: " << size 
+            //   << ", bindingPoint: " << bindingPoint 
+            //   << ", bufferID: " << bufferID << std::endl;
 
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     LogGLError("glBindBuffer (2)");
@@ -78,7 +78,6 @@ void UniformBuffer::UpdateColor(const glm::vec4& color) {
     glBindBuffer(GL_UNIFORM_BUFFER, bufferID);
     LogGLError("glBindBuffer (3)");
 
-    // Assuming the color data is at the start of the buffer
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec4), glm::value_ptr(color));
     LogGLError("glBufferSubData");
 
@@ -120,8 +119,8 @@ void UniformBuffer::CheckBufferBinding(GLuint expectedBindingPoint) const { // C
                   << " not correctly bound to expected binding point " << expectedBindingPoint 
                   << ". Currently bound buffer ID at that point: " << currentBufferID << std::endl;
     } else {
-        std::cout << "UniformBuffer::CheckBufferBinding: UBO with buffer ID " << bufferID 
-                  << " is correctly bound to binding point " << expectedBindingPoint << std::endl;
+        // std::cout << "UniformBuffer::CheckBufferBinding: UBO with buffer ID " << bufferID 
+        //           << " is correctly bound to binding point " << expectedBindingPoint << std::endl;
     }
 }
 

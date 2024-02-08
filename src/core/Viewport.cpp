@@ -48,7 +48,7 @@ void Viewport::Render(SceneNode& rootNode) {
     float uvY = 1.0f;
 
     // Get the scroll wheel delta and adjust the zoom factor
-    static float zoom = 1.0f;
+    static float zoom = 0.3f;
     float targetZoom = zoom + io.MouseWheel * 0.1f;
     targetZoom = std::max(targetZoom, 0.1f); // Clamp the target zoom
     zoom = zoom + (targetZoom - zoom) * 0.1f; // Adjust the zoom smoothly

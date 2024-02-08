@@ -1,16 +1,9 @@
 RavenEngine
-├── .vscode
 ├── Assets
 │   ├── Images
 │   │   ├── Cursors
 │   │   ├── Icons
 │   │   └── LogoStuff
-│   ├── Models
-│   ├── Shaders
-│   │   ├── FragmentShader.glsl
-│   │   ├── ShaderManager.cpp
-│   │   ├── ShaderManager.h
-│   │   └── VertexShader.glsl
 │   └── Textures
 ├── Build
 ├── Docs
@@ -41,6 +34,7 @@ RavenEngine
 ├── Libs
 │   ├── glm
 │   ├── ImGui
+│   ├── json
 │   └── Stb
 ├── Settings
 │   ├── ProjectSettings.json
@@ -79,12 +73,12 @@ RavenEngine
 │   │   │   │   ├── Point.h
 │   │   │   │   ├── Shape2D.cpp
 │   │   │   │   ├── Shape2D.h
+│   │   │   │   ├── ShapeCreate2D.cpp
+│   │   │   │   ├── ShapeCreate2D.h
 │   │   │   │   ├── Triangle.cpp
 │   │   │   │   ├── Triangle.h
 │   │   │   │   ├── TriQuad.cpp
 │   │   │   │   └── TriQuad.h
-│   │   │   ├── ShapeCreate.cpp
-│   │   │   ├── ShapeCreate.h
 │   │   │   ├── ShapeManager.cpp
 │   │   │   └── ShapeManager.h
 │   ├── Scene

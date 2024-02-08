@@ -1,4 +1,4 @@
-// ShapeCreate.h
+// ShapeCreate2D.h
 
 // #include section
 // #####################
@@ -9,15 +9,16 @@
 // Third party includes
 
 // Raven includes
-#include "../Shaders/ShaderManager.h"
-#include "../../Scene/SceneNode.h"
-#include "../Materials/MaterialManager.h"
+#include "Shape2D.h"
+#include "../../Shaders/ShaderManager.h"
+#include "../../Materials/MaterialManager.h"
+#include "../../../Scene/SceneNode.h"
 
 namespace RavenEngine {
 
-class ShapeCreate {
+class ShapeCreate2D {
 public:
-    std::shared_ptr<Shape2D> CreateShape(Shape2D::Type shapeType);
+    std::shared_ptr<Shape2D> CreateShape2D(Shape2D::Type shapeType);
 
 private:
     MaterialManager materialManager; // Add MaterialManager member

@@ -7,6 +7,7 @@
 // Third-party library includes
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
 // Raven includes
 #include "Inspector.h"
 #include "../Scene/SceneManager.h"
@@ -22,52 +23,57 @@ Inspector::Inspector(ScenePanel& scenePanel)
 
 void Inspector::Render() {
     std::vector<SceneNode*> selectedNodes = scenePanel.GetSelectedNodes();
-    bool isOpen = !selectedNodes.empty();
-
-    if (isOpen) {
-        SceneNode* selectedNode = selectedNodes[0];
-        auto shape2D = dynamic_cast<Shape2D*>(selectedNode->GetShape().get());
-
-        if (ImGui::Begin("Inspector", &isOpen, ImGuiWindowFlags_AlwaysAutoResize || ImGuiWindowFlags_NoCollapse)) {
-            if (shape2D != nullptr) {
-                // Name
-                char name[128];
-                strncpy_s(name, sizeof(name), selectedNode->GetName().c_str(), _TRUNCATE);
-                if (ImGui::InputText("Name", name, sizeof(name))) {
-                    selectedNode->SetName(name);
-                }
-
-                glm::vec3 position = shape2D->GetPosition();
-                glm::vec3 rotation = shape2D->GetRotation();
-                glm::vec3 size = shape2D->GetSize();
-                glm::vec4 color = shape2D->GetColor(); // Get the current color
-
-                // Position
-                if (ImGui::DragFloat3("Position (x, y, z)", &position.x)) {
-                    shape2D->SetPosition(position);
-                }
-
-                // Rotation
-                if (ImGui::DragFloat3("Rotation (x, y, z)", &rotation.x)) {
-                    shape2D->SetRotation(rotation);
-                }
-
-                // Size
-                if (ImGui::DragFloat3("Size (w, h, d)", &size.x)) {
-                    shape2D->SetSize(size);
-                }
-
-                if (ImGui::ColorEdit4("Color", glm::value_ptr(color))) {
-                    shape2D->SetColor(color); // Set the new color using the modified color value
-                }
-            }
-
-            ImGui::End();
-        }
-        // if (!isOpen) {
-        //     std::cout << "'X' button was pressed on the Inspector window.\n";
-        // }
+    if (selectedNodes.empty()) {
+        return;
     }
+
+    SceneNode* selectedNode = selectedNodes[0];
+    Shape* shape = selectedNode->GetShape().get();
+
+    if (!ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse)) {
+        ImGui::End();
+        return;
+    }
+
+    char name[128];
+    strncpy_s(name, sizeof(name), selectedNode->GetName().c_str(), _TRUNCATE);
+    if (ImGui::InputText("Name", name, sizeof(name))) {
+        selectedNode->SetName(name);
+    }
+
+    // Since position, rotation, size, and color are common to all shapes, handle them generically
+    glm::vec3 position = shape->GetPosition();
+    glm::vec3 rotation = shape->GetRotation();
+    glm::vec3 size = shape->GetSize(); // Ensure that Shape3D also uses GetSize and SetSize. If it uses scale, replace these with GetScale and SetScale.
+    glm::vec4 color = shape->GetColor();
+
+    // Position
+    if (ImGui::DragFloat3("Position (x, y, z)", &position.x)) {
+        shape->SetPosition(position);
+    }
+
+    // Rotation
+    if (ImGui::DragFloat3("Rotation (x, y, z)", &rotation.x)) {
+        shape->SetRotation(rotation);
+    }
+
+    // Size/Scale
+    if (ImGui::DragFloat3("Size (w, h, d)", &size.x)) {
+        shape->SetSize(size); // Replace with SetScale if Shape3D uses scale
+        //output size to console
+        std::cout << "INSPECTOR::RENDER Size: " << glm::to_string(size) << std::endl;
+    }
+
+    // Color
+    if (ImGui::ColorEdit4("Color", glm::value_ptr(color))) {
+        shape->SetColor(color);
+    }
+
+    // Shape-specific attributes
+    // For Shape2D or Shape3D specific attributes, you can handle them here using dynamic_cast or GetType to identify the shape type
+
+    ImGui::End();
 }
+
 
 } // namespace RavenEngine
