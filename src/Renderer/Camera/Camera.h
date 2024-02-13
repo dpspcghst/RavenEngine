@@ -23,6 +23,8 @@ public:
     // Set projection
     void setProjection(float left, float right, float bottom, float top, float nearPlane, float farPlane);
 
+    void SetupPerspective(float fovY, float aspect, float near, float far);
+
 private:
     glm::vec3 position;
     glm::vec3 front;

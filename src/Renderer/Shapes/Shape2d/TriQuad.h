@@ -1,28 +1,40 @@
 // TriQuad.h
+// #####################
 #pragma once
+// #####################
+// #include section
+// #####################
+// Standard library includes
 
+// Third-party includes
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-#include "Shape2d.h" // Include the Shape base class
-#include "../../Shaders/ShaderManager.h" // Include the ShaderManager class
+// Raven includes
+#include "Shape2d.h" 
 
 namespace RavenEngine {
 
-class TriQuad : public Shape2D { // Make TriQuad inherit from Shape
+class TriQuad : public Shape2D {
 public:
-    TriQuad(); // Add a default constructor
-    ~TriQuad();
+    TriQuad();
+    virtual ~TriQuad();
 
-    void Create() override; 
+    void Create() override;
     void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
 
-    // Added getter method
-    int GetVertexCount() const override { return 6; } // A TriQuad has 6 vertices
+    int GetVertexCount() const override;
+
+    int GetTextureId() const { return textureId; }
+    void SetTextureId(int id) { textureId = id; }
 
 private:
-    GLuint VAO;
-    GLuint VBO;
-    ShaderManager* shaderManager; // Add a ShaderManager reference
+    int textureId;
+    struct Vertex {
+        glm::vec3 position;
+        glm::vec2 texCoords;
+    };
+
+    Vertex vertices[6]; // 2 triangles, 3 vertices each
 };
 
 } // namespace RavenEngine

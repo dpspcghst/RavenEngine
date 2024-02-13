@@ -18,30 +18,31 @@
 #include "ImGuiManager.h"
 #include "ResourceManager.h"
 
+
 // main function
 int main() { 
-    try {                                                                                   // Try to run the code
-        auto& settingsManager = RavenEngine::SettingsManager::GetInstance();        
-        GLFWWindowWrapper windowWrapper(800, 600, "Raven Engine");                          // Initialize the GLFWWindowWrapper
-        GLFWwindow* mainWindow = windowWrapper.getMainWindow();                             // Get the GLFWwindow pointer from the GLFWWindowWrapper
-        glfwMaximizeWindow(mainWindow);                                                     // Maximize the window
-        GLFWContextManager contextManager(mainWindow);                                      // Initialize the GLFWContextManager
+    try { // Try to fly
+        auto& settingsManager = RavenEngine::SettingsManager::GetInstance(); // Get the settings manager instance
+        GLFWWindowWrapper windowWrapper(800, 600, "Raven Engine"); // Initialize the GLFWWindowWrapper
+        GLFWwindow* mainWindow = windowWrapper.getMainWindow(); // Get the GLFWwindow pointer from the GLFWWindowWrapper
+        glfwMaximizeWindow(mainWindow); // Maximize the window
+        GLFWContextManager contextManager(mainWindow); // Initialize the GLFWContextManager
 
-        ResourceManager::LoadIcon(mainWindow, L"../Assets/Images/Icons/raven16x16.ico", 
-                                              L"../Assets/Images/Icons/raven32x32.ico");    // Load the window icons
-        ResourceManager::SetWindowIcons(mainWindow);                                        // Set the window icons
+        RavenEngine::ResourceManager::LoadIcon(mainWindow, L"../Assets/images/icons/ravenIco.ico"); // Load the window icons
 
-        // Check the OpenGL version
+        RavenEngine::ResourceManager::ResourceManager::SetWindowIcons(mainWindow); // Set the window icons
+
+        
         const GLubyte* glVersion = glGetString(GL_VERSION);
-        if (glVersion != nullptr) {
+        if (glVersion != nullptr) {// If the OpenGL version is not null
             std::cout << "OpenGL version: " << glVersion << std::endl;
         } else {
             std::cout << "Failed to get OpenGL version" << std::endl;
         }
 
         ImGuiManager::Init(mainWindow);                                                     // Initialize the ImGuiManager
-        RavenEngine::Workspace workspace(mainWindow);  // Initialize the Workspace                      // Initialize the Workspace
-        //std::cout << "starting main loop" << std::endl;                                     // Output "starting main loop
+        RavenEngine::Workspace workspace(mainWindow);                                       // Initialize the Workspace
+        //std::cout << "starting main loop" << std::endl;                                   // Output "starting main loop"
         while (!windowWrapper.shouldClose()) {                                              // Main loop
             GLFWEventPoller::pollEvents();                                                  // Poll GLFW events
             ImGuiManager::NewFrame();                                                       // Start the Dear ImGui frame
@@ -51,7 +52,7 @@ int main() {
         }
 
         ImGuiManager::Shutdown();                                                           // Shutdown the ImGuiManager
-        ResourceManager::UnloadIcon();                                                      // Unload the window icons
+        RavenEngine::ResourceManager::ResourceManager::UnloadIcon();                        // Unload the window icons
     } catch (const std::exception& e) {                                                     
         std::cerr << "Error: " << e.what() << std::endl;                                    // Catch any exceptions and print the error message
         return EXIT_FAILURE;                                                                // Return EXIT_FAILURE

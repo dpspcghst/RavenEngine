@@ -3,17 +3,19 @@
 // #include section
 // #####################
 // standard library includes
+#include <iostream>
 
 // third party includes
-#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // Raven includes
 #include "Rect.h"
+#include "../../Shaders/ShaderManager.h"
 
 namespace RavenEngine {
 
 Rect::Rect() : Shape2D() {
-    type = Type::Rect; // Set the type member to Type::Rect
+    type = Type::Rect;
 }
 
 Rect::~Rect() {
@@ -48,12 +50,31 @@ void Rect::Create() {
 }
 
 void Rect::Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const {
-    // Bind VAO and draw Rect
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    ShaderManager& shaderManager = ShaderManager::GetInstance();
+    std::shared_ptr<RavenEngine::ShaderProgram> shaderProgramPtr = shaderManager.GetShader(GetShaderName());
 
-    // Unbind
-    glBindVertexArray(0);
+    if (shaderProgramPtr) {
+        GLuint shaderProgramID = shaderProgramPtr->GetID();
+        glUseProgram(shaderProgramID);
+
+        // Set the shader uniforms
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "model"), 1, GL_FALSE, glm::value_ptr(transformMatrix));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "view"), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "projection"), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+
+        // Bind VAO and draw Rect
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+        // Unbind
+        glBindVertexArray(0);
+    } else {
+        std::cerr << "Rect::Render: Failed to retrieve shader program for '" << GetShaderName() << "'." << std::endl;
+    }
+}
+
+int Rect::GetVertexCount() const {
+    return 4;
 }
 
 } // namespace RavenEngine

@@ -3,7 +3,7 @@
 // #include section
 // #####################
 // Standard library includes
-#include <array>
+#include <array> 
 // Third party includes
 #include <glm/gtc/type_ptr.hpp>
 // Raven includes
@@ -12,16 +12,15 @@
 namespace RavenEngine {
 
 Cube::Cube() {
-    // Initialize member variables as needed
-    // For example:
-    // shaderProgram = 0;
-    // VAO = 0;
-    // VBO = 0;
-    // type = Type::Cube;
+
 }
 
 Cube::Cube(GLuint shaderProgram) : shaderProgram(shaderProgram) {
     type = Type::Cube;
+    ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+    diffuse = glm::vec3(0.5f, 0.5f, 0.5f);
+    specular = glm::vec3(0.5f, 0.5f, 0.5f);
+    shininess = 32.0f;
 }
 
 Cube::~Cube() {
@@ -31,49 +30,49 @@ Cube::~Cube() {
 
 void Cube::Create() {
     // Define the vertices for a cube
-    std::array<float, 108> vertices = {
-        // positions          
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+    std::array<float, 216> vertices = {
+        // positions            // normals
+        -0.5f, -0.5f, -0.5f,     0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,     0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,     0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,     0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,     0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,     0.0f,  0.0f, -1.0f,
 
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,     0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,     0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,     0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,     0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,     0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,     0.0f,  0.0f,  1.0f,
 
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,     -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,     -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,     -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,     -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,     -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,     -1.0f,  0.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,      1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,      1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,      1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,      1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,      1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,      1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,     0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,     0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,     0.0f, -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,     0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,     0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,     0.0f, -1.0f,  0.0f,
 
-        -0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f
+        -0.5f,  0.5f, -0.5f,     0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,     0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,     0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,     0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,     0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,     0.0f,  1.0f,  0.0f
     };
 
     // Generate and bind a Vertex Array Object
@@ -87,9 +86,12 @@ void Cube::Create() {
     // Copy the vertices into the VBO
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
 
-    // Set up the vertex attribute pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // Normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Unbind the VAO (safe practice)
     glBindVertexArray(0);

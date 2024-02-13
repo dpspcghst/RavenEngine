@@ -42,29 +42,11 @@ std::string Shape::GetMaterialUBOName() const {
     return materialUBOName;
 }
 
-void Shape::SetColor(const glm::vec4& newColor) {
-    color = newColor;
-    UniformBufferManager& uniformBufferManager = UniformBufferManager::GetInstance();
-    MaterialProperties props{color};
-    uniformBufferManager.UpdateUniformBuffer(materialUBOName, &props, sizeof(props));
-
-    std::cout << "SHAPE::SETCOLOR Material UBO Name: " << materialUBOName 
-              << ", New Color: (" << newColor.r << ", " << newColor.g << ", " << newColor.b << ", " << newColor.a << ")\n";
-
-    MaterialProperties readBackProps;
-    uniformBufferManager.GetUBOData(materialUBOName, &readBackProps, sizeof(readBackProps));
-    std::cout << "SHAPE::SETCOLOR Read back UBO data: Color: (" << readBackProps.color.r << ", " << readBackProps.color.g << ", " << readBackProps.color.b << ", " << readBackProps.color.a << ")\n";
-}
-
-glm::vec4 Shape::GetColor() const {
-    return color;
-}
-
 void Shape::SetSize(const glm::vec3& newSize) {
     size = newSize;
     // Add any additional handling needed when the size is set.
     // print size to console
-    std::cout << "SHAPE::SETSIZE Size: " << glm::to_string(size) << std::endl;
+    //std::cout << "SHAPE::SETSIZE Size: " << glm::to_string(size) << std::endl;
     UpdateTransformMatrix();
 }
 
@@ -77,7 +59,7 @@ void Shape::SetPosition(const glm::vec3& newPosition) {
     position = newPosition;
     // Add any additional handling needed when the position is set.
     // print position to console
-    std::cout << "SHAPE::SETPOSITION Position: " << glm::to_string(position) << std::endl;
+    //std::cout << "SHAPE::SETPOSITION Position: " << glm::to_string(position) << std::endl;
     UpdateTransformMatrix();
 }
 
@@ -95,7 +77,71 @@ glm::vec3 Shape::GetRotation() const {
     return rotation;
 }
 
-// No implementation for GetTransformMatrix() as it is a pure virtual function.
-// Derived classes must provide their own implementation.
+void Shape::SetTextureId(int id) {
+    std::cout << "Shape::SetTextureId - Setting Texture ID to: " << id << std::endl;
+    textureId = id;
+}
+
+int Shape::GetTextureId() const {
+    std::cout << "Shape::GetTextureId - Texture ID is: " << textureId << std::endl;
+    return textureId;
+}
+
+// for handling 2d shapes
+void Shape::SetColor(const glm::vec4& newColor) {
+    color = newColor;
+    UniformBufferManager& uniformBufferManager = UniformBufferManager::GetInstance();
+    MaterialProperties props{color};
+    uniformBufferManager.UpdateUniformBuffer(materialUBOName, &props, sizeof(props));
+
+    // std::cout << "SHAPE::SETCOLOR Material UBO Name: " << materialUBOName 
+    //           << ", New Color: (" << newColor.r << ", " << newColor.g << ", " << newColor.b << ", " << newColor.a << ")\n";
+
+    MaterialProperties readBackProps;
+    uniformBufferManager.GetUBOData(materialUBOName, &readBackProps, sizeof(readBackProps));
+    //std::cout << "SHAPE::SETCOLOR Read back UBO data: Color: (" << readBackProps.color.r << ", " << readBackProps.color.g << ", " << readBackProps.color.b << ", " << readBackProps.color.a << ")\n";
+}
+
+glm::vec4 Shape::GetColor() const {
+    return color;
+}
+
+// for handling 3d shapes
+void Shape::SetAmbient(const glm::vec3& newAmbient) {
+    ambient = newAmbient;
+    // Add any additional handling needed when the ambient is set.
+}
+
+glm::vec3 Shape::GetAmbient() const {
+    return ambient;
+
+}
+
+void Shape::SetDiffuse(const glm::vec3& newDiffuse) {
+    diffuse = newDiffuse;
+    // Add any additional handling needed when the diffuse is set.
+}
+
+glm::vec3 Shape::GetDiffuse() const {
+    return diffuse;
+}
+
+void Shape::SetSpecular(const glm::vec3& newSpecular) {
+    specular = newSpecular;
+    // Add any additional handling needed when the specular is set.
+}
+
+glm::vec3 Shape::GetSpecular() const {
+    return specular;
+}
+
+void Shape::SetShininess(float newShininess) {
+    shininess = newShininess;
+    // Add any additional handling needed when the shininess is set.
+}
+
+float Shape::GetShininess() const {
+    return shininess;
+}
 
 } // namespace RavenEngine

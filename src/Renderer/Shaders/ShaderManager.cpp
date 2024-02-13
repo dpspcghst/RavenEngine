@@ -39,7 +39,7 @@ void ShaderManager::LoadShader(const std::string& name, const std::string& verte
     auto shaderProgram = std::make_shared<ShaderProgram>();
     if (shaderProgram->LoadFromSource(vertexCode, fragmentCode)) {
         shaders[name] = shaderProgram;
-        //std::cout << "SHADERMANAGER::LOADSHADER Shader loaded and compiled: " << name << std::endl;
+         std::cout << "SHADERMANAGER::LOADSHADER Shader loaded and compiled: " << name << std::endl;
 
         // Check for OpenGL errors
         GLenum error = glGetError();

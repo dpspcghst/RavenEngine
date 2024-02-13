@@ -16,9 +16,17 @@ public:
     void Create() override;
     void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
     int GetVertexCount() const override;
+    int GetTextureId() const { return textureId; }
+    void SetTextureId(int id) { textureId = id; }
 
 private:
-    glm::vec3 vertices[3];
+    struct Vertex {
+        glm::vec3 position;
+        glm::vec2 texCoords;
+    };
+    int textureId;
+
+    Vertex vertices[3];
 };
 
 } // namespace RavenEngine

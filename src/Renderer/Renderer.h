@@ -1,6 +1,8 @@
+// renderer.h
+// #####################
 #ifndef RAVENENGINE_RENDERER_H
 #define RAVENENGINE_RENDERER_H
-
+// #####################
 // #include section
 // #####################
 // Standard library includes
@@ -18,7 +20,8 @@
 #include "Shaders/ShaderManager.h"
 #include "FBO/FBManager.h"
 #include "Camera/Camera.h"
-#include "Shapes/Shape.h" // Include the unified Shape.h
+#include "Shapes/Shape.h"
+#include "../Scene/SceneGraphRenderer.h"
 
 namespace RavenEngine {
 
@@ -49,7 +52,9 @@ public:
     std::pair<int, int> GetSize() const;
 
 private:
-    int gameWidth, gameHeight;
+    std::unique_ptr<SceneGraphRenderer> sceneGraphRenderer; // Add a unique pointer to the SceneGraphRenderer
+
+    int gameWidth, gameHeight;  // aspect ratio set by the settings manager
     std::array<float, 4> clearColor;
     
     FBManager* fbManager; // Add a pointer to the FBManager

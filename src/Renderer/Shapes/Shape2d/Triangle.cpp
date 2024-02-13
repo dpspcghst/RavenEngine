@@ -16,9 +16,9 @@ namespace RavenEngine {
 
 Triangle::Triangle() : Shape2D() {
     type = Type::Triangle;
-    vertices[0] = glm::vec3(0.0f, -0.5f, 0.0f);
-    vertices[1] = glm::vec3(-0.5f, 0.5f, 0.0f);
-    vertices[2] = glm::vec3(0.5f, 0.5f, 0.0f);
+    vertices[0] = { glm::vec3(0.0f, -0.5f, 0.0f), glm::vec2(0.5f, 0.0f) };
+    vertices[1] = { glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec2(0.0f, 1.0f) };
+    vertices[2] = { glm::vec3(0.5f, 0.5f, 0.0f), glm::vec2(1.0f, 1.0f) };
     color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); // Red color for the triangle by default
 }
 
@@ -34,8 +34,11 @@ void Triangle::Create() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(sizeof(glm::vec3)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     glBindVertexArray(0);
@@ -61,7 +64,6 @@ void Triangle::Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMa
         std::cerr << "Triangle::Render: Failed to retrieve shader program for '" << GetShaderName() << "'." << std::endl;
     }
 }
-
 
 int Triangle::GetVertexCount() const {
     return 3; // Number of vertices in a triangle

@@ -41,7 +41,7 @@ bool ShaderProgram::LoadFromSource(const std::string& vertexShaderSource, const 
 void ShaderProgram::Use() const {
     if (id != 0) {
         glUseProgram(id);
-        std::cout << "SHADERPROGRAM::USE Using shader program with ID: " << id << std::endl;
+        //std::cout << "SHADERPROGRAM::USE Using shader program with ID: " << id << std::endl;
     } else {
         std::cout << "SHADERPROGRAM::USE Shader program ID is zero" << std::endl;
     }

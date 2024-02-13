@@ -30,7 +30,10 @@ namespace RavenEngine {
 
     class UIManager {
     public:
-        UIManager(DoodleManager& doodleManager, PaletteManager& paletteManager, CalculatorManager& calculatorManager, Viewport& viewport, ShaderManager& shaderManagerInstance, SceneManager& sceneManager); // Constructor
+        UIManager(DoodleManager& doodleManager, PaletteManager& paletteManager, 
+              CalculatorManager& calculatorManager, Viewport& viewport, 
+              ShaderManager& shaderManagerInstance, SceneManager& sceneManager,
+              TextureManager& textureManager);  // Constructor
         void SetSceneManagerContext(SceneManager* sceneManager); // Set the SceneManager context for the UIManager
         void Render(); // Render the UIManager
 

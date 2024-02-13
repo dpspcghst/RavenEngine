@@ -10,12 +10,10 @@ namespace RavenEngine {
 
 Workspace::Workspace(GLFWwindow* mainWindow)
         : window(mainWindow), 
-            settingsManager(SettingsManager::GetInstance()), 
             viewport(window),
             doodleManager(),
             sceneManager(),
-            shaderManager(ShaderManager::GetInstance()),  // ShaderManager instance obtained
-            uiManager(doodleManager, paletteManager, calculatorManager, viewport, shaderManager, sceneManager),  // Passing ShaderManager by reference
+            uiManager(doodleManager, paletteManager, calculatorManager, viewport, ShaderManager::GetInstance(), sceneManager, TextureManager::GetInstance()),  // Use singleton instances
             menuSystem(*this, mainWindow, doodleManager, paletteManager, calculatorManager, uiManager) {
         
         ImGuiIO& io = ImGui::GetIO();

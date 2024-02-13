@@ -18,8 +18,14 @@
 
 namespace RavenEngine {
     
-UIManager::UIManager(DoodleManager& doodleManager, PaletteManager& paletteManager, CalculatorManager& calculatorManager, Viewport& viewport, ShaderManager& shaderManagerInstance, SceneManager& sceneManager)
-    : viewport(viewport), doodleManager(doodleManager), paletteManager(paletteManager), scenePanel(shaderManagerInstance), sceneManager(sceneManager), inspector(scenePanel), calculatorManager(calculatorManager){
+UIManager::UIManager(DoodleManager& doodleManager, PaletteManager& paletteManager, 
+                     CalculatorManager& calculatorManager, Viewport& viewport, 
+                     ShaderManager& shaderManagerInstance, SceneManager& sceneManager,
+                     TextureManager& textureManager)  // Added TextureManager parameter
+    : viewport(viewport), doodleManager(doodleManager), paletteManager(paletteManager), 
+      scenePanel(shaderManagerInstance), sceneManager(sceneManager), 
+      inspector(scenePanel, textureManager),  // Now passing TextureManager to Inspector
+      calculatorManager(calculatorManager) {
     // initialize ui manager
     scenePanel.SetSize(200, 800);
     //std::cout << "Initializing UIManager..." << std::endl;

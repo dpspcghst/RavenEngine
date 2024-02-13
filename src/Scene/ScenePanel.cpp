@@ -81,8 +81,8 @@ void ScenePanel::DrawNodeTree(SceneNode* node) {                                
         flags |= ImGuiTreeNodeFlags_Leaf;                                      // If the node is a leaf node, add the leaf flag
     }
 
-    // check if selected
-    if (std::find(selectedNodes.begin(), selectedNodes.end(), node) != selectedNodes.end()) { 
+    
+    if (std::find(selectedNodes.begin(), selectedNodes.end(), node) != selectedNodes.end()) { // Check if the node is selected
         flags |= ImGuiTreeNodeFlags_Selected;                                   // If the node is selected, add the selected flag
     }
 
@@ -143,9 +143,9 @@ void ScenePanel::HandleNodeInteraction(SceneNode* node) {                       
         // Multi-selection with Ctrl key
         if (ctrlPressed) {                                                      // this is like a select one by one
             auto it = std::find(selectedNodes.begin(), selectedNodes.end(), node);
-            if (it == selectedNodes.end()) {
+            if (it == selectedNodes.end()) {                                   // If the node is not already selected, add it to the selection
                 selectedNodes.push_back(node); // Add to selection if not already selected
-            } else {
+            } else {                                                           // If the node is already selected, remove it from the selection
                 selectedNodes.erase(it); // Remove from selection if already selected
             }
         } else if (shiftPressed) {                                              // this is like a select all between node "A" and node "B"
@@ -153,29 +153,28 @@ void ScenePanel::HandleNodeInteraction(SceneNode* node) {                       
             std::vector<SceneNode*> allNodes = sceneManager->GetAllNodes();
             if (selectedNodes.empty()) {
                 selectedNodes.push_back(node); // If no nodes are selected, select the current node
-            } else {
+            } else {                                                           // If nodes are already selected, select all nodes between the first selected node and the current node
                 // Find the first selected node and the current node in the allNodes list
                 auto firstSelectedNodeIt = std::find(allNodes.begin(), allNodes.end(), selectedNodes.front());
                 auto currentNodeIt = std::find(allNodes.begin(), allNodes.end(), node);
 
                 // Select all nodes between the first selected node and the current node
                 selectedNodes.clear();
+                // Add all nodes between the first selected node and the current node to the selectedNodes list
                 for (auto it = std::min(firstSelectedNodeIt, currentNodeIt); it != std::max(firstSelectedNodeIt, currentNodeIt) + 1; ++it) {
                     selectedNodes.push_back(*it);
                 }
             }
         } else {                                                                // default selection style
-            // Single selection
+
             selectedNodes.clear();
             selectedNodes.push_back(node);
         }
     }
-
     if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {             // Double click to rename
         nodeToRename = node;
         renameRequested = true;
     }
-
     if (ImGui::BeginPopupContextItem()) {                                       // Right click node context menu
         if (ImGui::MenuItem("Rename")) {      // Rename node option
             nodeToRename = node;
@@ -184,14 +183,13 @@ void ScenePanel::HandleNodeInteraction(SceneNode* node) {                       
         if (ImGui::MenuItem("Delete")) {      // Delete node/s option (ye olde node removal)
             // Check if the node is in the selectedNodes list
             auto it = std::find(selectedNodes.begin(), selectedNodes.end(), node);
-            if (it != selectedNodes.end()) {
-                // Node is selected, delete all selected nodes
-                for (auto& selectedNode : selectedNodes) {
+            if (it != selectedNodes.end()) { // Node is selected, delete all selected nodes
+                for (auto& selectedNode : selectedNodes) { // Delete all selected nodes
                     sceneManager->RemoveNode(selectedNode);
                 }
                 selectedNodes.clear();
-            } else {
-                // Node is not selected, delete only this node
+            } else { // Node is not selected, delete only this node
+                
                 sceneManager->RemoveNode(node);
             }
         }
@@ -213,10 +211,10 @@ void ScenePanel::HandleNodeCreation() {
 void ScenePanel::CreateShape(int shapeType, bool is3D) {
     std::shared_ptr<Shape> newShape;
     std::string shapeTypeName;
+    int defaultTextureId = 1;  // Default texture ID
 
     if (is3D) {
         ShapeCreate3D shapeCreate3D;
-        // Use the existing CreateShape3D method from ShapeCreate3D
         newShape = shapeCreate3D.CreateShape3D(static_cast<Shape3D::Type>(shapeType));
         shapeTypeName = Shape3D::GetTypeName(static_cast<Shape3D::Type>(shapeType));
     } else {
@@ -228,13 +226,12 @@ void ScenePanel::CreateShape(int shapeType, bool is3D) {
     if (newShape) {
         auto newNode = std::make_unique<SceneNode>();
         newNode->SetName(shapeTypeName);
-        newNode->AttachShape(newShape);
+        newNode->AttachShape(newShape, defaultTextureId);  // Provide a texture ID
         sceneManager->AddNode(std::move(newNode));
     } else {
         std::cerr << "Failed to create shape." << std::endl;
     }
 }
-
 
 void ScenePanel::Handle2DShapeCreationMenu() {
     if (ImGui::BeginMenu("2D")) {

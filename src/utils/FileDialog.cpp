@@ -1,39 +1,45 @@
-// Standard library headers
-#include <Windows.h>
-#include <commdlg.h> // Common dialogs like open file
-#include <tchar.h>   // For _T macro
+// filedialog.cpp
 
-// Third-party library headers
+// #include section
+// #####################
+// Standard library includes
+#include <Windows.h>
+#include <commdlg.h>
+
+#include <locale>
+#include <codecvt>
+
+// Third-party library includes
 #include <GLFW/glfw3.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
 
-// Project headers
+// Raven includes
 #include "FileDialog.h"
 
-std::string FileDialog::OpenFileDialog(GLFWwindow* ownerWindow) {
-    OPENFILENAME ofn;       // common dialog box structure
-    TCHAR szFile[260] = {0}; // buffer for file name
-    HWND hwnd = glfwGetWin32Window(ownerWindow); // owner window
+namespace RavenEngine {
 
-    // Initialize OPENFILENAME
+std::string FileDialog::OpenFileDialog(GLFWwindow* ownerWindow, const std::wstring& filter) {
+    OPENFILENAMEW ofn;
+    WCHAR szFile[260] = {0};
+    HWND hwnd = glfwGetWin32Window(ownerWindow);
+
     ZeroMemory(&ofn, sizeof(ofn));
-    ofn.lStructSize = sizeof(ofn);
+    ofn.lStructSize = sizeof(OPENFILENAMEW);
     ofn.hwndOwner = hwnd;
     ofn.lpstrFile = szFile;
-    ofn.nMaxFile = sizeof(szFile);
-    ofn.lpstrFilter = _T("All\0*.*\0Text\0*.TXT\0");
-    ofn.nFilterIndex = 1;
-    ofn.lpstrFileTitle = NULL;
-    ofn.nMaxFileTitle = 0;
-    ofn.lpstrInitialDir = NULL;
+    ofn.nMaxFile = sizeof(szFile) / sizeof(WCHAR);
+    ofn.lpstrFilter = filter.c_str();
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-    // Display the Open dialog box.
-    if (GetOpenFileName(&ofn) == TRUE) {
-        // Use ofn.lpstrFile here
-        return ofn.lpstrFile;
+    if (GetOpenFileNameW(&ofn) == TRUE) {
+        int sizeNeeded = WideCharToMultiByte(CP_UTF8, 0, szFile, -1, NULL, 0, NULL, NULL);
+        std::string filePath(sizeNeeded, 0);
+        WideCharToMultiByte(CP_UTF8, 0, szFile, -1, &filePath[0], sizeNeeded, NULL, NULL);
+        filePath.resize(sizeNeeded - 1); // Remove extra null terminator
+        return filePath;
     }
-    
-    return ""; // Return empty string if no file was selected
+    return "";
 }
+
+} // namespace RavenEngine

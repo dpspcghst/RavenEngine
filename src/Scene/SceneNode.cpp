@@ -14,11 +14,11 @@
 
 namespace RavenEngine {
 
-SceneNode::SceneNode() : name("") {
+SceneNode::SceneNode() : name(""), transformMatrix(glm::mat4(1.0f)) {
     // Default constructor
 }
 
-SceneNode::SceneNode(const std::string& nodeName) : name(nodeName) {
+SceneNode::SceneNode(const std::string& nodeName) : name(nodeName), transformMatrix(glm::mat4(1.0f)) {
     // Constructor
 }
 
@@ -54,13 +54,14 @@ void SceneNode::SetName(const std::string& newName) {
     name = newName;
 }
 
-void SceneNode::AttachShape(std::shared_ptr<Shape> newShape) { 
+void SceneNode::AttachShape(std::shared_ptr<Shape> newShape, int textureId) { 
     if (!newShape) {
         std::cout << "Attempted to attach a null shape to node: " << this->GetName() << std::endl;
         return;
     }
+    newShape->SetTextureId(textureId);  // Assuming Shape class has a SetTextureId method
     shape = std::move(newShape);
-    std::cout << "SCENENODE::ATTACHSHAPE Attached shape to node: " << this->GetName() << std::endl;
+    std::cout << "SCENENODE::ATTACHSHAPE Attached shape with texture ID " << textureId << " to node: " << this->GetName() << std::endl;
 }
 
 std::shared_ptr<Shape> SceneNode::GetShape() const { 

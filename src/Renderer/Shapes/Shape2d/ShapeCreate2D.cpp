@@ -15,6 +15,7 @@
 // Raven includes
 #include "../../Materials/MaterialProperties.h"
 #include "../../Shaders/ShaderManager.h"
+#include "../../Texture/TextureManager.h"
 #include "ShapeCreate2D.h"
 #include "Point.h"
 #include "Line.h"
@@ -27,6 +28,7 @@ namespace RavenEngine {
 std::shared_ptr<Shape2D> ShapeCreate2D::CreateShape2D(Shape2D::Type shapeType) {
     static int uboBindingPoint = 0;  // creating a unique binding point for each shape
     static int uniqueID = 1;  // creating a unique ID for each shape
+    int defaultTextureId = 0;
     std::string shapeTypeName = Shape2D::GetTypeName(shapeType);
     std::string entityName = shapeTypeName + "_" + std::to_string(uniqueID);
 
@@ -67,26 +69,17 @@ std::shared_ptr<Shape2D> ShapeCreate2D::CreateShape2D(Shape2D::Type shapeType) {
 
     // Debug print
     std::cout << "SHAPECREATE2D::CREATESHAPE2D Shader loaded and set for shape: " << shape2D->GetID() << std::endl;
-    
     // Create a UBO for the shape's material properties
     std::string uboName = "MaterialProperties_" + std::to_string(uniqueID);
     size_t uboSize = sizeof(MaterialProperties);
-
     // Create a UBO for the shape
     UniformBufferManager& uniformBufferManager = UniformBufferManager::GetInstance();
     uniformBufferManager.CreateUniformBuffer(uboName, uboSize, uboBindingPoint);
     // Log the UBO's name, size, and binding point
-    std::cout << "SHAPECREATE::2D Created UBO with name: " << uboName 
-              << ", size: " << uboSize 
-              << ", binding point: " << uboBindingPoint << std::endl;
     shape2D->SetMaterialUBOName(uboName);
-
     // Initialize color for the shape and update its UBO
     glm::vec4 initialColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // Default color: white
     shape2D->SetColor(initialColor);  // Set the shape's color (this will internally update the UBO)
-
-    // Debug print
-    std::cout << "SHAPECREATE2D::CREATESHAPE2D Color set and UBO updated for shape: " << shape2D->GetID() << std::endl;
 
     // Get the shader program
     std::shared_ptr<RavenEngine::ShaderProgram> shaderProgramPtr = shaderManager.GetShader("defaultShader");

@@ -1,7 +1,14 @@
+// shape2d.h
+// #####################
 #pragma once
-
+// #include section
+// #####################
+// Standard library includes
 #include <string>
 #include <vector>
+// Third party includes
+
+// Raven includes
 #include "../Shape.h"
 
 namespace RavenEngine {
@@ -25,21 +32,19 @@ public:
 
     ~Shape2D() override;
 
-    // Inherited pure virtual functions implemented in Shape2D.cpp
+    // Inherited pure virtual functions
     virtual void Create() = 0;
     virtual void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override = 0;
-    glm::mat4 GetTransformMatrix() const {
-        return transformMatrix;
-    }
+    glm::mat4 GetTransformMatrix() const override;
 
     void SetShaderName(const std::string& shaderName) override;
 
     // Shape-specific methods
     virtual int GetVertexCount() const = 0;
-    Type GetSpecificType() const; // Rename from GetType to GetSpecificType
+    Type GetSpecificType() const;
     static std::string GetTypeName(Type type);
     GLuint GetVAO() const;
-    
+
     // Implement GetType from the base class to return ShapeType
     Shape::ShapeType GetType() const override;
 
@@ -52,8 +57,8 @@ public:
 protected:
     void UpdateTransformMatrix();
 
-    Type type;  // Specific to Shape2D
-    GLuint VAO;  // OpenGL Vertex Array Object, specific to Shape2D
+    Type type;
+    GLuint VAO;
 };
 
 } // namespace RavenEngine

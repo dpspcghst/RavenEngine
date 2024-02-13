@@ -68,7 +68,8 @@ void MenuSystem::handleFileMenuItems() {
 
 void MenuSystem::handleFileDialog() {
     if (fileDialogOpen) {
-        std::string filePath = FileDialog::OpenFileDialog(mainWindow);
+        // Pass the default filter for showing all files
+        std::string filePath = FileDialog::OpenFileDialog(mainWindow, L"All\0*.*\0");
         if (!filePath.empty()) {
             std::cout << "File selected: " << filePath << std::endl;
             // Handle the file path

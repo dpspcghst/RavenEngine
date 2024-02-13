@@ -18,6 +18,7 @@
 #include "../../Tools/Calc/Calculator.h"
 #include "../utils/MenuSystem.h"
 #include "../src/Renderer/Shaders/ShaderManager.h"
+#include "../src/Renderer/Texture/TextureManager.h"
 
 namespace RavenEngine {
     class SceneManager;
@@ -37,8 +38,6 @@ namespace RavenEngine {
         PaletteManager paletteManager;
         CalculatorManager calculatorManager;
         MenuSystem menuSystem;
-        SettingsManager& settingsManager;
-        ShaderManager& shaderManager;
     };
 }
 

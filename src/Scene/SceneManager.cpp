@@ -70,7 +70,7 @@ void SceneManager::AddNode(std::unique_ptr<SceneNode> node) {
 
     nodes.push_back(std::move(node)); // Add the node to the nodes vector
     rootNode->AddChild(nodes.back().get()); // Add the node to the root node
-    std::cout << "SCENEMANAGER::ADDNODE Node added to the scene." << std::endl;
+    std::cout << "SCENEMANAGER::ADDNODE Node: " << nodes.back()->GetName() << " added to the scene." << std::endl;
 }
 
 void SceneManager::RemoveNode(SceneNode* node) {

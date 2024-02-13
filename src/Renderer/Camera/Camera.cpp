@@ -80,4 +80,8 @@ void Camera::setProjection(float left, float right, float bottom, float top, flo
     updateProjectionMatrix();
 }
 
+void Camera::SetupPerspective(float fovY, float aspect, float near, float far) {
+    projectionMatrix = glm::perspective(glm::radians(fovY), aspect, near, far);
+}
+
 } // namespace RavenEngine

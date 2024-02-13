@@ -10,9 +10,10 @@
 #include <memory>
 
 // Third party includes
+#include <glm/glm.hpp> 
 
 // Raven includes
-#include "../Renderer/Shapes/Shape.h"  // Include the unified Shape.h
+#include "../Renderer/Shapes/Shape.h"
 
 namespace RavenEngine {
 
@@ -33,9 +34,14 @@ public:
     void SetID(int newID);
     int GetID() const;
 
-    void AttachShape(std::shared_ptr<Shape> newShape);  // Unified method to attach a shape
+    void AttachShape(std::shared_ptr<Shape> newShape, int textureId);  // Change this line  // Unified method to attach a shape and set its texture ID
 
     std::shared_ptr<Shape> GetShape() const;  // Unified method to get the attached shape
+
+    void SetTextureId(const std::string& newTextureId) { textureId = newTextureId; }
+    const std::string& GetTextureId() const { return textureId; }
+
+    const glm::mat4& GetTransformMatrix() const { return transformMatrix; }  // Getter for the transformation matrix
 
 private:
     std::string name;
@@ -43,6 +49,10 @@ private:
     int id;
 
     std::shared_ptr<Shape> shape;  // Unified shape member
+
+    std::string textureId;
+
+    glm::mat4 transformMatrix;  // Transformation matrix member
 
 };
 

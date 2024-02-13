@@ -28,6 +28,7 @@ public:
 private:
     GLuint VAO, VBO;
     GLuint shaderProgram;
+    std::array<glm::vec3, 36> vertices;
 };
 
 } // namespace RavenEngine
