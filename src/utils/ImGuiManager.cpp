@@ -20,7 +20,7 @@ void ImGuiManager::Init(GLFWwindow* window) {
 
     // Define theme colors only once
     ImVec4 PrimaryBackground(0.0941f, 0.0941f, 0.0941f, 1.0f); // "Raven Black"
-    ImVec4 SecondaryBackground(0.1216f, 0.1019f, 0.1294f, 1.0f); // "Raven Shadow"
+    ImVec4 SecondaryBackground(0.121f, 0.101f, 0.129f, 1.0f); // "Raven Shadow"
     ImVec4 TextColor(0.9961f, 0.9961f, 0.9961f, 1.0f); // "Raven White"
     ImVec4 HoverColor(0.3333f, 0.3333f, 0.3333f, 1.0f); // "Raven Hover Gray"
     ImVec4 AccentColor(0.11f, 0.11f, 0.11f, 1.0f); // Updated Accent Color for better visibility
@@ -74,6 +74,7 @@ void ImGuiManager::Init(GLFWwindow* window) {
     style.Colors[ImGuiCol_Button] = SecondaryBackground;
     style.Colors[ImGuiCol_ButtonHovered] = HoverColor;
     style.Colors[ImGuiCol_ButtonActive] = AccentColor; // Use Accent Color for active buttons
+    
 
     // Resize Grips
     style.Colors[ImGuiCol_ResizeGrip] = SecondaryBackground;
@@ -87,7 +88,7 @@ void ImGuiManager::Init(GLFWwindow* window) {
     style.Colors[ImGuiCol_ScrollbarGrabActive] = AccentColor; // Use Accent Color for active scrollbar grabs
 
     // Checkmark and Sliders
-    style.Colors[ImGuiCol_CheckMark] = AccentColor; // Use Accent Color for checkmarks
+    style.Colors[ImGuiCol_CheckMark] = TextColor; // Use Accent Color for checkmarks
     style.Colors[ImGuiCol_SliderGrab] = HoverColor;
     style.Colors[ImGuiCol_SliderGrabActive] = AccentColor; // Use Accent Color for active slider grabs
 

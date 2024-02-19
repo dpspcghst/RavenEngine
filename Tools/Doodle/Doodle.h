@@ -31,6 +31,9 @@ public:
     void SetInitialPosition(const ImVec2& position); // Set the initial position for the Doodle window
     void SetDrawColor(const ImColor& color);
     void SetCanvasColor(const ImColor& color);
+    void SetLineSize(float size) { lineSize = size; }
+    void SelectStrokes();
+    void MoveSelectedStrokes(const ImVec2& delta);
 
 private:
     static int doodleCount; // Static counter for unique ID assignment
@@ -41,7 +44,7 @@ private:
     bool eraseMode; // Whether erasing mode is enabled
     bool closeRequested; // Whether a request to close the window has been made
     std::string doodleTitle; // Title of the Doodle window
-    std::vector<std::pair<ImColor, std::vector<ImVec2>>> strokes; // Strokes drawn on the canvas
+    std::vector<std::pair<ImColor, std::vector<std::pair<ImVec2, float>>>> strokes;
     ImVec2 canvasPos; // Position of the canvas
     ImDrawList* drawList; // Draw list for ImGui
     void EraseLines(const ImVec2& point); // Method to handle erasing on the canvas
@@ -50,6 +53,11 @@ private:
     const float eraseThreshold = 10.0f; // Threshold for erasing strokes
     int doodleNumber; // Unique number for each doodle
     bool firstDraw = true;
+    float lineSize = 1.0f; // Size of the lines drawn
+
+    bool isSelecting = false;
+    ImVec2 selectionStart, selectionEnd;
+    std::vector<std::pair<ImColor, std::vector<std::pair<ImVec2, float>>>> selectedStrokes;
 };
 
 } // namespace RavenEngine

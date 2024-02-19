@@ -5,7 +5,7 @@
 // #include section
 // #####################
 // Standard library includes
-
+#include <vector>
 // Third-party includes
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -13,34 +13,48 @@
 #include "Shape2D.h"
 
 namespace RavenEngine {
-    class Circle : public Shape2D {
-    public:
-        Circle();
-        Circle(float radius, int segments);
-        virtual ~Circle();
 
-        void Create() override;
-        void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
-        int GetVertexCount() const override;
+class Circle : public Shape2D {
+public:
+    // Adjusted constructor to accept xRadius and yRadius
+    Circle();
+    Circle(float xRadius, float yRadius, int segments);
+    virtual ~Circle();
 
-        // Add a method to set the texture ID
-        void SetTextureId(int id) { textureId = id; }
-        // Add a method to get the texture ID
-        int GetTextureId() const { return textureId; }
+    void Create() override;
+    void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
+    int GetVertexCount() const override;
 
-    private:
-        struct Vertex {
-            glm::vec3 position;
-            glm::vec2 texCoords; // Even though Circle might not use texCoords, it maintains consistency.
-        };
+    // Methods to set and get radii
+    void SetRadii(float xRadius, float yRadius);
+    std::pair<float, float> GetRadii() const;
 
-        float radius;
-        int segments;
-        std::vector<Vertex> vertices; // Use a dynamic array to store vertices dynamically based on segments
+    // Adjusted to manage a texture ID
+    void SetTextureId(GLuint id);
+    GLuint GetTextureId() const;
 
-        // Add a member variable to store the texture ID
-        int textureId;
+    const float PI = 3.14159265358979323846f;
 
-        void CalculateVertices(); // A helper function to calculate vertices based on radius and segments
-    };
+    std::vector<glm::vec3> GetVertices() const override {
+        return {glm::vec3(xRadius, yRadius, 0.0f)};
+    }
+
+    std::vector<glm::vec2> GetNormals() const override {
+        return {};
+    }
+
+    Projection ProjectOntoAxis(const glm::vec2 &axis) const override {
+        float centerProjection = glm::dot(glm::vec2(xRadius, yRadius), axis);
+        float radius = glm::length(glm::vec2(xRadius, yRadius));
+        return {centerProjection - radius, centerProjection + radius};
+    }
+
+private:
+    float xRadius, yRadius; // Two radii for the ellipse
+    int segments;
+    GLuint textureId; // OpenGL texture ID
+
+    void CalculateVertices();
+};
+
 } // namespace RavenEngine

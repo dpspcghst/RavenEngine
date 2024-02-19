@@ -23,6 +23,8 @@ public:
     // Use this shader program for rendering
     void Use() const;
 
+    void SetAlpha(float alpha);
+
     // Set uniform functions
     void SetUniform(const std::string& name, const glm::mat4& value);
     void SetUniform(const std::string& name, const glm::vec4& value);

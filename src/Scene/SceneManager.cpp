@@ -39,7 +39,7 @@ void SceneManager::AddNode(std::unique_ptr<SceneNode> node) {
         std::cout << "Reusing deleted node ID: " << newID << std::endl;
     } else {
         newID = GetNextEntityID();
-        std::cout << "Generated new node ID: " << newID << std::endl;
+        //std::cout << "Generated new node ID: " << newID << std::endl;
     }
     node->SetID(newID);
     entityIDs.insert(newID); // Add the entity ID to the set
@@ -70,11 +70,11 @@ void SceneManager::AddNode(std::unique_ptr<SceneNode> node) {
 
     nodes.push_back(std::move(node)); // Add the node to the nodes vector
     rootNode->AddChild(nodes.back().get()); // Add the node to the root node
-    std::cout << "SCENEMANAGER::ADDNODE Node: " << nodes.back()->GetName() << " added to the scene." << std::endl;
+    //std::cout << "SCENEMANAGER::ADDNODE Node: " << nodes.back()->GetName() << " added to the scene." << std::endl;
 }
 
 void SceneManager::RemoveNode(SceneNode* node) {
-    std::cout << "SCENEMANAGER::REMOVENODE Removing node: " << node->GetName() << std::endl;
+    //std::cout << "SCENEMANAGER::REMOVENODE Removing node: " << node->GetName() << std::endl;
     deletedNodeIDs.push(node->GetID());
     entityIDs.erase(node->GetID());
     rootNode->RemoveChild(node);
@@ -86,8 +86,8 @@ void SceneManager::RemoveNode(SceneNode* node) {
     //             nodes.end());
 
     // Debug print statements
-    std::cout << "deletedNodeIDs size: " << deletedNodeIDs.size() << std::endl;
-    std::cout << "nodes size: " << nodes.size() << std::endl;
+    //std::cout << "deletedNodeIDs size: " << deletedNodeIDs.size() << std::endl;
+    //std::cout << "nodes size: " << nodes.size() << std::endl;
 }
 
 std::vector<SceneNode*> SceneManager::GetAllNodes() const {                               

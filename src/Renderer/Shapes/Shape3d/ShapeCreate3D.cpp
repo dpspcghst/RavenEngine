@@ -49,7 +49,7 @@ std::shared_ptr<Shape3D> ShapeCreate3D::CreateShape3D(Shape3D::Type shapeType) {
     shape3D->SetShaderName(defaultShaderName);
 
     // Debug print
-    std::cout << "SHAPECREATE2D::CREATESHAPE2D Shader loaded and set for shape: " << shape3D->GetID() << std::endl;
+    //std::cout << "SHAPECREATE2D::CREATESHAPE2D Shader loaded and set for shape: " << shape3D->GetID() << std::endl;
 
     // Create a UBO for the shape's material properties
     std::string uboName = "MaterialProperties3D_" + std::to_string(uniqueID);
@@ -58,9 +58,9 @@ std::shared_ptr<Shape3D> ShapeCreate3D::CreateShape3D(Shape3D::Type shapeType) {
     UniformBufferManager& uniformBufferManager = UniformBufferManager::GetInstance();
     uniformBufferManager.CreateUniformBuffer(uboName, uboSize, uboBindingPoint);
     // Log the UBO's name, size, and binding point
-    std::cout << "SHAPECREATE::3D Created UBO with name: " << uboName 
-              << ", size: " << uboSize 
-              << ", binding point: " << uboBindingPoint << std::endl;
+    // std::cout << "SHAPECREATE::3D Created UBO with name: " << uboName 
+    //           << ", size: " << uboSize 
+    //           << ", binding point: " << uboBindingPoint << std::endl;
     shape3D->SetMaterialUBOName(uboName);
 
     MaterialProperties3D materialProps;

@@ -26,15 +26,31 @@ public:
     void AddNode(std::unique_ptr<SceneNode> node); // Adds a node to the scene
     void RemoveNode(SceneNode* node); // Removes a node from the scene
 
-    std::vector<SceneNode*> GetAllNodes() const; // Returns a vector of raw pointers to all nodes in the scene
-    const std::vector<std::unique_ptr<SceneNode>>& GetNodes() const; // Returns a reference to the vector of unique pointers to the nodes
+    void Update(float deltaTime); // Updates the scene
+
     SceneNode& GetRootNode() const; // Returns a reference to the root node
-    SceneNode* FindNode(const std::string& name) const; // Finds a node by name
-    void SetParent(SceneNode* child, SceneNode* parent); // Sets the parent of a node
     SceneNode* GetRootNodePtr() const {
     return rootNode.get();
     }
-    void Update(float deltaTime); // Updates the scene
+    
+    const std::vector<std::unique_ptr<SceneNode>>& GetNodes() const; // Returns a reference to the vector of unique pointers to the nodes
+    std::vector<SceneNode*> GetAllNodes() const; // Returns a vector of raw pointers to all nodes in the scene
+    
+    SceneNode* FindNode(const std::string& name) const; // Finds a node by name
+    SceneNode* FindNodeById(int id) const {
+        for (const auto& node : nodes) {
+            if (node->GetID() == id) {
+                return node.get();
+            }
+        }
+        // Optionally, also check the rootNode if it can have an ID and be searched
+        if (rootNode && rootNode->GetID() == id) {
+            return rootNode.get();
+        }
+        return nullptr; // Return nullptr if no matching node is found
+    }
+    
+    void SetParent(SceneNode* child, SceneNode* parent); // Sets the parent of a node
 
 private:
     std::vector<std::unique_ptr<SceneNode>> nodes; // Vector of unique pointers to the nodes

@@ -44,7 +44,6 @@ void ScenePanel::SetSceneManager(SceneManager* newSceneManager) {               
 }
 
 void ScenePanel::OnImGuiRender() {                                               // Render the ScenePanel
-
     //std::cout << "ScenePanel::OnImGuiRender()" << std::endl;
     ImGui::Begin("Scene");                                                      // Begin the ImGui window (ScenePanel Name)
 
@@ -52,7 +51,6 @@ void ScenePanel::OnImGuiRender() {                                              
     HandleNodeCreation();
     DrawSceneNodes();
 
-    
     ImGui::End();
 }
 
@@ -106,7 +104,7 @@ void ScenePanel::DrawNodeTree(SceneNode* node) {                                
 
         HandleNodeInteraction(node);
 
-        if (treeNodeOpen) {
+        if (treeNodeOpen) {                                                    // If the node is open, draw its children
             for (auto& child : node->GetChildren()) {
                 DrawNodeTree(child.get());
             }
@@ -174,6 +172,8 @@ void ScenePanel::HandleNodeInteraction(SceneNode* node) {                       
     if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {             // Double click to rename
         nodeToRename = node;
         renameRequested = true;
+        ImGui::SetKeyboardFocusHere();
+        ImGui::CaptureKeyboardFromApp(true);
     }
     if (ImGui::BeginPopupContextItem()) {                                       // Right click node context menu
         if (ImGui::MenuItem("Rename")) {      // Rename node option
@@ -238,6 +238,7 @@ void ScenePanel::Handle2DShapeCreationMenu() {
         for (auto type : Shape2D::AllTypes) { // Assume Shape2D::AllTypes is a collection of all 2D types
             if (ImGui::MenuItem(Shape2D::GetTypeName(type).c_str())) {
                 CreateShape(static_cast<int>(type)); // Create 2D shape
+                //std::cout << "SCENEPANEL::HANDLE2DSHAPECREATIONMENU Creating 2D shape: " << Shape2D::GetTypeName(type) << std::endl;
             }
         }
         ImGui::EndMenu();

@@ -1,7 +1,14 @@
+// viewport.cpp
+// #####################
+// #include section
+// #####################
+// Standard library includes
+#include <iostream>
+// Third party includes
+// Raven includes
 #include "../Renderer/Renderer.h"
 #include "Viewport.h"
-#include <GLFW/glfw3.h>
-#include <iostream>
+#include "../../include/utils/playbackbar.h"
 
 namespace RavenEngine {
 
@@ -91,6 +98,10 @@ void Viewport::Render(SceneNode& rootNode) {
         ImVec2(0, 0), // UV start coordinates
         ImVec2(uvX, uvY) // UV end coordinates, adjusted to match the renderer's size
     );
+
+    // Draw the playback bar at the bottom of the viewport
+    ImGui::SetCursorPos(ImVec2(0, ImGui::GetWindowSize().y - ImGui::GetFrameHeightWithSpacing()));
+    RavenEngine::PlaybackBar::Draw();
 
     ImGui::End();
 

@@ -1,7 +1,14 @@
-#include "Shape.h"
+// shape.cpp
+// #####################
+// #include section
+// #####################
+// Standard library includes
 #include <iostream>
+// Third party includes
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
+// Raven includes
+#include "Shape.h" 
 
 namespace RavenEngine {
 
@@ -78,12 +85,12 @@ glm::vec3 Shape::GetRotation() const {
 }
 
 void Shape::SetTextureId(int id) {
-    std::cout << "Shape::SetTextureId - Setting Texture ID to: " << id << std::endl;
+    //std::cout << "Shape::SetTextureId - Setting Texture ID to: " << id << std::endl;
     textureId = id;
 }
 
 int Shape::GetTextureId() const {
-    std::cout << "Shape::GetTextureId - Texture ID is: " << textureId << std::endl;
+    //std::cout << "Shape::GetTextureId - Texture ID is: " << textureId << std::endl;
     return textureId;
 }
 

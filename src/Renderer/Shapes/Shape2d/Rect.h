@@ -21,12 +21,16 @@ public:
 
     void Create() override;
     void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
-    
+
     int GetVertexCount() const override;
 
     int GetTextureId() const { return textureId; }
     void SetTextureId(int id) { textureId = id; }
 
+    std::vector<glm::vec3> GetVertices() const override; 
+    std::vector<glm::vec2> GetNormals() const override; 
+    Projection ProjectOntoAxis(const glm::vec2 &axis) const override; 
+    
 private:
     int textureId;
     struct Vertex {

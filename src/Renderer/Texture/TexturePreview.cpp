@@ -17,7 +17,7 @@ namespace RavenEngine {
 TexturePreview::TexturePreview(const std::string& texturePath)
     : textureID(0), width(0), height(0) {
     if (!LoadTexture(texturePath)) {
-        std::cerr << "Failed to load texture: " << texturePath << std::endl;
+        std::cerr << "TEXTUREPREVIEW::CONSTRUCTION Failed to load texture: " << texturePath << std::endl;
     }
 }
 
@@ -30,7 +30,7 @@ bool TexturePreview::LoadTexture(const std::string& texturePath) {
     // Load image data with 4 channels (RGBA) per pixel
     unsigned char* data = stbi_load(texturePath.c_str(), &width, &height, NULL, 4); // NULL for channels to default to 4
     if (data == nullptr) {
-        std::cerr << "Texture failed to load at path: " << texturePath << std::endl;
+        std::cerr << "TEXTUREPREVIEW::LOADTEXTURE failed to load at path: " << texturePath << std::endl;
         return false;
     }
     int nrChannels = 4; // 4 channels for RGBA

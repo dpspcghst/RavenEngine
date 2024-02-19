@@ -23,11 +23,18 @@ set(PROJECT_SOURCES
     src/Core/UIManager.cpp
     src/Core/Viewport.cpp
     src/Core/Workspace.cpp
+    src/Core/GameLoop.cpp
     Settings/SettingsManager.cpp
 
     src/Renderer/Renderer.cpp
     src/Renderer/Camera/Camera.cpp
     src/Renderer/FBO/FBManager.cpp
+
+    src/Physics/PhysicsEngine.cpp
+    src/Physics/CollisionManager.cpp
+    src/Physics/CollisionPanel.cpp
+    src/Physics/RigidBody.cpp
+    src/Physics/RigidBodyPanel.cpp
 
     src/Renderer/Shaders/ShaderManager.cpp
     src/Renderer/Shaders/ShaderLoader.cpp
@@ -52,6 +59,7 @@ set(PROJECT_SOURCES
 
     src/Renderer/Texture/TextureFileDialog.cpp
     src/Renderer/Texture/TextureManager.cpp
+    src/Renderer/Texture/TextureManagerPanel.cpp
     src/Renderer/Texture/TexturePanel.cpp
     src/Renderer/Texture/TexturePreview.cpp
 
@@ -69,6 +77,7 @@ set(PROJECT_SOURCES
     src/Utils/FileDialog.cpp
     src/Utils/ImGuiManager.cpp
     src/Utils/MenuSystem.cpp
+    src/Utils/PlayBackBar.cpp
     src/Utils/ResourceManager.cpp
     src/Utils/Inspector.cpp
 

@@ -47,6 +47,11 @@ void ShaderProgram::Use() const {
     }
 }
 
+void ShaderProgram::SetAlpha(float alpha) {
+    SetUniform("u_Alpha", alpha);
+    //std::cout << "SHADERPROGRAM::SETALPHA Setting alpha to " << alpha << std::endl;
+}
+
 void ShaderProgram::SetUniform(const std::string& name, const glm::mat4& value) {
     GLint loc = glGetUniformLocation(id, name.c_str());
     if (loc != -1) {
@@ -115,7 +120,7 @@ bool ShaderProgram::CompileShader(GLuint& shaderID, GLenum type, const std::stri
         return false;
     }
     // Debug print
-    std::cout << "SHADERPROGRAM::COMPILESHADER Compilation successful for " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader with ID: " << shaderID << std::endl;
+    //std::cout << "SHADERPROGRAM::COMPILESHADER Compilation successful for " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader with ID: " << shaderID << std::endl;
 
     return true;
 }
@@ -129,7 +134,7 @@ bool ShaderProgram::LinkProgram() {
         CheckLinkErrors();
         return false;
     }
-    std::cout << "SHADERPROGRAM::LINKPROGRAM Linking successful for program with ID: " << id << std::endl;
+    //std::cout << "SHADERPROGRAM::LINKPROGRAM Linking successful for program with ID: " << id << std::endl;
 
     return true;
 }

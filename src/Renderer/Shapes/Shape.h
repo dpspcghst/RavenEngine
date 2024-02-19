@@ -53,41 +53,42 @@ public:
     // Setters and getters
     virtual void SetID(int id); // Set the ID
     virtual int GetID() const;  // Get the ID
+    
 
     virtual void SetShaderName(const std::string& shaderName); // Set the shader name
-    virtual const std::string& GetShaderName() const;         // Get the shader name
-    GLuint GetShaderProgram() const { return shaderProgram; }
+    virtual const std::string& GetShaderName() const; // Get the shader name
+    GLuint GetShaderProgram() const { return shaderProgram; } // Get the shader program
 
     virtual void SetMaterialUBOName(const std::string& name); // Set the material UBO name
-    virtual std::string GetMaterialUBOName() const;          // Get the material UBO name
+    virtual std::string GetMaterialUBOName() const; // Get the material UBO name
 
-    void SetTextureId(int id);
-    int GetTextureId() const;
+    void SetTextureId(int id); // Set the texture ID
+    int GetTextureId() const; // Get the texture ID
 
-    virtual void SetSize(const glm::vec3& newSize);
-    virtual glm::vec3 GetSize() const;
+    virtual void SetSize(const glm::vec3& newSize); // Set the size
+    virtual glm::vec3 GetSize() const; // Get the size
 
-    virtual void SetPosition(const glm::vec3& newPosition);
-    virtual glm::vec3 GetPosition() const;
+    virtual void SetPosition(const glm::vec3& newPosition); // Set the position
+    virtual glm::vec3 GetPosition() const; // Get the position
 
-    virtual void SetRotation(const glm::vec3& newRotation);
-    virtual glm::vec3 GetRotation() const;
+    virtual void SetRotation(const glm::vec3& newRotation); // Set the rotation
+    virtual glm::vec3 GetRotation() const; // Get the rotation
 
     // 2d shader
-    virtual void SetColor(const glm::vec4& newColor);
-    virtual glm::vec4 GetColor() const;
+    virtual void SetColor(const glm::vec4& newColor); // Set the color
+    virtual glm::vec4 GetColor() const; // Get the color
 
     // 3d shader
-    virtual void SetShininess(float newShininess);
-    virtual float GetShininess() const;
+    virtual void SetShininess(float newShininess); // Set the shininess
+    virtual float GetShininess() const; // Get the shininess
 
-    virtual void SetAmbient(const glm::vec3& newAmbient);
-    virtual glm::vec3 GetAmbient() const;
+    virtual void SetAmbient(const glm::vec3& newAmbient); // Set the ambient
+    virtual glm::vec3 GetAmbient() const; // Get the ambient
 
-    virtual void SetDiffuse(const glm::vec3& newDiffuse);
-    virtual glm::vec3 GetDiffuse() const;
+    virtual void SetDiffuse(const glm::vec3& newDiffuse); // Set the diffuse
+    virtual glm::vec3 GetDiffuse() const; // Get the diffuse
 
-    virtual void SetSpecular(const glm::vec3& newSpecular);
+    virtual void SetSpecular(const glm::vec3& newSpecular); // Set the specular
     virtual glm::vec3 GetSpecular() const;
 
 protected:

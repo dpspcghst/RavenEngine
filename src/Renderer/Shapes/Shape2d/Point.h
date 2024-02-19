@@ -23,6 +23,22 @@ public:
     void Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) const override;
     int GetVertexCount() const override;
 
+    std::vector<glm::vec3> GetVertices() const override {
+        // For a point, the only vertex is the point itself.
+        return {vertex.position};
+    }
+
+    std::vector<glm::vec2> GetNormals() const override {
+        // A point doesn't have any normals, because it doesn't have any area.
+        return {};
+    }
+
+    Projection ProjectOntoAxis(const glm::vec2 &axis) const override {
+        // For a point, the projection onto any axis is just the point itself.
+        float projection = glm::dot(glm::vec2(vertex.position), axis);
+        return {projection, projection};
+    }
+
 private:
     struct Vertex {
         glm::vec3 position;

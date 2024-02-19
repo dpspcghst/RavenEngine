@@ -8,20 +8,32 @@
 
 namespace RavenEngine {
 
-Workspace::Workspace(GLFWwindow* mainWindow)
-        : window(mainWindow), 
-            viewport(window),
-            doodleManager(),
-            sceneManager(),
-            uiManager(doodleManager, paletteManager, calculatorManager, viewport, ShaderManager::GetInstance(), sceneManager, TextureManager::GetInstance()),  // Use singleton instances
-            menuSystem(*this, mainWindow, doodleManager, paletteManager, calculatorManager, uiManager) {
-        
-        ImGuiIO& io = ImGui::GetIO();
-        io.IniFilename = nullptr;
+RavenEngine::Workspace::Workspace(GLFWwindow* mainWindow)
+    : window(mainWindow), 
+      viewport(window),
+      doodleManager(),
+      paletteManager(),
+      calculatorManager(),
+      sceneManager(),
+      collisionPanel(), // Assuming collisionPanel is initialized here as needed
+      uiManager(
+          doodleManager, 
+          paletteManager, 
+          calculatorManager, 
+          viewport, 
+          sceneManager, 
+          ShaderManager::GetInstance(), // Assuming this returns a reference or pointer suitable for UIManager
+          TextureManager::GetInstance(), // Same assumption as above
+          collisionPanel // Pass the initialized collisionPanel here
+      ),
+      menuSystem(*this, mainWindow, doodleManager, paletteManager, calculatorManager, uiManager) {
 
-        console.AddLog("Welcome to RavenEngine!");
+    ImGuiIO& io = ImGui::GetIO();
+    io.IniFilename = nullptr; // Disables ImGui.ini saving/loading
 
-        uiManager.SetSceneManagerContext(&sceneManager);
+    console.AddLog("Welcome to RavenEngine!");
+
+    uiManager.SetSceneManagerContext(&sceneManager);
 }
 
 void Workspace::Render() {

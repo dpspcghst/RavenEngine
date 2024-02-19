@@ -2,40 +2,48 @@
 // #####################
 #ifndef TEXTURE_PANEL_H
 #define TEXTURE_PANEL_H
-
+// #####################
 // #include section
 // #####################
 // Standard library includes
 #include <string>
-#include <unordered_map>
-#include <memory>
 #include <functional>
-
 // Third-party includes
 
 // Raven includes
-#include "TextureManager.h"
 #include "TexturePreview.h"
+#include "TextureManager.h"
 
 namespace RavenEngine {
-    
+
 class TexturePanel {
 public:
-    // Constructor takes a reference to the TextureManager to interact with it
-    // and a callback function to be called when a new texture is loaded
+    // Constructor to initialize the TexturePanel with a reference to TextureManager and a callback function
     TexturePanel(TextureManager& textureManager, std::function<void(int)> onTextureLoadedCallback);
 
-    // Render the texture panel UI
+    // Main draw function for the TexturePanel
     void Draw();
-
+    bool IsTextureEnabled = false; // New: Boolean to indicate if a texture is enabled
 private:
     TextureManager& textureManager; // Reference to the TextureManager to manage textures
-    std::function<void(int)> onTextureLoadedCallback; // Callback function to be called when a new texture is loaded
+    std::unique_ptr<TexturePreview> texturePreview;
 
-    std::string OpenTextureFileDialog(); // Open file dialog to select a texture file
-    int selectedTexture; // ID of the selected texture
-    std::unordered_map<int, std::unique_ptr<RavenEngine::TexturePreview>> texturePreviews;
+    std::function<void(int)> onTextureLoadedCallback; // Callback function to be called when a new texture is loaded
+    int selectedTexture = -1; // ID of the currently selected texture, initialized to -1 to indicate no selection
+
+    // Private member functions to modularize the UI drawing process
+    void DisplaySelectedTextureProperties(); // Displays properties of the selected texture and allows editing
+    void DisplayFilteringModeCombo(); // Displays and allows editing of the texture filtering mode
+    void DisplayTextureWrapModeCombo(const char* label, int textureID, bool isWrapS); // Displays and allows editing of texture wrap modes
+    void DisplayAlphaSlider(); // Displays and allows editing of the alpha value of the texture
+    void DisplayTextureSelectionCombo(); // New: Displays and allows selection of a texture from a combo box
+    void DisplayTextureTransformations();
+
+    // Utility functions
+    void LoadNewTexture(); // Handles the loading of a new texture
+    std::string OpenTextureFileDialog(); // Opens a dialog to select a texture file
 };
 
-}   // namespace RavenEngine
+} // namespace RavenEngine
+
 #endif // TEXTURE_PANEL_H

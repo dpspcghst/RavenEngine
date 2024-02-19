@@ -16,6 +16,7 @@
 namespace RavenEngine {
 
 Line::Line() : start(glm::vec3(0.0f)), end(glm::vec3(1.0f, 0.0f, 0.0f)) { // Default to a horizontal line of unit length
+    type = Shape2D::Type::Line; // Set shape type
 }
 
 Line::Line(const glm::vec3& startPoint, const glm::vec3& endPoint)  
@@ -75,7 +76,7 @@ void Line::Render(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix
 }
 
 int Line::GetVertexCount() const {
-    return 2; // Assuming a line is defined by 2 vertices
+    return 2; // A line has 2 vertices
 }
 
 } // namespace RavenEngine

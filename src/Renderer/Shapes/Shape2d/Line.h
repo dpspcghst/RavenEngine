@@ -13,8 +13,8 @@
 #include "Shape2D.h"
 
 namespace RavenEngine {
-    class Line : public Shape2D {
-    public:
+class Line : public Shape2D {
+public:
         Line(); // Default constructor
         Line(const glm::vec3& startPoint, const glm::vec3& endPoint);
         virtual ~Line();
@@ -29,7 +29,23 @@ namespace RavenEngine {
         // Add a method to get the texture ID
         int GetTextureId() const { return textureId; }
 
-    private:
+        std::vector<glm::vec3> GetVertices() const override {
+        // For a line, the vertices are the start and end points.
+        return {start, end};
+    }
+
+    std::vector<glm::vec2> GetNormals() const override {
+        glm::vec2 direction = glm::normalize(glm::vec2(end - start));
+        return {glm::vec2(-direction.y, direction.x), glm::vec2(direction.y, -direction.x)};
+    }
+
+    Projection ProjectOntoAxis(const glm::vec2 &axis) const override {
+        float startProjection = glm::dot(glm::vec2(start), axis);
+        float endProjection = glm::dot(glm::vec2(end), axis);
+        return {std::min(startProjection, endProjection), std::max(startProjection, endProjection)};
+    }
+
+private:
         glm::vec3 start{0.0f, 0.0f, 0.0f}, end{0.0f, 0.0f, 0.0f}; // Initialize to default values
         GLuint VAO = 0, VBO = 0;
 

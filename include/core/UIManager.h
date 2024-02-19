@@ -7,7 +7,7 @@
 
 // Third-party libraries
 
-// Local project includes
+// Raven project includes
 #include "Console.h"
 #include "../../src/Scene/ScenePanel.h"
 #include "../../src/Scene/SceneManager.h"
@@ -16,6 +16,9 @@
 #include "../../Tools//Palette/PaletteManager.h"
 #include "../../Tools//Calc/CalculatorManager.h" 
 #include "../utils/Inspector.h" 
+#include "../../src/Renderer/Texture/TextureManagerPanel.h"
+#include "../../src/Physics/CollisionPanel.h"
+#include "../../src/Renderer/Shaders/ShaderManager.h"
 
 
 namespace RavenEngine {
@@ -32,19 +35,22 @@ namespace RavenEngine {
     public:
         UIManager(DoodleManager& doodleManager, PaletteManager& paletteManager, 
               CalculatorManager& calculatorManager, Viewport& viewport, 
-              ShaderManager& shaderManagerInstance, SceneManager& sceneManager,
-              TextureManager& textureManager);  // Constructor
+              SceneManager& sceneManager, ShaderManager& shaderManagerInstance, 
+              TextureManager& textureManager, 
+              CollisionPanel& collisionPanel);  // Constructor
         void SetSceneManagerContext(SceneManager* sceneManager); // Set the SceneManager context for the UIManager
         void Render(); // Render the UIManager
 
     private:
         ScenePanel scenePanel; // Scene Panel
         Viewport& viewport; // Viewport
-        DoodleManager& doodleManager; // Doodle Util
-        PaletteManager& paletteManager;
+        DoodleManager& doodleManager; // Doodle
+        PaletteManager& paletteManager; // Palette
         SceneManager& sceneManager; // SceneManager
         Inspector inspector; // Inspector
-        CalculatorManager& calculatorManager;
+        CalculatorManager& calculatorManager; // Calculator
+        TextureManagerPanel textureManagerPanel; // TextureManagerPanel
+        CollisionPanel& collisionPanel; // CollisionPanel
     };
 }
 

@@ -19,23 +19,23 @@
 namespace RavenEngine {
 const std::vector<Shape2D::Type> Shape2D::AllTypes = { Shape2D::Type::Point, Shape2D::Type::Line, Shape2D::Type::Triangle, Shape2D::Type::Rect, Shape2D::Type::TriQuad, Shape2D::Type::Circle };
 
-Shape2D::Shape2D() : Shape() {
+Shape2D::Shape2D() : Shape(), rigidBody(std::make_shared<RigidBody>()) {
     type = Type::Point; // Default type can be set here
     glGenBuffers(1, &ubo); // Generate UBO
     ID = nextID++;
     UpdateTransformMatrix();
 }
 
-Shape2D::Shape2D(const glm::vec3& pos, Type type) 
-    : Shape(), type(type) { // Initialize with given parameters
-    this->position = pos;
+Shape2D::Shape2D(const glm::vec3& position, Type type, BodyType bodyType)
+    : Shape(), type(type), rigidBody(std::make_shared<RigidBody>()) { // Initialize with given parameters
+    this->position = position;
     glGenBuffers(1, &ubo); // Generate UBO
     ID = nextID++;
     UpdateTransformMatrix();
 }
 
 Shape2D::Shape2D(const std::string& shaderName)
-    : Shape() { // Initialize with textureId
+    : Shape(), rigidBody(std::make_shared<RigidBody>()) { // Initialize with textureId
     glGenBuffers(1, &ubo); // Generate UBO
     this->SetShaderName(shaderName); // Set the shader name through the method to ensure any related setup is done
     ID = nextID++;
@@ -108,6 +108,37 @@ void Shape2D::UpdateTransformMatrix() {
 
 glm::mat4 Shape2D::GetTransformMatrix() const {
     return transformMatrix;
+}
+
+Shape2D::Projection Shape2D::ProjectOntoAxis(const glm::vec2& axis) const {
+    auto vertices = this->GetVertices(); // Retrieve the shape's vertices
+    if (vertices.empty()) {
+        return {0, 0}; // Return an empty projection if no vertices
+    }
+
+    float minProjection = glm::dot(axis, glm::vec2(vertices[0]));
+    float maxProjection = minProjection;
+
+    // Project each vertex onto the axis and find the min/max values
+    for (const auto& vertex : vertices) {
+        float projection = glm::dot(axis, glm::vec2(vertex));
+        minProjection = std::min(minProjection, projection);
+        maxProjection = std::max(maxProjection, projection);
+    }
+
+    return {minProjection, maxProjection};
+}
+
+void Shape2D::SetCollisionEnabled(bool enabled) {
+    collisionEnabled = enabled;
+}
+
+bool Shape2D::IsCollisionEnabled() const {
+    return collisionEnabled;
+}
+
+std::shared_ptr<RigidBody> Shape2D::GetRigidBody() const {
+    return rigidBody;
 }
 
 } // namespace RavenEngine

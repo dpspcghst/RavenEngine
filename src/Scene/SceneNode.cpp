@@ -59,7 +59,7 @@ void SceneNode::AttachShape(std::shared_ptr<Shape> newShape, int textureId) {
         std::cout << "Attempted to attach a null shape to node: " << this->GetName() << std::endl;
         return;
     }
-    newShape->SetTextureId(textureId);  // Assuming Shape class has a SetTextureId method
+    newShape->SetTextureId(-1);
     shape = std::move(newShape);
     std::cout << "SCENENODE::ATTACHSHAPE Attached shape with texture ID " << textureId << " to node: " << this->GetName() << std::endl;
 }

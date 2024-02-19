@@ -74,6 +74,11 @@ void Palette::DrawColorSquares() {
             if (ImGui::MenuItem("Unlock")) {
                 locked[i] = false;
             }
+            if (ImGui::MenuItem("Copy")) {
+                char hexColor[8];
+                sprintf_s(hexColor, sizeof(hexColor), "#%02X%02X%02X", static_cast<int>(colors[i].x * 255), static_cast<int>(colors[i].y * 255), static_cast<int>(colors[i].z * 255));
+                ImGui::SetClipboardText(hexColor);
+            }
             ImGui::EndPopup();
         }
         

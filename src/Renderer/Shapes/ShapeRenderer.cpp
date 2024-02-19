@@ -35,6 +35,9 @@ void ShapeRenderer::RenderShape(const std::shared_ptr<Shape>& shape, const glm::
     SetShaderUniforms(shaderProgramPtr, modelMatrix, viewMatrix, projectionMatrix, shape);
     BindTextureIfAvailable(shape);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     shape->Render(viewMatrix, projectionMatrix);
 }
 
@@ -53,23 +56,35 @@ void ShapeRenderer::SetShaderUniforms(std::shared_ptr<ShaderProgram> shaderProgr
 
 void ShapeRenderer::BindTextureIfAvailable(const std::shared_ptr<RavenEngine::Shape>& shape) {
     int textureId = shape->GetTextureId();
-    if (textureId != -1 && TextureManager::GetInstance().HasTexture(textureId)) { // If the shape texture is == -1, it means no texture is set
-        auto textureInfo = TextureManager::GetInstance().GetTexture(textureId);
-        if (textureInfo.id != 0) {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, textureInfo.id);
-            // Assuming shader uses "u_Texture" as the sampler2D uniform name
-            glUniform1i(glGetUniformLocation(shape->GetShaderProgram(), "u_Texture"), 0);
-            // Set the u_HasTexture uniform to 1
-            glUniform1i(glGetUniformLocation(shape->GetShaderProgram(), "u_HasTexture"), 1);
+    if (textureId != -1 && TextureManager::GetInstance().HasTexture(textureId)) {
+        // Activate the texture unit before binding
+        glActiveTexture(GL_TEXTURE0);
 
-            std::cout << "SHAPERENDERER::BINDTEXTUREIFAVAILABLE Bound texture with ID: " << textureInfo.id << std::endl;
-        } else {
-            std::cerr << "SHAPERENDERER::BINDTEXTUREIFAVAILABLE Texture with id " << textureId << " not found." << std::endl;
-        }
+        // Bind the texture
+        TextureManager::GetInstance().BindTexture(textureId);
+
+        auto shaderProgram = shape->GetShaderProgram();
+        GLint textureUniformLoc = glGetUniformLocation(shaderProgram, "u_Texture");
+        GLint hasTextureUniformLoc = glGetUniformLocation(shaderProgram, "u_HasTexture");
+
+        // Bind the texture to the active texture unit
+        glUniform1i(textureUniformLoc, 0); // Texture unit 0
+        glUniform1i(hasTextureUniformLoc, 1); // Indicates a texture is bound
+
+        // Set texture transformation uniforms
+        auto& textureManager = TextureManager::GetInstance();
+        auto textureInfo = textureManager.GetTexture(textureId);
+
+        glUniform2f(glGetUniformLocation(shaderProgram, "textureScale"), textureInfo.scaleX, textureInfo.scaleY);
+        glUniform2f(glGetUniformLocation(shaderProgram, "textureTranslation"), textureInfo.position.x, textureInfo.position.y);
+        glUniform1f(glGetUniformLocation(shaderProgram, "textureRotation"), textureInfo.rotation);
+
+        std::cout << "ShapeRenderer::BindTextureIfAvailable - Bound texture with ID: " << textureId << std::endl;
     } else {
-        // Set the u_HasTexture uniform to 0
-        glUniform1i(glGetUniformLocation(shape->GetShaderProgram(), "u_HasTexture"), 0);
+        auto shaderProgram = shape->GetShaderProgram();
+        GLint hasTextureUniformLoc = glGetUniformLocation(shaderProgram, "u_HasTexture");
+        glUniform1i(hasTextureUniformLoc, 0); // Indicates no texture is bound
     }
 }
+
 }

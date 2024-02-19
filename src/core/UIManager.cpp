@@ -20,16 +20,18 @@ namespace RavenEngine {
     
 UIManager::UIManager(DoodleManager& doodleManager, PaletteManager& paletteManager, 
                      CalculatorManager& calculatorManager, Viewport& viewport, 
-                     ShaderManager& shaderManagerInstance, SceneManager& sceneManager,
-                     TextureManager& textureManager)  // Added TextureManager parameter
+                     SceneManager& sceneManager, ShaderManager& shaderManagerInstance,
+                     TextureManager& textureManager, CollisionPanel& collisionPanel)
     : viewport(viewport), doodleManager(doodleManager), paletteManager(paletteManager), 
-      scenePanel(shaderManagerInstance), sceneManager(sceneManager), 
-      inspector(scenePanel, textureManager),  // Now passing TextureManager to Inspector
-      calculatorManager(calculatorManager) {
-    // initialize ui manager
+      calculatorManager(calculatorManager), sceneManager(sceneManager), 
+      scenePanel(shaderManagerInstance), 
+      inspector(scenePanel, textureManager, collisionPanel, &sceneManager), // Assuming Inspector constructor matches this signature
+      textureManagerPanel(textureManager, [](int){}),
+      collisionPanel(collisionPanel) { // Ensure this is correctly initialized
+    // Initialization logic here if needed
     scenePanel.SetSize(200, 800);
-    //std::cout << "Initializing UIManager..." << std::endl;
 }
+
 
 void UIManager::Render() { // Render the UIManager
                                                                                    
@@ -67,6 +69,12 @@ void UIManager::Render() { // Render the UIManager
 
     // Inspector window
     inspector.Render(); // Render the Inspector window
+    
+    ImGui::SetNextWindowSize(ImVec2(400, 400), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 400, 
+                            ImGui::GetIO().DisplaySize.y - 240), ImGuiCond_FirstUseEver); 
+
+    textureManagerPanel.Draw(); // Draw the TextureManagerPanel
 }
 
 void UIManager::SetSceneManagerContext(SceneManager* sceneManager) {

@@ -43,6 +43,12 @@ public:
 
     const glm::mat4& GetTransformMatrix() const { return transformMatrix; }  // Getter for the transformation matrix
 
+    // New method to check if this node is open in a tab
+    bool IsOpenInTab() const { return isOpenInTab; }
+
+    // New method to set whether this node is open in a tab
+    void SetOpenInTab(bool open) { isOpenInTab = open; }
+
 private:
     std::string name;
     std::vector<std::unique_ptr<SceneNode>> children;
@@ -53,6 +59,8 @@ private:
     std::string textureId;
 
     glm::mat4 transformMatrix;  // Transformation matrix member
+
+    bool isOpenInTab = false;
 
 };
 

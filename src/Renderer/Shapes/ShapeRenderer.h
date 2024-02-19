@@ -22,13 +22,13 @@ public:
     ShapeRenderer();
     ~ShapeRenderer();
 
-    
     void RenderShape(const std::shared_ptr<Shape>& shape, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
 private:
     
     void SetShaderUniforms(std::shared_ptr<ShaderProgram> shaderProgram, const glm::mat4& modelMatrix, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const std::shared_ptr<Shape>& shape);
     void BindTextureIfAvailable(const std::shared_ptr<Shape>& shape);
+
 };
 
 } // namespace RavenEngine

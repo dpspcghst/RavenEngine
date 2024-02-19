@@ -32,14 +32,14 @@ void ShaderManager::LoadShader(const std::string& name, const std::string& verte
     std::string vertexCode = loader.ReadShaderFile(vertexShaderPath);
     std::string fragmentCode = loader.ReadShaderFile(fragmentShaderPath);
 
-    // Log shader source code
-    // std::cout << "Vertex shader source code for " << name << ":\n" << vertexCode << std::endl;
-    // std::cout << "Fragment shader source code for " << name << ":\n" << fragmentCode << std::endl;
-
     auto shaderProgram = std::make_shared<ShaderProgram>();
     if (shaderProgram->LoadFromSource(vertexCode, fragmentCode)) {
         shaders[name] = shaderProgram;
-         std::cout << "SHADERMANAGER::LOADSHADER Shader loaded and compiled: " << name << std::endl;
+        std::cout << "SHADERMANAGER::LOADSHADER Shader loaded and compiled: " << name << std::endl;
+
+        // Use the shader to set the default alpha
+        shaderProgram->Use();
+        shaderProgram->SetAlpha(1.0f); // Set default alpha value
 
         // Check for OpenGL errors
         GLenum error = glGetError();

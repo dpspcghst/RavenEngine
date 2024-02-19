@@ -16,6 +16,7 @@
 #include "../../Materials/MaterialProperties.h"
 #include "../../Shaders/ShaderManager.h"
 #include "../../Texture/TextureManager.h"
+#include "../../../Physics/CollisionManager.h"
 #include "ShapeCreate2D.h"
 #include "Point.h"
 #include "Line.h"
@@ -28,9 +29,10 @@ namespace RavenEngine {
 std::shared_ptr<Shape2D> ShapeCreate2D::CreateShape2D(Shape2D::Type shapeType) {
     static int uboBindingPoint = 0;  // creating a unique binding point for each shape
     static int uniqueID = 1;  // creating a unique ID for each shape
-    int defaultTextureId = 0;
-    std::string shapeTypeName = Shape2D::GetTypeName(shapeType);
-    std::string entityName = shapeTypeName + "_" + std::to_string(uniqueID);
+    static int textureId = -1;
+    std::string shapeTypeName = Shape2D::GetTypeName(shapeType); // Get the name of the shape type
+    std::string entityName = shapeTypeName + "_" + std::to_string(uniqueID); // Create a unique name for the shape
+
 
     std::shared_ptr<Shape2D> shape2D;
     switch (shapeType) {
@@ -57,8 +59,12 @@ std::shared_ptr<Shape2D> ShapeCreate2D::CreateShape2D(Shape2D::Type shapeType) {
     }
     
     shape2D->Create();
-    std::cout << "SHAPECREATE::2D Created " << Shape2D::GetTypeName(shapeType) << " shape" << std::endl;
 
+    // Add the shape to the CollisionManager
+    CollisionManager& collisionManager = CollisionManager::GetInstance();
+    collisionManager.AddShape(shape2D.get());
+    //std::cout << "!!SHAPECREATE2D::CREATESHAPE2D Added shape to collision manager: " << shape2D->GetID() << std::endl;
+    
     // Load default shader and set shader name for the shape
     ShaderManager& shaderManager = ShaderManager::GetInstance();
     const std::string defaultShaderName = "defaultShader";
@@ -67,8 +73,10 @@ std::shared_ptr<Shape2D> ShapeCreate2D::CreateShape2D(Shape2D::Type shapeType) {
     }
     shape2D->SetShaderName(defaultShaderName);
 
+    shape2D->SetTextureId(textureId);
+
     // Debug print
-    std::cout << "SHAPECREATE2D::CREATESHAPE2D Shader loaded and set for shape: " << shape2D->GetID() << std::endl;
+    //std::cout << "SHAPECREATE2D::CREATESHAPE2D Shader loaded and set for shape: " << shape2D->GetID() << std::endl;
     // Create a UBO for the shape's material properties
     std::string uboName = "MaterialProperties_" + std::to_string(uniqueID);
     size_t uboSize = sizeof(MaterialProperties);
@@ -90,7 +98,7 @@ std::shared_ptr<Shape2D> ShapeCreate2D::CreateShape2D(Shape2D::Type shapeType) {
 
     // Get the GLuint representing the shader program
     GLuint shaderProgram = shaderProgramPtr->GetID();
-    std::cout << "SHAPECREATE::2D Shader program ID: " << shaderProgram << std::endl;
+    //std::cout << "SHAPECREATE::2D Shader program ID: " << shaderProgram << std::endl;
     if (!shaderProgram || !glIsProgram(shaderProgram)) { // If the shader program is invalid
         std::cerr << "SHAPECREATE::2D Failed to get valid shader program for: " << defaultShaderName << std::endl;
         return nullptr;

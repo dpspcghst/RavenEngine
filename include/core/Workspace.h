@@ -19,6 +19,7 @@
 #include "../utils/MenuSystem.h"
 #include "../src/Renderer/Shaders/ShaderManager.h"
 #include "../src/Renderer/Texture/TextureManager.h"
+#include "../src/Physics/CollisionPanel.h"
 
 namespace RavenEngine {
     class SceneManager;
@@ -38,6 +39,7 @@ namespace RavenEngine {
         PaletteManager paletteManager;
         CalculatorManager calculatorManager;
         MenuSystem menuSystem;
+        CollisionPanel collisionPanel;
     };
 }
 
