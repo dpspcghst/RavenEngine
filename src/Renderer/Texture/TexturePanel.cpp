@@ -197,7 +197,7 @@ void TexturePanel::Draw() {
         // When toggling the checkbox, directly manipulate the visibility of the preview and the callback
         if (ImGui::Checkbox(IsTextureEnabled ? "Disable Texture" : "Enable Texture", &IsTextureEnabled)) {
             if (!IsTextureEnabled) {
-                // If disabling, you might want to do additional logic like notifying other components
+                // Disable the texture and notify the callback
                 onTextureLoadedCallback(-1); // Optionally notify that texture is disabled if needed
             } else {
                 // Ensure re-enabling also refreshes the preview if needed

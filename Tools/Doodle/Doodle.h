@@ -32,8 +32,7 @@ public:
     void SetDrawColor(const ImColor& color);
     void SetCanvasColor(const ImColor& color);
     void SetLineSize(float size) { lineSize = size; }
-    void SelectStrokes();
-    void MoveSelectedStrokes(const ImVec2& delta);
+
 
 private:
     static int doodleCount; // Static counter for unique ID assignment
@@ -55,9 +54,6 @@ private:
     bool firstDraw = true;
     float lineSize = 1.0f; // Size of the lines drawn
 
-    bool isSelecting = false;
-    ImVec2 selectionStart, selectionEnd;
-    std::vector<std::pair<ImColor, std::vector<std::pair<ImVec2, float>>>> selectedStrokes;
 };
 
 } // namespace RavenEngine

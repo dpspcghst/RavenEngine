@@ -29,7 +29,6 @@ public:
 
     std::vector<glm::vec3> GetVertices() const override {
         // For a quadrilateral, the vertices are the four corners.
-        // Assuming the vertices are ordered in a counterclockwise manner.
         return {vertices[0].position, vertices[1].position, vertices[2].position, vertices[3].position};
     }
 

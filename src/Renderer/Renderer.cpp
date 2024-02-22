@@ -9,8 +9,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
-#include <glad/glad.h> // Include glad first
-#include <GLFW/glfw3.h> // Then include GLFW
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <imgui.h>
 
 // Raven includes
 #include "Renderer.h"
@@ -22,6 +23,7 @@
 #include "../Scene/SceneManager.h"
 #include "../Scene/SceneGraphRenderer.h"
 #include "Texture/TextureManager.h"
+#include "../../include/core/GameStateManager.h"
 
 namespace RavenEngine {
 
@@ -45,10 +47,25 @@ Renderer::~Renderer() {                                                         
     delete fbManager;
 }
 
+std::pair<int, int> Renderer::GetSize() const {                                       // Get size
+    return std::make_pair(gameWidth, gameHeight);
+}
+
+void Renderer::SetGLViewport(int x, int y, int width, int height) {                   // Set GL viewport
+    glViewport(x, y, width, height);
+    gameWidth = width;
+    gameHeight = height;
+}
+
+GLuint Renderer::GetCurrentTexture() {                                                // Get current texture
+    GLuint currentTexture = fbManager->GetCurrentTexture();
+    std::cout << "GetCurrentTexture: " << currentTexture << std::endl;
+    return currentTexture;
+}
+
 // Initialize Renderer
 bool Renderer::InitializeRenderer() {                                                 // Initialize renderer
 
-    clearColor = {0.149f, 0.137f, 0.788f, 1.0f}; // Set the default clear color
     SetGLViewport(0, 0, gameWidth, gameHeight); // Set the viewport to the game width and height
 
     if (!fbManager->Initialize()) { // If the framebuffer fails to initialize
@@ -65,30 +82,42 @@ bool Renderer::InitializeRenderer() {                                           
 }
 
 void Renderer::ShutdownRenderer() {                                                   // Shutdown renderer
-        // Implement the shutdown logic here, e.g., releasing resources
-        //std::cout << "Renderer shutdown" << std::endl;
+
 }
 
-std::pair<int, int> Renderer::GetSize() const {                                       // Get size
-    return std::make_pair(gameWidth, gameHeight);
-}
-
-void Renderer::SetGLViewport(int x, int y, int width, int height) {                   // Set GL viewport
-    glViewport(x, y, width, height);
-    gameWidth = width;
-    gameHeight = height;
-}
-
-GLuint Renderer::GetCurrentTexture() {                                                // Get current texture
-    return fbManager->GetCurrentTexture();
-}
-
-void Renderer::StartFrame() {                                                         // Start frame
-    // Bind the framebuffer and clear the screen
+void Renderer::StartFrame() {
     glBindFramebuffer(GL_FRAMEBUFFER, fbManager->GetCurrentTexture());
-    glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);
+
+    // Check the game state and set the clear color accordingly
+    switch (GameStateManager::GetInstance().GetState()) {
+        case GameState::Running:
+            // Set the clear color to black when the game is running
+            clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
+            glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glDisable(GL_DEPTH_TEST);
+
+            // Reset the pause timer
+            pauseTimer = 0.0f;
+            break;
+
+        case GameState::Paused:
+            // Render the paused screen when the game is paused
+            RenderPausedScreen();
+            break;
+
+        case GameState::Stopped:
+        default:
+            // Set the clear color to blue when the game is not running (i.e., in Edit Mode)
+            clearColor = {0.149f, 0.137f, 0.788f, 1.0f};
+            glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glDisable(GL_DEPTH_TEST);
+
+            // Reset the pause timer
+            pauseTimer = 0.0f;
+            break;
+    }
 }
 
 void Renderer::UpdateColors() {                                                       // Update colors
@@ -112,6 +141,19 @@ void Renderer::UpdateColors() {                                                 
 
 void Renderer::RenderScene(const SceneNode& rootNode) {
     sceneGraphRenderer->RenderScene(rootNode);
+}
+
+void Renderer::RenderPausedScreen() {
+    // Increment the pause timer by the time since the last frame
+    pauseTimer += ImGui::GetIO().DeltaTime;
+
+    // Render a pause message or overlay if the timer is less than 2 seconds
+    if (pauseTimer <= 2.0f) {
+        ImGui::Begin("PauseOverlay", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav);
+        ImGui::SetWindowFontScale(2.0); // Increase font size for visibility
+        ImGui::Text("Game Paused");
+        ImGui::End();
+    }
 }
 
 void Renderer::FinishFrame() {                                                        // Finish frame

@@ -57,10 +57,6 @@ void Doodle::DrawUI() {
             ClearCanvas();
         }
         ImGui::SameLine();
-        // Add this in your DrawUI method, where you have your other buttons
-        if (ImGui::Button(isSelecting ? "Stop Selecting" : "Start Selecting")) {
-            isSelecting = !isSelecting;
-        }
         // Collapsible section for lineSize slider
         if (ImGui::CollapsingHeader("Line Settings")) {
             ImGui::SliderFloat("Line Size", &lineSize, 1.0f, 10.0f, "Size: %.2f");
@@ -96,21 +92,6 @@ void Doodle::DrawUI() {
         HandleCanvasInteraction();
 
         DrawLines();
-
-        if (isSelecting) {
-            if (ImGui::IsMouseClicked(1)) { // Right mouse button for selection, for example
-                selectionStart = ImGui::GetMousePos();
-            }
-
-            if (ImGui::IsMouseReleased(1)) {
-                selectionEnd = ImGui::GetMousePos();
-                SelectStrokes();
-                isSelecting = false; // Stop selecting after a selection is made
-            }
-
-            ImVec2 currentMousePos = ImGui::GetMousePos();
-            drawList->AddRect(selectionStart, currentMousePos, IM_COL32(255, 255, 255, 255)); // Draw selection rectangle
-        }
         
     }
     ImGui::End();
@@ -124,30 +105,12 @@ void Doodle::HandleCanvasInteraction() {
     ImVec2 mousePos = ImGui::GetMousePos();
     ImVec2 pointOnCanvas = ImVec2(mousePos.x - canvasPos.x, mousePos.y - canvasPos.y);
 
-    if (isSelecting) {
-        if (ImGui::IsMouseClicked(0)) { // Left mouse button for selection
-            selectionStart = ImGui::GetMousePos();
-        }
-
-        if (ImGui::IsMouseReleased(0)) {
-            selectionEnd = ImGui::GetMousePos();
-            SelectStrokes();
-            isSelecting = false; // Stop selecting after a selection is made
-        }
-
-        ImVec2 currentMousePos = ImGui::GetMousePos();
-        drawList->AddRect(selectionStart, currentMousePos, IM_COL32(255, 255, 255, 255)); // Draw selection rectangle
-    } else if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered(ImGuiHoveredFlags_RectOnly)) {
+    if (ImGui::IsMouseDown(0) && ImGui::IsItemHovered(ImGuiHoveredFlags_RectOnly)) {
         if (!eraseMode) {
             HandleFreeformDrawing(pointOnCanvas);
         } else {
             EraseLines(pointOnCanvas);
         }
-    } else if (!selectedStrokes.empty() && ImGui::IsMouseDown(0)) {
-        // Move selected strokes if mouse is dragged
-        ImVec2 delta = ImGui::GetMouseDragDelta(0);
-        MoveSelectedStrokes(delta);
-        ImGui::ResetMouseDragDelta(0);
     } else {
         isDrawing = false;
     }
@@ -174,35 +137,6 @@ void Doodle::EraseLines(const ImVec2& pointOnCanvas) {
     strokes = std::move(newStrokes);
 }
 
-void Doodle::SelectStrokes() {
-    selectedStrokes.clear();
-    ImVec2 min = ImVec2(std::min(selectionStart.x, selectionEnd.x), std::min(selectionStart.y, selectionEnd.y));
-    ImVec2 max = ImVec2(std::max(selectionStart.x, selectionEnd.x), std::max(selectionStart.y, selectionEnd.y));
-
-    for (auto& stroke : strokes) {
-        bool strokeSelected = false;
-        for (size_t i = 0; i < stroke.second.size(); ++i) {
-            ImVec2 point = ImVec2(canvasPos.x + stroke.second[i].first.x, canvasPos.y + stroke.second[i].first.y);
-            if (point.x >= min.x && point.x <= max.x && point.y >= min.y && point.y <= max.y) {
-                strokeSelected = true;
-                break;
-            }
-        }
-        if (strokeSelected) {
-            selectedStrokes.push_back(stroke);
-        }
-    }
-}
-
-void Doodle::MoveSelectedStrokes(const ImVec2& delta) {
-    for (auto& stroke : selectedStrokes) {
-        for (size_t i = 0; i < stroke.second.size(); ++i) {
-            stroke.second[i].first.x += delta.x;
-            stroke.second[i].first.y += delta.y;
-        }
-    }
-}
-
 // Adjusting HandleFreeformDrawing to include line size
 void Doodle::HandleFreeformDrawing(const ImVec2& pointOnCanvas) {
     if (isDrawing) {
@@ -218,26 +152,14 @@ void Doodle::HandleFreeformDrawing(const ImVec2& pointOnCanvas) {
     }
 }
 
+// Update the DrawLines method to use the line size stored with each stroke
 void Doodle::DrawLines() {
     for (const auto& stroke : strokes) {
-        bool isSelected = std::find_if(selectedStrokes.begin(), selectedStrokes.end(), [&stroke](const auto& selectedStroke) {
-            if (stroke.first != selectedStroke.first) return false;
-            if (stroke.second.size() != selectedStroke.second.size()) return false;
-            for (size_t i = 0; i < stroke.second.size(); ++i) {
-                if (stroke.second[i].first.x != selectedStroke.second[i].first.x ||
-                    stroke.second[i].first.y != selectedStroke.second[i].first.y ||
-                    stroke.second[i].second != selectedStroke.second[i].second) return false;
-            }
-            return true;
-        }) != selectedStrokes.end();
-
-        ImColor strokeColor = isSelected ? ImColor(IM_COL32(255, 0, 0, 255)) : stroke.first; // Change color if selected
-
         for (size_t i = 1; i < stroke.second.size(); ++i) {
             ImVec2 p1 = ImVec2(canvasPos.x + stroke.second[i - 1].first.x, canvasPos.y + stroke.second[i - 1].first.y);
             float lineSize = stroke.second[i - 1].second; // Use the line size stored with the point
             ImVec2 p2 = ImVec2(canvasPos.x + stroke.second[i].first.x, canvasPos.y + stroke.second[i].first.y);
-            drawList->AddLine(p1, p2, strokeColor, lineSize);
+            drawList->AddLine(p1, p2, stroke.first, lineSize);
         }
     }
 }

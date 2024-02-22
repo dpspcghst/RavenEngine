@@ -85,4 +85,12 @@ void SettingsManager::SetCreatorName(const std::string& name) {          // Crea
     settingsJson["creatorName"] = name;
 }
 
+float SettingsManager::GetFrameRate() const { // FrameRate Getter
+    return settingsJson.at("frameRate").get<float>();
+}
+
+void SettingsManager::SetFrameRate(float frameRate) { // FrameRate Setter
+    settingsJson["frameRate"] = frameRate;
+}
+
 } // namespace RavenEngine

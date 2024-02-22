@@ -105,8 +105,9 @@ std::vector<glm::vec3> Rect::GetVertices() const {
 std::vector<glm::vec2> Rect::GetNormals() const {
     std::vector<glm::vec2> normals;
 
-    // Assuming vertices are stored in an array or can be accessed,
-    // and are in order: Top Left, Top Right, Bottom Right, Bottom Left
+    
+    // Get the current vertices
+    
     std::vector<glm::vec3> currentVertices = GetVertices();
 
     // Calculate edges based on current vertices

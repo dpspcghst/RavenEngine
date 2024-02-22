@@ -20,34 +20,43 @@ Calculator::Calculator()
       isDecimalFirst(false), isDecimalSecond(false),
       decimalFactorFirst(1.0), decimalFactorSecond(1.0) {}
 
-static void AspectRatioConstraint(ImGuiSizeCallbackData* data) {
-    float aspectRatio = 1.0f; // 1:1 aspect ratio
-    data->DesiredSize = ImVec2(data->DesiredSize.x, data->DesiredSize.x / aspectRatio);
-}
-
 void Calculator::DrawUI(bool& isVisible) {
-    if (!isVisible) {
-        return; // Exit if not visible
-    }
+    if (!isVisible) return; // Exit if not visible
 
-    ImGui::SetNextWindowSize(ImVec2(200, 200), ImGuiCond_FirstUseEver); // Set default size
-    ImGui::SetNextWindowSizeConstraints(ImVec2(200, 200), ImVec2(FLT_MAX, FLT_MAX), AspectRatioConstraint); // Set the window to have a fixed aspect ratio
+    // Remove ImGuiWindowFlags_AlwaysAutoResize to allow manual resizing
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
 
-    if (!ImGui::Begin("Calculator", &isVisible, ImGuiWindowFlags_NoScrollbar)) {
+    if (!ImGui::Begin("Calculator", &isVisible, window_flags)) {
         ImGui::End();
         return;
     }
 
-    DrawResultDisplay();
-    ImGui::Separator();
-    DrawNumberButtons();
-    DrawOperationButtons();
-    DrawMemoryButtons();
+    // Calculate the scale based on the current window size
+    ImVec2 windowSize = ImGui::GetContentRegionAvail();
+    float scale = std::min(windowSize.x / 300.0f, windowSize.y / 500.0f);
 
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4.0f * scale, 4.0f * scale));
+
+    DrawResultDisplay(scale);
+    ImGui::Separator();
+    DrawButtons(scale);
+
+    // Optional: Add a spacer to adjust for unused space or to maintain layout
+    // ImGui::Dummy(ImVec2(0.0f, ...));
+
+    ImGui::PopStyleVar();
     ImGui::End();
 }
 
-void Calculator::DrawResultDisplay() {
+void Calculator::AspectRatioConstraint(ImGuiSizeCallbackData* data) {
+    float aspectRatio = 3.0f / 5.0f; // Desired aspect ratio: 3:5
+    // Calculate the height based on the current width and desired aspect ratio
+    float desiredHeight = data->CurrentSize.x / aspectRatio;
+    // Set the desired size maintaining the aspect ratio
+    data->DesiredSize = ImVec2(data->CurrentSize.x, desiredHeight);
+}
+
+void Calculator::DrawResultDisplay(float scale) {
     std::ostringstream stream;
 
     auto formatNumber = [](double number) -> std::string {
@@ -108,64 +117,73 @@ void Calculator::DrawResultDisplay() {
     }
 }
 
-void Calculator::DrawNumberButtons() {
-    // Get the available width for the window and divide by the number of buttons per row
-    float windowWidth = ImGui::GetContentRegionAvail().x;
-    float buttonWidth = windowWidth / 4 - ImGui::GetStyle().ItemSpacing.x; 
-    float buttonHeight = buttonWidth * 0.75f; // Maintain aspect ratio
+void Calculator::DrawButtons(float scale) {
+    // Calculate button dimensions based on the window size and scale
+    float buttonWidth = ImGui::GetContentRegionAvail().x / 4 - ImGui::GetStyle().ItemSpacing.x;
+    float buttonHeight = buttonWidth * 0.75f;
 
-    // Number buttons
-    if (ImGui::Button("7", ImVec2(buttonWidth, buttonHeight))) { AddDigit(7); } ImGui::SameLine();
-    if (ImGui::Button("8", ImVec2(buttonWidth, buttonHeight))) { AddDigit(8); } ImGui::SameLine();
-    if (ImGui::Button("9", ImVec2(buttonWidth, buttonHeight))) { AddDigit(9); } ImGui::SameLine();
-    if (ImGui::Button("x²", ImVec2(buttonWidth, buttonHeight))) { SetOperation(Operation::Square); }
+    // Define button labels in the order they should appear, reflecting the 4x6 layout
+    const char* buttons[24] = {
+        "%", "CE", "C", "<-",
+        "1/x", "x²", "√x", "/",
+        "7", "8", "9", "*",
+        "4", "5", "6", "-",
+        "1", "2", "3", "+",
+        "+/-", "0", ".", "="
+    };
 
-    if (ImGui::Button("4", ImVec2(buttonWidth, buttonHeight))) { AddDigit(4); } ImGui::SameLine();
-    if (ImGui::Button("5", ImVec2(buttonWidth, buttonHeight))) { AddDigit(5); } ImGui::SameLine();
-    if (ImGui::Button("6", ImVec2(buttonWidth, buttonHeight))) { AddDigit(6); } ImGui::SameLine();
-    if (ImGui::Button("√x", ImVec2(buttonWidth, buttonHeight))) { SetOperation(Operation::SquareRoot); }
-
-    if (ImGui::Button("1", ImVec2(buttonWidth, buttonHeight))) { AddDigit(1); } ImGui::SameLine();
-    if (ImGui::Button("2", ImVec2(buttonWidth, buttonHeight))) { AddDigit(2); } ImGui::SameLine();
-    if (ImGui::Button("3", ImVec2(buttonWidth, buttonHeight))) { AddDigit(3); } ImGui::SameLine();
-    if (ImGui::Button("%", ImVec2(buttonWidth, buttonHeight))) { SetOperation(Operation::Percent); }
-
-    if (ImGui::Button("0", ImVec2(buttonWidth, buttonHeight))) { AddDigit(0); } ImGui::SameLine();
-    if (ImGui::Button(".", ImVec2(buttonWidth, buttonHeight))) { AddDecimalPoint(); } ImGui::SameLine();
-    if (ImGui::Button("1/x", ImVec2(buttonWidth, buttonHeight))) { SetOperation(Operation::Reciprocal); }
+    // Iterate through the buttons and create them dynamically
+    for (int i = 0; i < 24; ++i) {
+        if (i % 4 != 0) ImGui::SameLine();
+        if (ImGui::Button(buttons[i], ImVec2(buttonWidth, buttonHeight))) {
+            ButtonPressed(buttons[i]);
+        }
+    }
 }
 
-void Calculator::DrawOperationButtons() {
-    // Get the available width for the window and divide by the number of buttons per row
-    float windowWidth = ImGui::GetContentRegionAvail().x;
-    float buttonWidth = windowWidth / 6 - ImGui::GetStyle().ItemSpacing.x;
-    float buttonHeight = buttonWidth * 0.75f; // Maintain aspect ratio
-
-    // Operation buttons
-    if (ImGui::Button("/", ImVec2(buttonWidth, buttonHeight))) { SetOperation(Operation::Division); } ImGui::SameLine();
-    if (ImGui::Button("*", ImVec2(buttonWidth, buttonHeight))) { SetOperation(Operation::Multiplication); } ImGui::SameLine();
-    if (ImGui::Button("-", ImVec2(buttonWidth, buttonHeight))) { SetOperation(Operation::Subtraction); } ImGui::SameLine();
-    if (ImGui::Button("+", ImVec2(buttonWidth, buttonHeight))) { SetOperation(Operation::Addition); } ImGui::SameLine();
-    if (ImGui::Button("=", ImVec2(buttonWidth, buttonHeight))) { Calculate(); } ImGui::SameLine();
-    // Clear button or other functionalities
-    if (ImGui::Button("C", ImVec2(buttonWidth, buttonHeight))) { Clear(); } ImGui::SameLine();
-    // Possibly add the +/- toggle button and any other operation buttons you might need
+void Calculator::ButtonPressed(const char* label) {
+    if (std::isdigit(label[0]) || (label[0] == '.' && std::strlen(label) == 1)) { // Check if digit or decimal point
+        if (label[0] == '.') {
+            AddDecimalPoint();
+        } else {
+            int digit = label[0] - '0';
+            AddDigit(digit);
+        }
+    } else {
+        // Map label to an action or operation
+        if (strcmp(label, "+") == 0) {
+            SetOperation(Operation::Addition);
+        } else if (strcmp(label, "-") == 0) {
+            SetOperation(Operation::Subtraction);
+        } else if (strcmp(label, "*") == 0) {
+            SetOperation(Operation::Multiplication);
+        } else if (strcmp(label, "/") == 0) {
+            SetOperation(Operation::Division);
+        } else if (strcmp(label, "=") == 0) {
+            Calculate();
+        } else if (strcmp(label, "C") == 0) {
+            Clear();
+        } else if (strcmp(label, "CE") == 0) {
+            Clear(); // Assuming CE behaves like C for simplicity
+        } else if (strcmp(label, "<-") == 0) {
+            Backspace();
+        } else if (strcmp(label, "1/x") == 0) {
+            Reciprocal();
+        } else if (strcmp(label, "x²") == 0) {
+            Square();
+        } else if (strcmp(label, "√x") == 0) {
+            SquareRoot();
+        } else if (strcmp(label, "%") == 0) {
+            Percent();
+        } else if (strcmp(label, "+/-") == 0) {
+            ToggleSign();
+        }
+    }
 }
 
-void Calculator::DrawMemoryButtons() {
-    // Get the available width for the window and divide by the number of buttons per row
-    float windowWidth = ImGui::GetContentRegionAvail().x;
-    float buttonWidth = windowWidth / 5 - ImGui::GetStyle().ItemSpacing.x;
-    float buttonHeight = buttonWidth * 0.75f; // Maintain aspect ratio
-
-    // Memory buttons
-    if (ImGui::Button("MC", ImVec2(buttonWidth, buttonHeight))) { MemoryClear(); } ImGui::SameLine();
-    if (ImGui::Button("MR", ImVec2(buttonWidth, buttonHeight))) { MemoryRecall(); } ImGui::SameLine();
-    if (ImGui::Button("M+", ImVec2(buttonWidth, buttonHeight))) { MemoryAdd(); } ImGui::SameLine();
-    if (ImGui::Button("M-", ImVec2(buttonWidth, buttonHeight))) { MemorySubtract(); } ImGui::SameLine();
-    // If you have a memory store button
-    if (ImGui::Button("MS", ImVec2(buttonWidth, buttonHeight))) { MemoryStore(); }
-}
+// #####################
+// #####################
+// #####################
 
 void Calculator::Calculate() {
     switch (operation) {
@@ -189,7 +207,6 @@ void Calculator::Calculate() {
     secondNumber = 0;
     operation = Operation::None;
     equalsPressed = true;
-    MemoryStore(); // Corrected: No argument is needed
     std::cout << "Result: " << result << std::endl;
 }
 
@@ -216,6 +233,28 @@ void Calculator::AddDigit(int digit) {
     }
 }
 
+void Calculator::Backspace() {
+    if (operation != Operation::None && userStartedTyping) {
+        // Convert the second number to a string
+        std::string numberStr = std::to_string(secondNumber);
+
+        // Remove the last character
+        numberStr.pop_back();
+
+        // Convert the string back to a number
+        secondNumber = std::stod(numberStr);
+    } else {
+        // Convert the first number to a string
+        std::string numberStr = std::to_string(firstNumber);
+
+        // Remove the last character
+        numberStr.pop_back();
+
+        // Convert the string back to a number
+        firstNumber = std::stod(numberStr);
+    }
+}
+
 void Calculator::AddDecimalPoint() {
     if (operation != Operation::None && !equalsPressed) {
         if (!isDecimalSecond) {  // If secondNumber doesn't have a decimal yet
@@ -229,6 +268,49 @@ void Calculator::AddDecimalPoint() {
             decimalFactorFirst = 0.1; // Next digit will be after the decimal point
             isDecimalFirst = true; // Mark it as decimal
         }
+    }
+}
+
+void Calculator::Reciprocal() {
+    // Perform 1/x operation
+    if (operation == Operation::None) {
+        firstNumber = (firstNumber != 0) ? 1 / firstNumber : 0;
+    } else {
+        secondNumber = (secondNumber != 0) ? 1 / secondNumber : 0;
+    }
+    equalsPressed = true;
+}
+
+void Calculator::Square() {
+    // Perform x² operation
+    if (operation == Operation::None) {
+        firstNumber *= firstNumber;
+    } else {
+        secondNumber *= secondNumber;
+    }
+    equalsPressed = true;
+}
+
+void Calculator::SquareRoot() {
+    // Perform √x operation
+    if (operation == Operation::None) {
+        firstNumber = std::sqrt(firstNumber);
+    } else {
+        secondNumber = std::sqrt(secondNumber);
+    }
+    equalsPressed = true;
+}
+
+void Calculator::Percent() {
+    // Implement percent logic here, if applicable
+}
+
+void Calculator::ToggleSign() {
+    // Toggle the sign of the currently active number
+    if (operation == Operation::None || !userStartedTyping) {
+        firstNumber = -firstNumber;
+    } else {
+        secondNumber = -secondNumber;
     }
 }
 
@@ -257,34 +339,6 @@ void Calculator::Clear() {
     decimalFactorFirst = 1.0;
     isDecimalSecond = false;
     decimalFactorSecond = 1.0;
-}
-
-void Calculator::MemoryClear() {
-    memory = 0.0f;
-}
-
-void Calculator::MemoryRecall() {
-    if (operation == Operation::None) {
-        firstNumber = memory;
-        equalsPressed = false;
-    } else {
-        secondNumber = memory;
-    }
-}
-
-void Calculator::MemoryAdd() {
-    // Adds the result to the memory
-    memory += result;
-}
-
-void Calculator::MemorySubtract() {
-    // Subtracts the result from the memory
-    memory -= result;
-}
-
-void Calculator::MemoryStore() {
-    // Stores the current result into memory
-    memory = result;
 }
 
 std::string Calculator::OperationToString(Operation op) {

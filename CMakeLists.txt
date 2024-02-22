@@ -35,6 +35,8 @@ set(PROJECT_SOURCES
     src/Physics/CollisionPanel.cpp
     src/Physics/RigidBody.cpp
     src/Physics/RigidBodyPanel.cpp
+    src/Physics/Gravity.cpp
+    src/Physics/GravityPanel.cpp
 
     src/Renderer/Shaders/ShaderManager.cpp
     src/Renderer/Shaders/ShaderLoader.cpp
@@ -72,6 +74,7 @@ set(PROJECT_SOURCES
     src/Scene/SceneManager.cpp
     src/Scene/SceneNode.cpp
     src/Scene/ScenePanel.cpp
+    src/Scene/SceneSerializer.cpp
     
     src/Utils/Console.cpp
     src/Utils/FileDialog.cpp

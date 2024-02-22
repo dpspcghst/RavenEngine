@@ -19,7 +19,8 @@ RigidBody::RigidBody()
       angularAcceleration(0.0f), 
       momentOfInertia(1.0f), 
       friction(0.0f), 
-      restitution(0.0f) {}
+      restitution(0.0f),
+      affectedByGravity(false) {}
 
 void RigidBody::Update(float deltaTime) {
     Integrate(deltaTime);

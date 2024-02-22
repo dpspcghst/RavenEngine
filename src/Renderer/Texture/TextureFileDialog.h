@@ -13,7 +13,7 @@
 namespace RavenEngine {
 class TextureFileDialog {
 public:
-    // This could be a static method if you're following a singleton-like approach for FileDialog
+    // Public methods
     static std::string OpenTextureDialog(GLFWwindow* ownerWindow);
 };
 } // namespace RavenEngine
