@@ -9,7 +9,7 @@ Before contributing, please familiarize yourself with our [Code of Conduct](http
 1. Fork the repository on GitHub.
 2. Clone your forked repository to your local machine.
 ```bash
-git clone https://github.com/your-username/your-game-engine.git
+git clone https://github.com/your-username/RavenEngine.git
 ```
 3. Set up the development environment by following the instructions in the README.md file.
 4. Create a new branch for your work.
