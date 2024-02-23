@@ -78,16 +78,6 @@ void SceneManager::RemoveNode(SceneNode* node) {
     deletedNodeIDs.push(node->GetID());
     entityIDs.erase(node->GetID());
     rootNode->RemoveChild(node);
-
-
-    // // Remove the node from the nodes vector
-    // nodes.erase(std::remove_if(nodes.begin(), nodes.end(),
-    //                            [node](const std::unique_ptr<SceneNode>& n) { return n.get() == node; }),
-    //             nodes.end());
-
-    // Debug print statements
-    //std::cout << "deletedNodeIDs size: " << deletedNodeIDs.size() << std::endl;
-    //std::cout << "nodes size: " << nodes.size() << std::endl;
 }
 
 std::vector<SceneNode*> SceneManager::GetAllNodes() const {                               

@@ -10,6 +10,9 @@
 
 // Raven includes
 #include "GameStateManager.h"
+#include "../../src/Physics/PhysicsEngine.h"
+#include "../../src/Renderer/Renderer.h"
+#include "../../src/Scene/SceneManager.h"
 
 namespace RavenEngine {
 
@@ -18,21 +21,17 @@ public:
     GameLoop();
     ~GameLoop();
 
-    // Initializes the game loop
     void Initialize();
-
-    // Starts the game loop
     void Start();
-
-    // Stops the game loop
     void Stop();
+    void Update(float deltaTime);
+    void Render();
 
 private:
-    // The main update function called every frame
-    void Update();
-
-    // Renders the game
-    void Render();
+    PhysicsEngine physicsEngine;
+    Renderer* renderer;
+    SceneManager sceneManager;
+    
 
     bool isRunning;
 };

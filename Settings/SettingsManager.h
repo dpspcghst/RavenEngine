@@ -1,10 +1,15 @@
+// settingsmanager.h
+// #####################
 #pragma once
+// #####################
 
 // Standard library includes
 #include <string> // For std::string
 
 // Third-party includes
 #include <nlohmann/json.hpp> // For nlohmann::json
+
+// Raven includes
 
 namespace RavenEngine {
 
@@ -41,6 +46,10 @@ public:
     void SetResolutionHeight(int height);
     void SetRenderStyle(const std::string& style);
     void SetCreatorName(const std::string& name);
+
+    float GetFrameRate() const; // FrameRate Getter
+    void SetFrameRate(float frameRate); // FrameRate Setter
+
 
     // Constants for the JSON keys
     static constexpr const char* SCREEN_WIDTH = "width";

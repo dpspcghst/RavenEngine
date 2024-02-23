@@ -15,15 +15,15 @@ RavenEngine::Workspace::Workspace(GLFWwindow* mainWindow)
       paletteManager(),
       calculatorManager(),
       sceneManager(),
-      collisionPanel(), // Assuming collisionPanel is initialized here as needed
+      collisionPanel(),
       uiManager(
           doodleManager, 
           paletteManager, 
           calculatorManager, 
           viewport, 
           sceneManager, 
-          ShaderManager::GetInstance(), // Assuming this returns a reference or pointer suitable for UIManager
-          TextureManager::GetInstance(), // Same assumption as above
+          ShaderManager::GetInstance(),
+          TextureManager::GetInstance(),
           collisionPanel // Pass the initialized collisionPanel here
       ),
       menuSystem(*this, mainWindow, doodleManager, paletteManager, calculatorManager, uiManager) {

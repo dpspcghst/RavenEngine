@@ -120,12 +120,12 @@ bool TextureManager::UnloadTexture(int id) {
 }
 
 TextureInfo TextureManager::GetTexture(int id) const {
-    std::cout << "TEXTUREMANAGER::GETTEXTURE getting id: " << id << std::endl;
+    //std::cout << "TEXTUREMANAGER::GETTEXTURE getting id: " << id << std::endl;
     auto it = textures.find(id);
     if (it != textures.end()) {
         return it->second;
     } else {
-        std::cerr << "TextureManager::GetTexture - Texture ID not found: " << id << std::endl;
+        //std::cerr << "TextureManager::GetTexture - Texture ID not found: " << id << std::endl;
         // Create a TextureInfo object with default values
         TextureInfo defaultTextureInfo;
         return defaultTextureInfo;
@@ -151,12 +151,12 @@ std::vector<std::string> TextureManager::GetLoadedTextureFiles() const {
 
 // set/get alpha value
 float TextureManager::GetTextureAlpha(int id) const {
-    std::cout << "TEXTUREMANAGER::GETTEXTUREALPHA getting id: " << id << "with alpha:" << textures.find(id)->second.alpha << std::endl;
+    //std::cout << "TEXTUREMANAGER::GETTEXTUREALPHA getting id: " << id << "with alpha:" << textures.find(id)->second.alpha << std::endl;
     auto it = textures.find(id);
     if (it != textures.end()) {
         return it->second.alpha;
     }
-    std::cerr << "TEXTUREMANAGER::GETTEXTUREALPHA - Texture with id " << id << " not found." << std::endl;
+    //std::cerr << "TEXTUREMANAGER::GETTEXTUREALPHA - Texture with id " << id << " not found." << std::endl;
     return 1.0f;
 }
 
@@ -244,7 +244,7 @@ GLenum TextureManager::GetTextureFilteringMode(int id) const {
     if (it != textures.end()) {
         return it->second.filteringMode;
     }
-    std::cerr << "TextureManager::GetTextureFilteringMode - Texture ID not found: " << id << std::endl;
+    //std::cerr << "TextureManager::GetTextureFilteringMode - Texture ID not found: " << id << std::endl;
     return GL_LINEAR; // Default or error handling
 }
 
@@ -276,7 +276,7 @@ GLenum TextureManager::GetTextureWrapS(int id) const {
     if (it != textures.end()) {
         return it->second.wrapModeS;
     }
-    std::cerr << "TextureManager::GetTextureWrapS - Texture ID not found: " << id << std::endl;
+    //std::cerr << "TextureManager::GetTextureWrapS - Texture ID not found: " << id << std::endl;
     return GL_REPEAT; // Default or error handling
 }
 
@@ -285,7 +285,7 @@ GLenum TextureManager::GetTextureWrapT(int id) const {
     if (it != textures.end()) {
         return it->second.wrapModeT;
     }
-    std::cerr << "TextureManager::GetTextureWrapT - Texture ID not found: " << id << std::endl;
+    //std::cerr << "TextureManager::GetTextureWrapT - Texture ID not found: " << id << std::endl;
     return GL_REPEAT; // Default or error handling
 }
 

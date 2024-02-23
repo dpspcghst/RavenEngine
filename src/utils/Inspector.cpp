@@ -18,6 +18,8 @@
 #include "../Renderer/Texture/TexturePanel.h"
 #include "../Physics/CollisionPanel.h"
 #include "../Physics/RigidBodyPanel.h"
+#include "../Physics/GravityManager.h"
+#include "../Physics/GravityPanel.h"
 
 namespace RavenEngine {
 
@@ -74,7 +76,7 @@ void Inspector::RenderShape2DDetails(Shape2D* shape2D) {
     // Texture Panel for 2D shapes
     if (shape2D->GetSpecificType() != Shape2D::Type::Point && shape2D->GetSpecificType() != Shape2D::Type::Line) {
         if (ImGui::TreeNode("Texture Panel")) {
-            texturePanel.Draw(); // Assuming texturePanel is accessible within this scope
+            texturePanel.Draw(); // Call Draw without passing the textureId
             ImGui::TreePop();
         }
     }
@@ -82,7 +84,7 @@ void Inspector::RenderShape2DDetails(Shape2D* shape2D) {
     ImGui::Separator(); // Separator for visual distinction
     // Collision Panel
     if (ImGui::TreeNode("Collision")) {
-        collisionPanel.DisplaySettings(std::static_pointer_cast<Shape2D>(shape2D->shared_from_this())); // Correct usage assuming Shape2D inherits from std::enable_shared_from_this
+        collisionPanel.DisplaySettings(std::static_pointer_cast<Shape2D>(shape2D->shared_from_this())); // Pass the Shape2D to the DisplaySettings function
         ImGui::TreePop();
     }
 
@@ -91,6 +93,14 @@ void Inspector::RenderShape2DDetails(Shape2D* shape2D) {
     if (ImGui::TreeNode("RigidBody")) {
         RigidBodyPanel rigidBodyPanel(shape2D->GetRigidBody()); // Pass the RigidBody to the constructor
         rigidBodyPanel.Display(); // Call Display without passing the RigidBody
+        ImGui::TreePop();
+    }
+
+    ImGui::Separator(); // Separator for visual distinction
+    // Gravity Panel
+    if (ImGui::TreeNode("Gravity")){
+        gravityPanel = std::make_unique<GravityPanel>(shape2D, gravityManager); // Create the GravityPanel instance here
+        gravityPanel->Display();
         ImGui::TreePop();
     }
 }

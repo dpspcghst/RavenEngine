@@ -108,11 +108,11 @@ void TextureManagerPanel::DrawDeleteButton() {
 }
 
 void TextureManagerPanel::LoadNewTexture() {
-    GLFWwindow* currentWindow = glfwGetCurrentContext(); // Make sure you have access to this function
+    GLFWwindow* currentWindow = glfwGetCurrentContext(); // Get the current window
     std::string filepath = TextureFileDialog::OpenTextureDialog(currentWindow);
     if (!filepath.empty()) {
         std::cout << "TEXTUREMANAGERPANEL::LOADNEWTEXTURE Loading texture from file: " << filepath << std::endl;
-        int newTextureId = textureManager.LoadTexture(filepath, true); // Assuming true for mipmaps
+        int newTextureId = textureManager.LoadTexture(filepath, true); // Load the texture and generate mipmaps
         std::cout << "TEXTUREMANAGERPANEL::LOADNEWTEXTURE Assigned Texture ID: " << newTextureId << " to file: " << filepath << std::endl;
         onTextureLoadedCallback(newTextureId);
     }

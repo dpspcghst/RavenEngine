@@ -5,7 +5,7 @@
 // #include section
 // #####################
 // Standard library includes
-
+#include <iostream>
 // Third party includes
 
 // Raven includes
@@ -30,11 +30,36 @@ public:
 
     // Sets the current game state
     void SetState(GameState newState) {
-        currentState = newState;
+    currentState = newState;
+    std::cout << "GameStateManager::SetState State changed to: ";
+    switch (newState) {
+        case GameState::Stopped:
+            std::cout << "Stopped";
+            break;
+        case GameState::Running:
+            std::cout << "Running";
+            break;
+        case GameState::Paused:
+            std::cout << "Paused";
+            break;
     }
-
+    std::cout << std::endl;
+}
     // Returns the current game state
     GameState GetState() const {
+        std::cout << "GameStateManager::GetState START PING! Current state: ";
+        switch (currentState) {
+            case GameState::Stopped:
+                std::cout << "Stopped";
+                break;
+            case GameState::Running:
+                std::cout << "Running";
+                break;
+            case GameState::Paused:
+                std::cout << "Paused";
+                break;
+        }
+        std::cout << std::endl;
         return currentState;
     }
 

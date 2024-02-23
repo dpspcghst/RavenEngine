@@ -47,27 +47,28 @@ private:
     double decimalFactorSecond{1.0};
 
     // UI helper functions
-    void DrawNumberButtons();
-    void DrawOperationButtons();
-    void DrawMemoryButtons();
-    void DrawResultDisplay();
+    void DrawButtons(float scale);
+    void ButtonPressed(const char* label);
+    void DrawResultDisplay(float scale);
 
     // Operation methods
     void AddDigit(int digit);
     void AddDecimalPoint();
+    void Reciprocal();
+    void Square();
+    void SquareRoot();
+    void Percent();
+    void ToggleSign();
     void SetOperation(Operation op);
     void Calculate();
     void Clear();
-
-    // Memory methods
-    void MemoryClear();
-    void MemoryRecall();
-    void MemoryAdd();
-    void MemorySubtract();
-    void MemoryStore();
+    void Backspace();
 
     // Utility method
     std::string OperationToString(Operation op);
+
+    static void AspectRatioConstraint(ImGuiSizeCallbackData* data);
+    
 };
 
 } // namespace RavenEngine

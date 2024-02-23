@@ -19,6 +19,7 @@ public:
 
     CollisionManager(const CollisionManager&) = delete;
     CollisionManager& operator=(const CollisionManager&) = delete;
+    
 
     void AddShape(Shape2D* shape);
     void RemoveShape(Shape2D* shape);
@@ -26,7 +27,6 @@ public:
     void CheckCollisions();
     void CheckSATCollisions();
 
-    // Add the new method declaration here
     bool CheckCollisionForShape(Shape2D* shape);
 
 private:

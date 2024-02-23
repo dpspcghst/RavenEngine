@@ -31,6 +31,13 @@ public:
     void SetRestitution(float newRestitution);
     void SetPosition(const glm::vec2& position);
 
+    bool IsAffectedByGravity() const {
+        return affectedByGravity;
+    }
+    void SetAffectedByGravity(bool affectedByGravity) {
+        this->affectedByGravity = affectedByGravity;
+    }
+
     // Getters
     float GetMass() const;
     glm::vec2 GetVelocity() const;
@@ -61,6 +68,7 @@ private:
     float restitution;
     glm::vec2 position;
     glm::vec2 acceleration;
+    bool affectedByGravity;
 
     void Integrate(float deltaTime);
 

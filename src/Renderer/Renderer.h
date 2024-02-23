@@ -45,11 +45,11 @@ public:
     void SetGLViewport(int x, int y, int width, int height);
     GLuint GetCurrentTexture();
 
-    static constexpr std::array<float, 4> SCREEN_CLEAR_COLOR = {0.149f, 0.137f, 0.788f, 1.0f};
-
     void RenderNode(const SceneNode& node, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
     std::pair<int, int> GetSize() const;
+
+    void RenderPausedScreen();
 
 private:
     std::unique_ptr<SceneGraphRenderer> sceneGraphRenderer; // Add a unique pointer to the SceneGraphRenderer
@@ -62,8 +62,11 @@ private:
     std::unique_ptr<Camera> camera; // Add a Camera member variable
 
     std::vector<std::shared_ptr<Shape>> shapes; // A unified vector to hold all Shape objects
-
+    float pauseTimer = 0.0f;
     void UpdateColors(); // Declare the UpdateColors method
+
+
+    
 };
 
 } // namespace RavenEngine

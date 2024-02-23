@@ -17,6 +17,8 @@
 #include "../../src/Renderer/Texture/TexturePanel.h"
 #include "../../src/Renderer/Texture/TextureManager.h"
 #include "../../src/Physics/CollisionPanel.h"
+#include "../../src/Physics/GravityManager.h"
+#include "../../src/Physics/GravityPanel.h"
 
 namespace RavenEngine {
 
@@ -34,6 +36,8 @@ private:
     SceneManager* sceneManager; // Add SceneManager member
     TexturePanel texturePanel; // Add TexturePanel member
     CollisionPanel& collisionPanel; // Add CollisionPanel member
+    GravityManager gravityManager; // Add GravityManager member
+    std::unique_ptr<GravityPanel> gravityPanel;
 
     SceneNode* lastSelectedNode = nullptr;
 
@@ -53,7 +57,6 @@ private:
     std::unordered_map<int, bool> openTabs;
 
     void RenderNodeProperties(SceneNode* selectedNode);
-    
     
 };
 

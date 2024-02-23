@@ -14,7 +14,6 @@ GLFWWindowWrapper::GLFWWindowWrapper(int width, int height, const char* title)  
     initGLFW();                                                                   // Initialize GLFW
     mainWindow = glfwCreateWindow(width, height, title, nullptr, nullptr);        // Create the GLFW window
     if (!mainWindow) {                                                            // Check if the window was created successfully
-        // Replace with your actual exception handling
         throw std::runtime_error("Failed to create GLFW window");                 // Throw an exception if the window was not created successfully
     }
     isWindowInitialized = true;                                                   // Set the isWindowInitialized flag to true
@@ -22,7 +21,6 @@ GLFWWindowWrapper::GLFWWindowWrapper(int width, int height, const char* title)  
 
 void GLFWWindowWrapper::initGLFW() {                                              // Initialize GLFW function
     if (!glfwInit()) {                                                            // Check if GLFW was initialized successfully
-        // Replace with your actual exception handling
         throw std::runtime_error("Failed to initialize GLFW");                    // Throw an exception if GLFW was not initialized successfully
     }
 }

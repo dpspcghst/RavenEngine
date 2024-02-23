@@ -25,7 +25,7 @@ Scene::~Scene() { // Destructor
 }
 
 void Scene::Initialize() { 
-    // Here you'd set up your camera, load resources, create scene graph nodes, etc.
+    // Set up the scene, such as creating objects, setting up the camera, etc.
     camera->SetupPerspective(45.0f, 16.0f/9.0f, 0.1f, 100.0f); // Example setup
 }
 
@@ -44,7 +44,6 @@ void Scene::Render() {
 }
 
 void Scene::Destroy() { 
-    // Here you'd clean up resources used by the scene
 }
 
 } // namespace RavenEngine

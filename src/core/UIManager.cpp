@@ -25,7 +25,7 @@ UIManager::UIManager(DoodleManager& doodleManager, PaletteManager& paletteManage
     : viewport(viewport), doodleManager(doodleManager), paletteManager(paletteManager), 
       calculatorManager(calculatorManager), sceneManager(sceneManager), 
       scenePanel(shaderManagerInstance), 
-      inspector(scenePanel, textureManager, collisionPanel, &sceneManager), // Assuming Inspector constructor matches this signature
+      inspector(scenePanel, textureManager, collisionPanel, &sceneManager),
       textureManagerPanel(textureManager, [](int){}),
       collisionPanel(collisionPanel) { // Ensure this is correctly initialized
     // Initialization logic here if needed

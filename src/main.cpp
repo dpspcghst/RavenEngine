@@ -1,5 +1,5 @@
 // main.cpp
-
+// #################
 // #include section
 // #################
 // Standard library includes
@@ -9,7 +9,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-// Local project includes
+// Raven includes
+#include "core/GameLoop.h"
 #include "../Settings/SettingsManager.h"
 #include "../include/core/Workspace.h"
 #include "GLFWContextManager.h"
@@ -17,45 +18,48 @@
 #include "GLFWWindowWrapper.h"
 #include "ImGuiManager.h"
 #include "ResourceManager.h"
+#include "GameStateManager.h"
 
-
-// main function
-int main() { 
-    try { // Try to fly
-        auto& settingsManager = RavenEngine::SettingsManager::GetInstance(); // Get the settings manager instance
-        GLFWWindowWrapper windowWrapper(800, 600, "Raven Engine"); // Initialize the GLFWWindowWrapper
-        GLFWwindow* mainWindow = windowWrapper.getMainWindow(); // Get the GLFWwindow pointer from the GLFWWindowWrapper
+int main() {
+    try {
+        auto& settingsManager = RavenEngine::SettingsManager::GetInstance(); // Settings Singleton
+        GLFWWindowWrapper windowWrapper(800, 600, "Raven Engine"); // Window Wrapper
+        GLFWwindow* mainWindow = windowWrapper.getMainWindow(); // Main Window
         glfwMaximizeWindow(mainWindow); // Maximize the window
-        GLFWContextManager contextManager(mainWindow); // Initialize the GLFWContextManager
+        GLFWContextManager contextManager(mainWindow); // Context Manager for OpenGL (GLAD and GLFW)
+        RavenEngine::ResourceManager::LoadIcon(mainWindow, L"../Assets/images/icons/ravenIco.ico"); // Load App Icon
+        RavenEngine::ResourceManager::SetWindowIcons(mainWindow); // Set App Icon
 
-        RavenEngine::ResourceManager::LoadIcon(mainWindow, L"../Assets/images/icons/ravenIco.ico"); // Load the window icons
+        const GLubyte* glVersion = glGetString(GL_VERSION); // Get OpenGL version
+        std::cout << "OpenGL version: " << (glVersion ? (const char*)glVersion : "Failed to get OpenGL version") << std::endl;
 
-        RavenEngine::ResourceManager::ResourceManager::SetWindowIcons(mainWindow); // Set the window icons
+        ImGuiManager::Init(mainWindow); // Initialize ImGui
+        RavenEngine::Workspace workspace(mainWindow); // Workspace
+        RavenEngine::GameLoop gameLoop; // Game Loop
 
-        
-        const GLubyte* glVersion = glGetString(GL_VERSION);
-        if (glVersion != nullptr) {// If the OpenGL version is not null
-            std::cout << "OpenGL version: " << glVersion << std::endl;
-        } else {
-            std::cout << "Failed to get OpenGL version" << std::endl;
+
+        while (!windowWrapper.shouldClose()) { // Main Loop
+            GLFWEventPoller::pollEvents(); // Poll Events
+            ImGuiManager::NewFrame(); // Start ImGui Frame
+
+            auto gameState = RavenEngine::GameStateManager::GetInstance().GetState();
+
+            if (gameState == RavenEngine::GameState::Running) { // if runGameLoop is true, run the game loop
+                float frameRate = settingsManager.GetFrameRate();
+                float deltaTime = static_cast<float>(1.0 / frameRate); // Calculate deltaTime
+                gameLoop.Update(deltaTime); // Update Game Loop with deltaTime
+            }
+
+            workspace.Render(); // Render Workspace
+            ImGuiManager::Render(); // Render ImGui
+            windowWrapper.swapBuffers(); // Swap Buffers
         }
 
-        ImGuiManager::Init(mainWindow);                                                     // Initialize the ImGuiManager
-        RavenEngine::Workspace workspace(mainWindow);                                       // Initialize the Workspace
-        //std::cout << "starting main loop" << std::endl;                                   // Output "starting main loop"
-        while (!windowWrapper.shouldClose()) {                                              // Main loop
-            GLFWEventPoller::pollEvents();                                                  // Poll GLFW events
-            ImGuiManager::NewFrame();                                                       // Start the Dear ImGui frame
-            workspace.Render();                                                             // Render the Workspace
-            ImGuiManager::Render();                                                         // Render the ImGui frame
-            windowWrapper.swapBuffers();                                                    // Swap the window buffers
-        }
-
-        ImGuiManager::Shutdown();                                                           // Shutdown the ImGuiManager
-        RavenEngine::ResourceManager::ResourceManager::UnloadIcon();                        // Unload the window icons
-    } catch (const std::exception& e) {                                                     
-        std::cerr << "Error: " << e.what() << std::endl;                                    // Catch any exceptions and print the error message
-        return EXIT_FAILURE;                                                                // Return EXIT_FAILURE
+        ImGuiManager::Shutdown(); // Shutdown ImGui
+        RavenEngine::ResourceManager::UnloadIcon(); // Unload App Icon
+    } catch (const std::exception& e) { // Catch exceptions
+        std::cerr << "Error: " << e.what() << std::endl; // Print error message
+        return EXIT_FAILURE; // Return EXIT_FAILURE
     }
-    return EXIT_SUCCESS;                                                                    // Return EXIT_SUCCESS
+    return EXIT_SUCCESS; // Return EXIT_SUCCESS
 }
