@@ -35,7 +35,7 @@ git checkout -b my-new-feature
 *  **Translations**: If the project supports multiple languages, you can contribute translations to make the project accessible to more users.
 
 ## Community
-*  **Join Discussions**: Participate in discussions on GitHub issues, pull requests, and our community forums.
+*  **Join Discussions**: Participate in discussions on GitHub issues, pull requests, our community forums, and on [Discord!](https://discord.gg/9KksREu6).
 *  **Help Others**: Offer support and assistance to fellow contributors and users.
 *  **Spread the Word**: Share your experiences with RavenEngine on social media and help grow the community.
 
@@ -43,4 +43,5 @@ git checkout -b my-new-feature
 Thank you for considering contributing to RavenEngine! Your contributions are invaluable to the success of the project. If you have any questions or need assistance, don't hesitate to reach out to us.
 
 Happy coding!
+
 RavenEngine Team
